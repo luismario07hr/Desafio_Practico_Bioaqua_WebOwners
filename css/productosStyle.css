@@ -1,0 +1,164 @@
+/* =========================================
+   PÁGINA DE PRODUCTOS (Mockup)
+   ========================================= */
+
+/* Fondo de la página de productos basado en el mockup */
+.bg-page-products {
+    background-color: #1a1a9a; /* Un azul intenso similar al mockup */
+    color: var(--color-blanco);
+}
+
+.products-main-container {
+    padding: 3rem 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.category-section {
+    margin-bottom: 4rem;
+}
+
+.category-title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--color-blanco);
+    text-align: center;
+}
+
+.category-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-blanco);
+    font-weight: normal;
+}
+
+/* Contenedores Flexbox generales */
+.flex-grid {
+    display: flex;
+    flex-direction: column; /* Mobile First: una columna */
+    gap: 2rem;
+    align-items: center;
+}
+
+/* --- Best Sellers --- */
+.best-seller-item {
+    text-align: center;
+    max-width: 250px;
+}
+
+.best-seller-item h3 {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+}
+
+.best-seller-item p {
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+.bs-img {
+    height: 250px;
+    background-color: transparent;
+    border: 1px dashed rgba(255,255,255,0.5);
+    color: var(--color-blanco);
+}
+
+/* =========================================
+   EFECTO FLIP CARD (Tarjetas Giratorias)
+   ========================================= */
+.flip-card {
+    background-color: transparent;
+    width: 100%;
+    max-width: 300px; /* Ancho máximo de la tarjeta */
+    height: 400px; /* Altura de la tarjeta blanca del mockup */
+    perspective: 1000px; /* Da el efecto de profundidad 3D */
+}
+
+/* Contenedor interno necesario para posicionar los lados */
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1); /* Transición fluida */
+    transform-style: preserve-3d; /* Permite elementos 3D hijos */
+}
+
+/* Al hacer hover en la tarjeta, rota el contenedor interno en el eje Y */
+.flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Estilos compartidos para el frente y el reverso */
+.flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden; /* Oculta la parte trasera cuando está de espaldas */
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* Frente de la tarjeta (Blanco con texto negro) */
+.flip-card-front {
+    background-color: var(--color-blanco);
+    color: var(--color-negro);
+}
+
+.product-img {
+    width: 100%;
+    flex: 1;
+    background-color: #f5f5f5;
+    border: 1px dashed #ccc;
+    margin-bottom: 1rem;
+    min-height: 200px;
+}
+
+/* Reverso de la tarjeta (Gira y revela más info) */
+.flip-card-back {
+    /* bg-cyan se aplicará desde el HTML (color celeste de la marca) */
+    color: var(--color-blanco);
+    transform: rotateY(180deg); /* El reverso inicia girado a 180 grados */
+}
+
+.flip-card-back h4 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.flip-card-back p {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* =========================================
+   MEDIA QUERIES - PRODUCTOS (Desktop >= 768px)
+   ========================================= */
+@media (min-width: 768px) {
+    .category-title {
+        text-align: left;
+    }
+    
+    /* Cambia a filas en escritorio usando Flexbox */
+    .flex-grid {
+        flex-direction: row;
+        justify-content: flex-start; /* Alinea a la izquierda en lugar de centrar */
+        flex-wrap: wrap; /* Permite que salten de línea si no caben */
+        gap: 3rem;
+    }
+
+    /* Centra los Best Sellers como en el mockup */
+    .best-sellers-grid {
+        justify-content: space-around;
+    }
+
+    .flip-card {
+        width: calc(33.333% - 2rem); /* 3 tarjetas por fila descontando el gap */
+    }
+}
