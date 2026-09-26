@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bioaqua France | Tu tipo de piel</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/pielStyle.css">
+</head>
+<body>
+
+    <!-- ENCABEZADO OSCURO -->
+    <header class="header bg-dark">
+        <div class="logo-container">
+            <h1 class="logo-text">BIOAQUA <span class="logo-france">FRANCE</span></h1>
+        </div>
+        <nav class="main-nav">
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="productos.html">Productos</a></li>
+                <!-- Enlace activo -->
+                <li><a href="tipo-de-piel.html" class="active">Tu tipo de piel</a></li>
+                <li><a href="sobre-nosotros.html">Sobre nosotros</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- HERO SECTION: TU TIPO DE PIEL -->
+        <section class="hero-skin bg-dark text-center animate-fade-in">
+            <div class="hero-skin-content">
+                <h2>Tu tipo de piel</h2>
+                <p>Elige tu perfil y descubre qué serum y qué crema de tu ritual BIOAQUA se adaptan mejor a ti. Sin diagnósticos médicos - solo una guía para empezar bien.</p>
+            </div>
+            <!-- Espacio para imagen de fondo de mujer -->
+            <div class="image-placeholder skin-hero-bg">
+                <span class="placeholder-text">Imagen: Rostro de mujer luminoso</span>
+            </div>
+        </section>
+
+        <!-- SISTEMA DE PESTAÑAS (TABS) CON CSS PURO -->
+        <section class="skin-tabs-container">
+            
+            <!-- Inputs ocultos que controlan la lógica de las pestañas -->
+            <input type="radio" id="tab-acne" name="skin-tabs" checked>
+            <input type="radio" id="tab-grasa" name="skin-tabs">
+            <input type="radio" id="tab-seca" name="skin-tabs">
+            <input type="radio" id="tab-manchas" name="skin-tabs">
+
+            <!-- Sub Menú de Navegación -->
+            <nav class="skin-nav">
+                <label for="tab-acne" class="skin-tab-label">Piel con acné</label>
+                <label for="tab-grasa" class="skin-tab-label">Piel grasa</label>
+                <label for="tab-seca" class="skin-tab-label">Piel seca</label>
+                <label for="tab-manchas" class="skin-tab-label">Piel con manchas</label>
+            </nav>
+
+            <!-- CONTENIDO DE LAS PESTAÑAS -->
+            <div class="skin-content-wrapper">
+
+                <!-- Ficha 1: Piel con Acné -->
+                <article class="skin-panel-content" id="content-acne">
+                    <div class="split-section">
+                        <!-- Lado Izquierdo (Cyan) -->
+                        <div class="content-box bg-cyan text-center product-side">
+                            <h3>Set Bioaqua Acné Removal</h3>
+                            <div class="image-placeholder skin-product-img">Imagen: Kit Acné</div>
+                            <p>Kit completo de cuidado anti-acné que incluye limpiador, suero y crema, diseñado para controlar el exceso de grasa, purificar los poros y tratar los brotes activos.</p>
+                        </div>
+                        <!-- Lado Derecho (Blanco) -->
+                        <div class="content-box bg-white text-center info-side">
+                            <span class="overline">--- Piel con acné</span>
+                            <h2 class="text-dark">Equilibrio, poros afinados<br>y frescura duradera.</h2>
+                            <p class="text-dark">Regula el exceso de sebo, refina la textura y controla el brillo del clima cálido.</p>
+                            <hr class="separator-dark">
+                            <span class="overline text-dark">--- Refuerza con</span>
+                            <p class="text-dark">Gel exfoliante de arroz | Protector solar</p>
+                            <a href="contacto.html" class="btn-dark-blue mt-1">Contactate con uno de nuestros ascesores</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Ficha 2: Piel Grasa -->
+                <article class="skin-panel-content" id="content-grasa">
+                    <div class="split-section">
+                        <!-- Lado Izquierdo (Cyan) -->
+                        <div class="content-box bg-cyan text-center product-side">
+                            <h3>Crema Bioaqua Pure Skin</h3>
+                            <div class="image-placeholder skin-product-img">Imagen: Crema Tubo Pure Skin</div>
+                            <p>Tratamiento focalizado en tubo que ayuda a equilibrar la producción de grasa en el rostro, minimizando el brillo excesivo a lo largo del día.</p>
+                        </div>
+                        <!-- Lado Derecho (Blanco) -->
+                        <div class="content-box bg-white text-center info-side">
+                            <span class="overline">--- Piel grasa</span>
+                            <h2 class="text-dark">Equilibrio, poros afinados<br>y frescura duradera.</h2>
+                            <p class="text-dark">Regula el exceso de sebo, refina la textura y controla el brillo del clima cálido.</p>
+                            <hr class="separator-dark">
+                            <span class="overline text-dark">--- Refuerza con</span>
+                            <p class="text-dark">Gel exfoliante de arroz | Protector solar</p>
+                            <a href="contacto.html" class="btn-dark-blue mt-1">Contactate con uno de nuestros ascesores</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Ficha 3: Piel Seca (Orden Invertido en Desktop) -->
+                <article class="skin-panel-content" id="content-seca">
+                    <div class="split-section reverse-desktop">
+                        <!-- Lado Izquierdo en Desktop (Blanco) -->
+                        <div class="content-box bg-white text-center info-side">
+                            <span class="overline">--- Piel seca</span>
+                            <h2 class="text-dark">Hidratación profunda<br>y brillo natural.</h2>
+                            <p class="text-dark">Poder antioxidante que refresca el rostro inmediatamente después de la limpieza, para un cutis más radiante.</p>
+                            <hr class="separator-dark">
+                            <span class="overline text-dark">--- Refuerza con</span>
+                            <p class="text-dark">Crema facial aclarante o hidratante | Protector solar</p>
+                            <a href="contacto.html" class="btn-dark-blue mt-1">Contactate con uno de nuestros ascesores</a>
+                        </div>
+                        <!-- Lado Derecho en Desktop (Dark Blue) -->
+                        <div class="content-box bg-deep-blue text-center product-side">
+                            <h3>Esencia de Vitamina C Bioaqua</h3>
+                            <div class="image-placeholder skin-product-img">Imagen: Esencia Vitamina C</div>
+                            <p>Tónico o esencia líquida antioxidante que se aplica después de la limpieza para hidratar profundamente, refrescar y aportar brillo natural.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Ficha 4: Piel con Manchas (Orden Invertido en Desktop) -->
+                <article class="skin-panel-content" id="content-manchas">
+                    <div class="split-section reverse-desktop">
+                        <!-- Lado Izquierdo en Desktop (Blanco) -->
+                        <div class="content-box bg-white text-center info-side">
+                            <span class="overline">--- Piel con manchas</span>
+                            <h2 class="text-dark">Tono uniforme y<br>luminosidad radiante.</h2>
+                            <p class="text-dark">Hidratación profunda que nutre el rostro y ayuda a atenuar la hiperpigmentación.</p>
+                            <hr class="separator-dark">
+                            <span class="overline text-dark">--- Refuerza con</span>
+                            <p class="text-dark">Jabón o gel limpiador de arroz | Protector solar</p>
+                            <a href="contacto.html" class="btn-dark-blue mt-1">Contactate con uno de nuestros ascesores</a>
+                        </div>
+                        <!-- Lado Derecho en Desktop (Dark Blue) -->
+                        <div class="content-box bg-deep-blue text-center product-side">
+                            <h3>Crema Facial Bioaqua Rice Raw Pulp</h3>
+                            <div class="image-placeholder skin-product-img">Imagen: Crema Arroz Tarro</div>
+                            <p>Crema facial en tarro formulada para hidratar, unificar el tono de la piel y atenuar manchas o hiperpigmentación, aportando un efecto luminoso.</p>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="footer bg-dark">
+        <div class="footer-content">
+            <p class="copyright">&copy; 2026 BIOAQUA FRANCE</p>
+            <p>BIOAQUA FRANCE - Skincare para piel latina. Recomendado por dermatólogos. Distribución oficial en El Salvador y Guatemala.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
