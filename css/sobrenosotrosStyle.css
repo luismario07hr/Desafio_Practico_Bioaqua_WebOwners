@@ -1,0 +1,34 @@
+/* =========================================
+   PÁGINA: SOBRE NOSOTROS
+   ========================================= */
+
+/* Utilidades de texto adicionales */
+.text-white { color: var(--color-blanco); }
+.text-left { text-align: left; }
+
+/* En dispositivos móviles, forzamos que el texto esté centrado para mejorar la lectura.
+   La alineación a los lados se aplicará solo en Desktop. */
+@media (max-width: 767px) {
+    .text-right, .text-left {
+        text-align: center;
+    }
+}
+
+/* Placeholders específicos para Sobre Nosotros */
+.placeholder-img-quienes {
+    background-color: #fce4ec; /* Tono rosa claro similar a los productos del mockup */
+}
+
+.placeholder-img-mision {
+    background-color: #e8f5e9; /* Tono verde claro */
+}
+
+.placeholder-img-vision {
+    background-color: #eeeeee; /* Tono grisáceo claro / tela blanca */
+}
+
+/* Fondo azul oscuro para las secciones ¿Quiénes somos? y Visión */
+.bg-deep-blue {
+    background-color: #190082; /* Tono azul oscuro/violeta basado en el mockup */
+    color: var(--color-blanco);
+}
