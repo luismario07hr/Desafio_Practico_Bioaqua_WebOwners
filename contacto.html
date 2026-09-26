@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bioaqua France | Contacto</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/contactoStyle.css">
+</head>
+<body>
+
+    <!-- ENCABEZADO OSCURO -->
+    <header class="header bg-dark">
+        <div class="logo-container">
+            <h1 class="logo-text">BIOAQUA <span class="logo-france">FRANCE</span></h1>
+        </div>
+        <nav class="main-nav">
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="productos.html">Productos</a></li>
+                <li><a href="tipo-de-piel.html">Tu tipo de piel</a></li>
+                <li><a href="sobre-nosotros.html">Sobre nosotros</a></li>
+                <!-- Enlace activo -->
+                <li><a href="contacto.html" class="active">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- SECCIÓN 1: HERO CONTACTO -->
+        <section class="contact-hero text-center animate-fade-in">
+            <div class="contact-hero-content">
+                <h2 class="title-large text-white">CONTÁCTANOS</h2>
+                <p class="text-white mt-1">Elige tu país y escríbenos por WhatsApp. Un asesor te acompaña de lunes a sábado.</p>
+            </div>
+            <!-- Contenedor para imagen de fondo (Mujer con ojos cerrados) -->
+            <div class="image-placeholder hero-contact-bg">
+                <span class="placeholder-text">Imagen: Mujer tocando su rostro</span>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: FORMULARIO Y BÚSCANOS -->
+        <section class="contact-main bg-cyan">
+            <div class="contact-header text-center animate-fade-in delay-1">
+                <h2 class="text-white">¿Listo para colaborar con nosotros?</h2>
+                <p class="text-white">En Bioaqua France, buscamos personas líderes, emprendedoras y responable</p>
+            </div>
+
+            <div class="split-section contact-grid animate-fade-in delay-2">
+                
+                <!-- Lado Izquierdo: Formulario de Contacto -->
+                <div class="form-container">
+                    <!-- Validación HTML5 nativa, sin necesidad de JS -->
+                    <form action="#" method="POST" class="contact-form">
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nombre">Nombre:</label>
+                                <input type="text" id="nombre" name="nombre" placeholder="Nombre:" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" id="email" name="email" placeholder="booster@email.com:" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="celular">Celular</label>
+                                <!-- Se usa type="tel" para abrir el teclado numérico en móviles -->
+                                <input type="tel" id="celular" name="celular" placeholder="ES | +503 0000 0000:" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="asunto">Asunto</label>
+                                <input type="text" id="asunto" name="asunto" placeholder="Asunto:" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mensaje">Mensaje</label>
+                            <textarea id="mensaje" name="mensaje" rows="4" placeholder="Mensaje:" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-dark-blue btn-submit">Enviar Mensaje</button>
+                    </form>
+                </div>
+
+                <!-- Lado Derecho: Búscanos (Redes Sociales) -->
+                <aside class="buscanos-container text-white">
+                    <h3 class="buscanos-title">Búscanos</h3>
+                    <hr class="separator-white">
+
+                    <div class="countries-wrapper">
+                        <!-- Guatemala -->
+                        <div class="country-card text-center">
+                            <div class="image-placeholder map-placeholder">
+                                <span class="placeholder-text">Mapa: GT</span>
+                            </div>
+                            <h4>Guatemala</h4>
+                            <a href="#" class="social-btn">
+                                <span class="icon-placeholder">Icon</span> WhatsApp
+                            </a>
+                            <a href="#" class="social-btn">
+                                <span class="icon-placeholder">Icon</span> Instagram
+                            </a>
+                        </div>
+
+                        <!-- El Salvador -->
+                        <div class="country-card text-center">
+                            <div class="image-placeholder map-placeholder">
+                                <span class="placeholder-text">Mapa: SV</span>
+                            </div>
+                            <h4>El Salvador</h4>
+                            <a href="#" class="social-btn">
+                                <span class="icon-placeholder">Icon</span> WhatsApp
+                            </a>
+                            <a href="#" class="social-btn">
+                                <span class="icon-placeholder">Icon</span> Instagram
+                            </a>
+                        </div>
+                    </div>
+                </aside>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="footer bg-dark">
+        <div class="footer-content">
+            <p class="copyright">&copy; 2026 BIOAQUA FRANCE</p>
+            <p>BIOAQUA FRANCE - Skincare para piel latina. Recomendado por dermatólogos. Distribución oficial en El Salvador y Guatemala.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

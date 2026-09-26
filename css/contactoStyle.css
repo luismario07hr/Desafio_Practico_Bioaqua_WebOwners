@@ -1,0 +1,234 @@
+/* =========================================
+   PÁGINA: CONTACTO
+   ========================================= */
+
+/* Hero Contacto */
+.contact-hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 350px;
+}
+
+.contact-hero-content {
+    position: absolute;
+    z-index: 2;
+    padding: 2rem;
+    max-width: 800px;
+}
+
+.hero-contact-bg {
+    width: 100%;
+    min-height: 350px;
+    background-color: #a1887f; /* Simula la piel / tono de la imagen */
+    opacity: 0.8;
+}
+
+/* Sección Principal (Cyan) */
+.contact-main {
+    padding: 4rem 1.5rem;
+}
+
+.contact-header {
+    margin-bottom: 3rem;
+}
+
+.contact-header h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Grid del Contacto (Formulario y Búscanos) */
+.contact-grid {
+    gap: 3rem;
+    align-items: flex-start;
+}
+
+.form-container, .buscanos-container {
+    width: 100%;
+}
+
+/* =========================================
+   FORMULARIO Y ESTADOS DE FOCUS (Bonito)
+   ========================================= */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column; /* Apilado en móvil */
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Permite que los campos en filas crezcan igual */
+}
+
+.form-group label {
+    color: var(--color-blanco);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+/* Estilos base de los inputs */
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid transparent; /* Borde transparente para transición */
+    border-radius: 8px;
+    font-family: var(--font-principal);
+    font-size: 1rem;
+    color: var(--color-negro);
+    background-color: var(--color-blanco);
+    transition: all 0.3s ease; /* Suavidad en las animaciones */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* EFECTO FOCUS (El requerimiento "bonito") */
+.contact-form input:focus,
+.contact-form textarea:focus {
+    outline: none; /* Quitamos el outline feo por defecto del navegador */
+    border: 2px solid var(--color-azul); /* Borde azul de la marca */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+    transform: translateY(-3px); /* El input "flota" ligeramente hacia arriba */
+}
+
+/* Personalización del placeholder */
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+/* Validación HTML5: Si el usuario escribe mal el correo (ej. le falta el @) */
+.contact-form input:focus:invalid {
+    border-color: #ff5252; /* Borde rojo sutil al enfocar un campo inválido */
+}
+
+.btn-submit {
+    align-self: flex-start; /* Alinea el botón a la izquierda */
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 1rem 2rem;
+    margin-top: 1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+/* =========================================
+   SECCIÓN: BÚSCANOS (Redes Sociales y Mapas)
+   ========================================= */
+.buscanos-title {
+    font-size: 2rem;
+    text-align: left;
+}
+
+.separator-white {
+    width: 100%;
+    border: 1px solid var(--color-blanco);
+    margin: 1rem 0 2rem 0;
+    opacity: 0.5;
+}
+
+.countries-wrapper {
+    display: flex;
+    flex-direction: column; /* Móvil */
+    gap: 2rem;
+}
+
+.country-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.country-card h4 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.map-placeholder {
+    width: 120px;
+    height: 120px;
+    background-color: #190082; /* Silueta oscura */
+    border-radius: 10px;
+    border: none;
+}
+
+/* Botones de redes sociales */
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: var(--color-blanco);
+    color: var(--color-negro);
+    text-decoration: none;
+    width: 100%;
+    max-width: 200px;
+    padding: 0.8rem 1rem;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: transform 0.2s ease, background-color 0.2s;
+}
+
+.social-btn:hover {
+    transform: scale(1.05); /* Efecto de crecimiento al pasar el cursor */
+    background-color: #f0f0f0;
+}
+
+.icon-placeholder {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: var(--color-azul);
+    border-radius: 50%; /* Círculo como placeholder de icono */
+    color: transparent;
+    font-size: 0;
+}
+
+/* =========================================
+   MEDIA QUERIES (Desktop >= 768px)
+   ========================================= */
+@media (min-width: 768px) {
+    /* El formulario se pone a la par del panel de Búscanos */
+    .contact-grid {
+        flex-direction: row;
+    }
+
+    .form-container {
+        flex: 3; /* El formulario toma más espacio (60%) */
+    }
+
+    .buscanos-container {
+        flex: 2; /* El panel derecho toma menos espacio (40%) */
+        padding-left: 2rem;
+    }
+
+    /* Los campos del formulario se ponen en fila de a 2 */
+    .form-row {
+        flex-direction: row;
+    }
+
+    /* Los países de Centroamérica se colocan uno al lado del otro */
+    .countries-wrapper {
+        flex-direction: row;
+    }
+}
