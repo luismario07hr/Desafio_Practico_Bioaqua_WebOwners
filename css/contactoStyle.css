@@ -10,20 +10,28 @@
     align-items: center;
     justify-content: center;
     min-height: 350px;
+    background-color: var(--color-negro); /* Fallback mientras carga la imagen */
+    overflow: hidden; /* Evita que la imagen sobresalga del contenedor */
+}
+
+/* Imagen real del Hero */
+.hero-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* La imagen cubre el contenedor sin deformarse */
+    object-position: center;
+    z-index: 1;
+    opacity: 0.6; /* Filtro oscuro para asegurar que el texto blanco sea legible */
 }
 
 .contact-hero-content {
-    position: absolute;
+    position: relative; /* Relative para que respete el z-index frente a la imagen */
     z-index: 2;
     padding: 2rem;
     max-width: 800px;
-}
-
-.hero-contact-bg {
-    width: 100%;
-    min-height: 350px;
-    background-color: #a1887f; /* Simula la piel / tono de la imagen */
-    opacity: 0.8;
 }
 
 /* Sección Principal (Cyan) */
@@ -51,7 +59,7 @@
 }
 
 /* =========================================
-   FORMULARIO Y ESTADOS DE FOCUS (Bonito)
+   FORMULARIO Y ESTADOS DE FOCUS
    ========================================= */
 .contact-form {
     display: flex;
@@ -61,14 +69,14 @@
 
 .form-row {
     display: flex;
-    flex-direction: column; /* Apilado en móvil */
+    flex-direction: column;
     gap: 1.5rem;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
-    flex: 1; /* Permite que los campos en filas crezcan igual */
+    flex: 1;
 }
 
 .form-group label {
@@ -78,55 +86,77 @@
     font-size: 0.95rem;
 }
 
-/* Estilos base de los inputs */
+/* Estilos base de los inputs y el select */
 .contact-form input,
-.contact-form textarea {
+.contact-form textarea,
+.phone-input-group select {
     width: 100%;
     padding: 1rem;
-    border: 2px solid transparent; /* Borde transparente para transición */
+    border: 2px solid transparent;
     border-radius: 8px;
     font-family: var(--font-principal);
     font-size: 1rem;
     color: var(--color-negro);
     background-color: var(--color-blanco);
-    transition: all 0.3s ease; /* Suavidad en las animaciones */
+    transition: all 0.3s ease;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
-/* EFECTO FOCUS (El requerimiento "bonito") */
+/* Efecto Focus (Flotante) */
 .contact-form input:focus,
-.contact-form textarea:focus {
-    outline: none; /* Quitamos el outline feo por defecto del navegador */
-    border: 2px solid var(--color-azul); /* Borde azul de la marca */
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
-    transform: translateY(-3px); /* El input "flota" ligeramente hacia arriba */
+.contact-form textarea:focus,
+.phone-input-group select:focus {
+    outline: none;
+    border: 2px solid var(--color-azul);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    transform: translateY(-3px);
 }
 
-/* Personalización del placeholder */
 .contact-form input::placeholder,
 .contact-form textarea::placeholder {
     color: #999;
     font-style: italic;
 }
 
-/* Validación HTML5: Si el usuario escribe mal el correo (ej. le falta el @) */
 .contact-form input:focus:invalid {
-    border-color: #ff5252; /* Borde rojo sutil al enfocar un campo inválido */
+    border-color: #ff5252;
+}
+
+/* Grupo de Input de Celular (País + Número) */
+.phone-input-group {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.phone-input-group select {
+    width: auto;
+    cursor: pointer;
+}
+
+.phone-input-group input {
+    flex: 1; /* El input de texto ocupa el espacio restante */
 }
 
 .btn-submit {
-    align-self: flex-start; /* Alinea el botón a la izquierda */
+    align-self: flex-start;
     border: none;
     cursor: pointer;
     font-size: 1rem;
     padding: 1rem 2rem;
     margin-top: 1rem;
+    border-radius: 25px;
+    background-color: var(--color-negro);
+    color: var(--color-blanco);
+    font-weight: bold;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
 }
 
 .btn-submit:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    background-color: var(--color-azul);
 }
 
 /* =========================================
@@ -146,7 +176,7 @@
 
 .countries-wrapper {
     display: flex;
-    flex-direction: column; /* Móvil */
+    flex-direction: column;
     gap: 2rem;
 }
 
@@ -163,14 +193,23 @@
     margin-bottom: 0.5rem;
 }
 
-.map-placeholder {
-    width: 120px;
-    height: 120px;
-    background-color: #190082; /* Silueta oscura */
+/* Clase para las imágenes reales de los mapas */
+.map-image {
+    width: 100%;           /* Se adapta al ancho disponible de su contenedor... */
+    max-width: 120px;      /* ...pero nunca será más grande que 120px */
+    aspect-ratio: 1 / 1;   /* ¡Magia! Mantiene la proporción cuadrada automáticamente */
+    object-fit: contain;     /* Garantiza que la imagen llene el cuadrado sin aplastarse */
     border-radius: 10px;
-    border: none;
+    
+    /* Agregamos transición para que deje de ser estática visualmente */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Efecto al pasar el cursor (hover) */
+.map-image:hover {
+    transform: translateY(-5px) scale(1.05); /* Se levanta un poco y se hace ligeramente más grande */
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);  /* La sombra crece para dar efecto 3D */
+}
 /* Botones de redes sociales */
 .social-btn {
     display: flex;
@@ -190,44 +229,39 @@
 }
 
 .social-btn:hover {
-    transform: scale(1.05); /* Efecto de crecimiento al pasar el cursor */
+    transform: scale(1.05);
     background-color: #f0f0f0;
 }
 
-.icon-placeholder {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background-color: var(--color-azul);
-    border-radius: 50%; /* Círculo como placeholder de icono */
-    color: transparent;
-    font-size: 0;
+/* Íconos de imágenes (WhatsApp, Instagram) dentro de los botones */
+.social-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain; /* Para que el ícono (png/svg) mantenga sus proporciones exactas */
+    display: block;
 }
 
 /* =========================================
    MEDIA QUERIES (Desktop >= 768px)
    ========================================= */
 @media (min-width: 768px) {
-    /* El formulario se pone a la par del panel de Búscanos */
     .contact-grid {
         flex-direction: row;
     }
 
     .form-container {
-        flex: 3; /* El formulario toma más espacio (60%) */
+        flex: 3;
     }
 
     .buscanos-container {
-        flex: 2; /* El panel derecho toma menos espacio (40%) */
+        flex: 2;
         padding-left: 2rem;
     }
 
-    /* Los campos del formulario se ponen en fila de a 2 */
     .form-row {
         flex-direction: row;
     }
 
-    /* Los países de Centroamérica se colocan uno al lado del otro */
     .countries-wrapper {
         flex-direction: row;
     }
