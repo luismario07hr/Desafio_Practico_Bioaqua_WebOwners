@@ -63,6 +63,7 @@
     font-size: 1.15rem;
     color: var(--color-negro);
     letter-spacing: 0.2px;
+    text-align: left;
 }
 
 /* ✅ Párrafos de best sellers ahora en NEGRO */
