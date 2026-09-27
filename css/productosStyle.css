@@ -2,8 +2,8 @@
    PÁGINA DE PRODUCTOS (Mockup)
    ========================================= */
 
-/* Fondo de la página de productos */
-.bg-page-products {
+/* Fondo de la página de productos (Aplicado al body si la main-container existe) */
+body {
     background-color: #fdfcfb;
     color: var(--color-negro);
 }
@@ -14,52 +14,49 @@
     margin: 0 auto;
 }
 
-.category-section {
+/* Todas las secciones dentro de products-main-container */
+.products-main-container > section {
     margin-bottom: 4rem;
 }
 
-.category-title {
+/* Título de Best Sellers */
+.products-main-container > section > h2 {
     font-size: 2.5rem;
     margin-bottom: 2rem;
     color: var(--color-negro);
     text-align: center;
 }
 
-.category-subtitle {
+/* Subtítulos de categorías */
+.products-main-container > section > h3 {
     font-size: 1.5rem;
     margin-bottom: 1.5rem;
     color: var(--color-negro);
     font-weight: normal;
 }
 
-/* Contenedores Flexbox generales */
-.flex-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    align-items: stretch;
-}
-
+/* Contenedores Grid */
+.best-sellers-grid,
 .products-cards-grid {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: stretch;
     gap: 2rem;
 }
 
-.best-sellers-grid{
-    align-items: stretch;
+.best-sellers-grid {
+    flex-direction: column;
 }
 
 /* =========================================
-   BEST SELLERS
+   BEST SELLERS (Primer Section)
    ========================================= */
-.best-seller-item {
+.best-sellers-grid > article {
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Distribuye el espacio y empuja elementos (como botones) al fondo */
-    height: 100%; /* Obliga a la tarjeta a estirarse al tamaño de la más alta del contenedor */
+    justify-content: space-between;
+    height: 100%;
     text-align: center;
     max-width: 280px;
     padding: 1.25rem;
@@ -67,33 +64,16 @@
     border-radius: 14px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
 }
 
-.best-seller-item:hover {
+.best-sellers-grid > article:hover {
     transform: translateY(-6px);
     box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
 }
 
-.best-seller-item h3 {
-    margin-top: 0.7rem;
-    font-size: 1.15rem;
-    color: var(--color-negro);
-    letter-spacing: 0.2px;
-    text-align: left;
-}
-
-/* ✅ Párrafos de best sellers en NEGRO */
-.best-seller-item p,
-.product-description {
-    color: var(--color-negro);
-    font-size: 0.88rem;
-    line-height: 1.55;
-    margin-top: 0.35rem;
-    opacity: 0.85;
-    text-align: left;
-}
-
-.bs-img {
+/* Contenedor de la Imagen */
+.best-sellers-grid > article > div {
     height: 230px;
     background-color: #faf7f5;
     border-radius: 14px;
@@ -104,23 +84,66 @@
     padding: 0.5rem;
 }
 
-.bs-img img {
+.best-sellers-grid > article > div > img {
     width: 100%;
     height: 100%;
     object-fit: contain;
 }
 
-.product-title {
+/* Título del producto */
+.best-sellers-grid > article > h3 {
+    margin-top: 0.7rem;
+    font-size: 1.15rem;
     color: var(--color-negro);
+    letter-spacing: 0.2px;
+    text-align: left;
 }
 
+/* Descripción del producto */
+.best-sellers-grid > article > p {
+    color: var(--color-negro);
+    font-size: 0.88rem;
+    line-height: 1.55;
+    margin-top: 0.35rem;
+    opacity: 0.85;
+    text-align: left;
+}
+
+/* Tags (Lista de características) */
+.best-sellers-grid > article > ul,
+.products-cards-grid article ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+}
+
+.best-sellers-grid > article > ul {
+    justify-content: center;
+    margin-top: 0.65rem;
+}
+
+.best-sellers-grid > article > ul > li,
+.products-cards-grid article ul > li {
+    padding: 0.25rem 0.55rem;
+    border-radius: 999px;
+    background-color: #e8f4f2;
+    color: #00BFFF;
+    font-size: 0.67rem;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+
 /* =========================================
-   PRODUCT CARD (cards de una sola cara)
+   PRODUCT CARDS (El resto de las sections)
    ========================================= */
 .product-card {
     background-color: transparent;
-    flex: 1 1 280px;             /* crece y se adapta, mínimo 280px */
-    max-width: 300px;   /* mantiene el ancho máximo */
+    flex: 1 1 280px;
+    max-width: 300px;
     height: auto;
     display: flex;
     border-radius: 14px;
@@ -134,7 +157,7 @@
     box-shadow: 0 22px 42px rgba(0, 0, 0, 0.18);
 }
 
-.product-card-inner {
+.product-card > div {
     width: 100%;
     height: 100%;
     text-align: center;
@@ -145,10 +168,10 @@
     overflow: hidden;
 }
 
-/* Zona superior: imagen + título */
-.product-card-front {
+/* Zona superior: imagen + título (.product-card-front) */
+.product-card > div > div:first-child {
     height: auto;
-    flex: 0 0 auto;              /* no crece, solo ocupa lo necesario */
+    flex: 0 0 auto;
     padding: 0 1rem 0.7rem;
     background-color: #ffffff;
     color: var(--color-negro);
@@ -158,7 +181,7 @@
     align-items: center;
 }
 
-.product-card-front h4 {
+.product-card > div > div:first-child > h4 {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -169,7 +192,7 @@
     font-size: 1rem;
 }
 
-.product-card-front h4::after {
+.product-card > div > div:first-child > h4::after {
     content: "BIOAQUA";
     flex: 0 0 auto;
     padding: 0.35rem 0.55rem;
@@ -180,7 +203,7 @@
     font-weight: 700;
 }
 
-.product-img {
+.product-card > div > div:first-child > div {
     width: 100%;
     height: 205px;
     flex: 0 0 205px;
@@ -193,7 +216,7 @@
     overflow: hidden;
 }
 
-.product-img img {
+.product-card > div > div:first-child > div > img {
     display: block;
     width: auto;
     height: auto;
@@ -203,13 +226,12 @@
     object-position: center;
 }
 
-/* Zona inferior: descripción + tags */
-.product-card-back,
-.product-card-back.bg-card-desc {
+/* Zona inferior: descripción + tags (.product-card-back) */
+.product-card > div > div:last-child {
     height: auto;
-    flex: 1 1 auto;              /* crece para llenar el hueco sobrante */
-    display: flex;               /* necesario para margin-top:auto */
-    flex-direction: column;      /* apila p y tags verticalmente */
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
     gap: 0.3rem;
@@ -218,11 +240,7 @@
     color: var(--color-negro);
 }
 
-.product-card-back h4 {
-    display: none;
-}
-
-.product-card-back p {
+.product-card > div > div:last-child > p {
     color: #555555;
     font-size: 0.82rem;
     line-height: 1.45;
@@ -231,48 +249,17 @@
     margin: 0;
 }
 
-/* =========================================
-   TAGS
-   ========================================= */
-.product-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-top: auto;            /* empuja los tags al fondo de la card */
-    padding-top: 0.5rem;
-}
-
-.best-seller-item .product-tags {
-    justify-content: center;
-    margin-top: 0.65rem;
-}
-
-.product-tags span {
-    padding: 0.25rem 0.55rem;
-    border-radius: 999px;
-    background-color: #e8f4f2;
-    color: #00BFFF;
-    font-size: 0.67rem;
-    line-height: 1.2;
-    white-space: nowrap;
-}
 
 /* =========================================
    MEDIA QUERIES - PRODUCTOS (Desktop >= 768px)
    ========================================= */
 @media (min-width: 768px) {
-    .category-title {
+    .products-main-container > section > h2 {
         text-align: left;
     }
 
-    .flex-grid {
-        flex-direction: row;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        gap: 3rem;
-    }
-
     .best-sellers-grid {
+        flex-direction: row;
         justify-content: space-between;
     }
 }
