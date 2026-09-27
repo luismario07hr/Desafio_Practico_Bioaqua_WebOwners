@@ -325,6 +325,7 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover; /* Evita que la imagen se deforme o aplaste */
+    display: block
 }
 
 /* Animación suave para imágenes (Zoom in + Fade) */

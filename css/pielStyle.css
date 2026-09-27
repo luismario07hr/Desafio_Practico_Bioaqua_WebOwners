@@ -110,11 +110,11 @@
 /* Imágenes de productos dentro de las tarjetas */
 .skin-product-img {
     background-color: #f5f5f5;
-    color: #666;
-    border-radius: 20px; /* Bordes redondeados según el mockup */
+    border-radius: 20px;
     margin: 1.5rem auto;
     width: 80%;
     min-height: 150px;
+    overflow: hidden; /* Corta el desbordamiento de la imagen para mantener los bordes redondos */
 }
 
 /* Ajustes específicos para los textos */
