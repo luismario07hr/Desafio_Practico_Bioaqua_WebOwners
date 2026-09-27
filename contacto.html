@@ -5,22 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bioaqua France | Contacto</title>
     <link rel="stylesheet" href="css/styles.css">
+    <!-- Vinculación del archivo específico -->
     <link rel="stylesheet" href="css/contactoStyle.css">
 </head>
 <body>
 
     <!-- ENCABEZADO OSCURO -->
     <header class="header bg-dark">
-        <div class="logo-container">
-            <img src="img/logo.png" alt="Logo Bioaqua" class="logo-img">
+        <div>
+            <img src="img/logo.png" alt="Logo Bioaqua">
         </div>
-        <nav class="main-nav">
-            <ul class="nav-links">
+        <nav>
+            <ul>
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="productos.html">Productos</a></li>
                 <li><a href="tipo-de-piel.html">Tu tipo de piel</a></li>
                 <li><a href="sobre-nosotros.html">Sobre nosotros</a></li>
-                <!-- Enlace activo -->
                 <li><a href="contacto.html" class="active">Contacto</a></li>
             </ul>
         </nav>
@@ -28,94 +28,95 @@
 
     <main>
         <!-- SECCIÓN 1: HERO CONTACTO -->
-        <section class="contact-hero text-center animate-fade-in">
-            <!-- Imagen real de fondo -->
-            <img src="img/contacto/Retail Website.png" alt="Mujer relajada tocando su rostro" class="hero-image">
+        <section class="bg-dark">
+            <img src="img/contacto/Retail Website.png" alt="Mujer relajada tocando su rostro">
             
-            <div class="contact-hero-content">
-                <h2 class="title-large text-white">CONTÁCTANOS</h2>
-                <p class="text-white mt-1">Elige tu país y escríbenos por WhatsApp. Un asesor te acompaña de lunes a sábado.</p>
+            <div>
+                <h2>CONTÁCTANOS</h2>
+                <p>Elige tu país y escríbenos por WhatsApp. Un asesor te acompaña de lunes a sábado.</p>
             </div>
         </section>
 
         <!-- SECCIÓN 2: FORMULARIO Y BÚSCANOS -->
-        <section class="contact-main bg-cyan">
-            <div class="contact-header text-center animate-fade-in delay-1">
-                <h2 class="text-white">¿Listo para colaborar con nosotros?</h2>
-                <p class="text-white">En Bioaqua France, buscamos personas líderes, emprendedoras y responsables.</p>
+        <section class="bg-cyan">
+            <div>
+                <h2>¿Listo para colaborar con nosotros?</h2>
+                <p>En Bioaqua France, buscamos personas líderes, emprendedoras y responsables.</p>
             </div>
 
-            <div class="split-section contact-grid animate-fade-in delay-2">
+            <div class="split-section">
                 
                 <!-- Lado Izquierdo: Formulario de Contacto -->
-                <div class="form-container">
-                    <form action="#" method="POST" class="contact-form">
+                <div>
+                    <form action="#" method="POST">
                         
-                        <div class="form-row">
-                            <div class="form-group">
+                        <!-- Fila 1: Nombre y Email -->
+                        <div>
+                            <div>
                                 <label for="nombre">Nombre:</label>
                                 <input type="text" id="nombre" name="nombre" placeholder="Tu nombre completo" required>
                             </div>
-                            <div class="form-group">
+                            <div>
                                 <label for="email">Email:</label>
                                 <input type="email" id="email" name="email" placeholder="booster@email.com" required>
                             </div>
                         </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
+                        <!-- Fila 2: Celular y Asunto -->
+                        <div>
+                            <div>
                                 <label for="celular">Celular:</label>
-                                <div class="phone-input-group">
+                                <div>
                                     <select name="codigo_pais" id="codigo_pais" required>
                                         <option value="+503">🇸🇻 +503</option>
                                         <option value="+502">🇬🇹 +502</option>
                                     </select>
-                                    <!-- pattern "[0-9]{8}" obliga a ingresar exactamente 8 números -->
                                     <input type="tel" id="celular" name="celular" placeholder="0000 0000" pattern="[0-9]{8}" required>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div>
                                 <label for="asunto">Asunto:</label>
                                 <input type="text" id="asunto" name="asunto" placeholder="¿En qué te ayudamos?" required>
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <!-- Fila 3: Mensaje -->
+                        <div>
                             <label for="mensaje">Mensaje:</label>
                             <textarea id="mensaje" name="mensaje" rows="4" placeholder="Escribe tu mensaje aquí..." required></textarea>
                         </div>
 
-                        <button type="submit" class="btn-dark-blue btn-submit">Enviar Mensaje</button>
+                        <button type="submit">Enviar Mensaje</button>
                     </form>
                 </div>
 
                 <!-- Lado Derecho: Búscanos (Redes Sociales) -->
-                <aside class="buscanos-container text-white">
-                    <h3 class="buscanos-title">Búscanos</h3>
-                    <hr class="separator-white">
+                <aside>
+                    <h3>Búscanos</h3>
+                    <hr>
 
-                    <div class="countries-wrapper">
+                    <div>
                         <!-- Guatemala -->
-                        <div class="country-card text-center">
-                            <img src="img/contacto/mapaGuatemala.png" alt="Mapa de Guatemala" class="map-image">
+                        <div>
+                            <img src="img/contacto/mapaGuatemala.png" alt="Mapa de Guatemala">
                             <h4>Guatemala</h4>
-                            <a href="https://wa.me/50230205597?text=Hola%20BIOAQUA%20FRANCE%20Guatemala%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener noreferrer" class="social-btn">
-                                <img src="img/contacto/Whatsapp.png" alt="WhatsApp" class="social-icon"> WhatsApp
+                            <a href="https://wa.me/50230205597?text=Hola%20BIOAQUA%20FRANCE%20Guatemala%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener noreferrer">
+                                <img src="img/contacto/Whatsapp.png" alt="WhatsApp"> WhatsApp
                             </a>
-                            <a href="https://instagram.com/bioaqua.sv" target="_blank" rel="noopener noreferrer" class="social-btn">
-                                <img src="img/contacto/Instagram.png" alt="Instagram" class="social-icon"> Instagram
+                            <a href="https://instagram.com/bioaqua.sv" target="_blank" rel="noopener noreferrer">
+                                <img src="img/contacto/Instagram.png" alt="Instagram"> Instagram
                             </a>
                         </div>
 
                         <!-- El Salvador -->
-                        <div class="country-card text-center">
-                            <img src="img/contacto/mapaElSalvador.png" alt="Mapa de El Salvador" class="map-image">
+                        <div>
+                            <img src="img/contacto/mapaElSalvador.png" alt="Mapa de El Salvador">
                             <h4>El Salvador</h4>
-                            <a href="https://wa.me/50379658920?text=Hola%20BIOAQUA%20FRANCE%20El%20Salvador%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener noreferrer" class="social-btn">
-                                <img src="img/contacto/Whatsapp.png" alt="WhatsApp" class="social-icon"> WhatsApp
+                            <a href="https://wa.me/50379658920?text=Hola%20BIOAQUA%20FRANCE%20El%20Salvador%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener noreferrer">
+                                <img src="img/contacto/Whatsapp.png" alt="WhatsApp"> WhatsApp
                             </a>
-                            <a href="https://instagram.com/bioaqua.sv" target="_blank" rel="noopener noreferrer" class="social-btn">
-                                <img src="img/contacto/Instagram.png" alt="Instagram" class="social-icon"> Instagram
+                            <a href="https://instagram.com/bioaqua.sv" target="_blank" rel="noopener noreferrer">
+                                <img src="img/contacto/Instagram.png" alt="Instagram"> Instagram
                             </a>
                         </div>
                     </div>
@@ -127,8 +128,8 @@
 
     <!-- PIE DE PÁGINA -->
     <footer class="footer bg-dark">
-        <div class="footer-content">
-            <p class="copyright">&copy; 2026 BIOAQUA FRANCE</p>
+        <div>
+            <p>&copy; 2026 BIOAQUA FRANCE</p>
             <p>BIOAQUA FRANCE - Skincare para piel latina. Recomendado por dermatólogos. Distribución oficial en El Salvador y Guatemala.</p>
         </div>
     </footer>

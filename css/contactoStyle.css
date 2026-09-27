@@ -2,98 +2,131 @@
    PÁGINA: CONTACTO
    ========================================= */
 
-/* Hero Contacto */
-.contact-hero {
+/* =========================================
+   SECCIÓN 1: HERO CONTACTO
+   ========================================= */
+main > section:first-child {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     min-height: 350px;
-    background-color: var(--color-negro); /* Fallback mientras carga la imagen */
-    overflow: hidden; /* Evita que la imagen sobresalga del contenedor */
+    overflow: hidden;
+    animation: fade-in-up 1s ease-out forwards;
+    opacity: 0;
 }
 
-/* Imagen real del Hero */
-.hero-image {
+/* Imagen real de fondo */
+main > section:first-child > img {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover; /* La imagen cubre el contenedor sin deformarse */
+    object-fit: cover;
     object-position: center;
     z-index: 1;
-    opacity: 0.6; /* Filtro oscuro para asegurar que el texto blanco sea legible */
+    opacity: 0.6;
 }
 
-.contact-hero-content {
-    position: relative; /* Relative para que respete el z-index frente a la imagen */
+/* Contenedor del texto Hero */
+main > section:first-child > div {
+    position: relative;
     z-index: 2;
     padding: 2rem;
     max-width: 800px;
+    text-align: center;
 }
 
-.contact-hero-content p, .contact-hero-content h2 {
-    color: #fff
+main > section:first-child > div > h2 {
+    font-size: 3rem;
+    color: var(--color-blanco);
 }
 
-/* Sección Principal (Cyan) */
-.contact-main {
+main > section:first-child > div > p {
+    color: var(--color-blanco);
+    margin-top: 1.5rem;
+}
+
+
+/* =========================================
+   SECCIÓN 2: FORMULARIO Y BÚSCANOS
+   ========================================= */
+main > section:last-child {
     padding: 4rem 1.5rem;
 }
 
-.contact-header {
+/* Encabezado del Contacto */
+main > section:last-child > div:first-child {
     margin-bottom: 3rem;
+    text-align: center;
+    animation: fade-in-up 1s ease-out forwards;
+    opacity: 0;
+    animation-delay: 0.3s;
 }
 
-.contact-header h2 {
+main > section:last-child > div:first-child > h2 {
     font-size: 2.5rem;
     margin-bottom: 0.5rem;
+    color: var(--color-blanco);
 }
 
-/* Grid del Contacto (Formulario y Búscanos) */
-.contact-grid {
+main > section:last-child > div:first-child > p {
+    color: var(--color-blanco);
+}
+
+/* Grid contenedor del formulario y panel derecho */
+main > section:last-child > div:last-child {
     gap: 3rem;
     align-items: flex-start;
+    animation: fade-in-up 1s ease-out forwards;
+    opacity: 0;
+    animation-delay: 0.6s;
 }
 
-.form-container, .buscanos-container {
+main > section:last-child > div:last-child > div, 
+main > section:last-child > div:last-child > aside {
     width: 100%;
 }
 
+
 /* =========================================
-   FORMULARIO Y ESTADOS DE FOCUS
+   FORMULARIO DE CONTACTO Y SUS CAMPOS
    ========================================= */
-.contact-form {
+form {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
 
-.form-row {
+/* Filas del formulario (Para que se apilen en móvil) */
+form > div:nth-of-type(1),
+form > div:nth-of-type(2) {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
 
-.form-group {
+/* Contenedor individual de cada label/input */
+form > div > div,
+form > div:nth-of-type(3) {
     display: flex;
     flex-direction: column;
     flex: 1;
 }
 
-.form-group label {
+form label {
     color: var(--color-blanco);
     margin-bottom: 0.5rem;
     font-weight: 500;
     font-size: 0.95rem;
 }
 
-/* Estilos base de los inputs y el select */
-.contact-form input,
-.contact-form textarea,
-.phone-input-group select {
+/* Estilos de inputs generales */
+form input,
+form textarea,
+form select {
     width: 100%;
     padding: 1rem;
     border: 2px solid transparent;
@@ -106,43 +139,43 @@
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
-/* Efecto Focus (Flotante) */
-.contact-form input:focus,
-.contact-form textarea:focus,
-.phone-input-group select:focus {
+form input:focus,
+form textarea:focus,
+form select:focus {
     outline: none;
     border: 2px solid var(--color-azul);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
     transform: translateY(-3px);
 }
 
-.contact-form input::placeholder,
-.contact-form textarea::placeholder {
+form input::placeholder,
+form textarea::placeholder {
     color: #999;
     font-style: italic;
 }
 
-.contact-form input:focus:invalid {
+form input:focus:invalid {
     border-color: #000;
 }
 
-/* Grupo de Input de Celular (País + Número) */
-.phone-input-group {
+/* Agrupación específica de input celular (País + Número) */
+form > div:nth-of-type(2) > div:first-child > div {
     display: flex;
     gap: 0.5rem;
     width: 100%;
 }
 
-.phone-input-group select {
+form > div:nth-of-type(2) > div:first-child > div > select {
     width: auto;
     cursor: pointer;
 }
 
-.phone-input-group input {
-    flex: 1; /* El input de texto ocupa el espacio restante */
+form > div:nth-of-type(2) > div:first-child > div > input {
+    flex: 1;
 }
 
-.btn-submit {
+/* Botón de Enviar */
+form > button {
     align-self: flex-start;
     border: none;
     cursor: pointer;
@@ -157,65 +190,71 @@
     transition: all 0.3s ease;
 }
 
-.btn-submit:hover {
+form > button:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0,0,0,0.2);
     background-color: var(--color-azul);
 }
 
+
 /* =========================================
-   SECCIÓN: BÚSCANOS (Redes Sociales y Mapas)
+   ASIDE: SECCIÓN BÚSCANOS (Redes y Mapas)
    ========================================= */
-.buscanos-title {
+aside {
+    color: var(--color-blanco);
+}
+
+aside > h3 {
     font-size: 2rem;
     text-align: left;
 }
 
-.separator-white {
+aside > hr {
     width: 100%;
     border: 1px solid var(--color-blanco);
     margin: 1rem 0 2rem 0;
     opacity: 0.5;
 }
 
-.countries-wrapper {
+/* Envoltura de los países */
+aside > div {
     display: flex;
     flex-direction: column;
     gap: 2rem;
 }
 
-.country-card {
+/* Tarjeta individual de país */
+aside > div > div {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    text-align: center;
 }
 
-.country-card h4 {
+aside > div > div > h4 {
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
 }
 
-/* Clase para las imágenes reales de los mapas */
-.map-image {
-    width: 100%;           /* Se adapta al ancho disponible de su contenedor... */
-    max-width: 120px;      /* ...pero nunca será más grande que 120px */
-    aspect-ratio: 1 / 1;   /* ¡Magia! Mantiene la proporción cuadrada automáticamente */
-    object-fit: contain;     /* Garantiza que la imagen llene el cuadrado sin aplastarse */
+/* Imágenes de los mapas */
+aside > div > div > img:first-of-type {
+    width: 100%;
+    max-width: 120px;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
     border-radius: 10px;
-    
-    /* Agregamos transición para que deje de ser estática visualmente */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Efecto al pasar el cursor (hover) */
-.map-image:hover {
-    transform: translateY(-5px) scale(1.05); /* Se levanta un poco y se hace ligeramente más grande */
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);  /* La sombra crece para dar efecto 3D */
+aside > div > div > img:first-of-type:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
 }
+
 /* Botones de redes sociales */
-.social-btn {
+aside a {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -232,41 +271,46 @@
     transition: transform 0.2s ease, background-color 0.2s;
 }
 
-.social-btn:hover {
+aside a:hover {
     transform: scale(1.05);
     background-color: #f0f0f0;
 }
 
-/* Íconos de imágenes (WhatsApp, Instagram) dentro de los botones */
-.social-icon {
+/* Íconos (WhatsApp, Instagram) dentro de los botones */
+aside a > img {
     width: 24px;
     height: 24px;
-    object-fit: contain; /* Para que el ícono (png/svg) mantenga sus proporciones exactas */
+    object-fit: contain;
     display: block;
 }
+
 
 /* =========================================
    MEDIA QUERIES (Desktop >= 768px)
    ========================================= */
 @media (min-width: 768px) {
-    .contact-grid {
+    /* El formulario se pone a la par del panel de Búscanos */
+    main > section:last-child > div:last-child {
         flex-direction: row;
     }
 
-    .form-container {
+    main > section:last-child > div:last-child > div {
         flex: 3;
     }
 
-    .buscanos-container {
+    main > section:last-child > div:last-child > aside {
         flex: 2;
         padding-left: 2rem;
     }
 
-    .form-row {
+    /* Los campos del formulario se ponen en fila de a 2 */
+    form > div:nth-of-type(1),
+    form > div:nth-of-type(2) {
         flex-direction: row;
     }
 
-    .countries-wrapper {
+    /* Los países se colocan uno al lado del otro */
+    aside > div {
         flex-direction: row;
     }
 }
