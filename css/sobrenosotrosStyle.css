@@ -2,20 +2,92 @@
    PÁGINA: SOBRE NOSOTROS
    ========================================= */
 
-/* Utilidades de texto adicionales */
-.text-white { color: var(--color-blanco); }
-.text-left { text-align: left; }
-
-/* En dispositivos móviles, forzamos que el texto esté centrado para mejorar la lectura.
-   La alineación a los lados se aplicará solo en Desktop. */
-@media (max-width: 767px) {
-    .text-right, .text-left {
-        text-align: center;
-    }
+/* Fondo azul oscuro para la primera y tercera sección */
+.bg-deep-blue {
+    background-color: #190082;
+    color: var(--color-blanco);
 }
 
-/* Fondo azul oscuro para las secciones ¿Quiénes somos? y Visión */
-.bg-deep-blue {
-    background-color: #190082; /* Tono azul oscuro/violeta basado en el mockup */
-    color: var(--color-blanco);
+/* =========================================
+   ANIMACIONES (Estructurales y sin clases HTML)
+   ========================================= */
+
+/* Animación exclusiva para las imágenes */
+@keyframes fade-scale-in {
+    0% { opacity: 0; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* Asignación base a las cajas */
+main > section .image-box {
+    animation: fade-scale-in 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    opacity: 0;
+}
+
+/* fade-in-up ya existe globalmente en styles.css, solo la llamamos */
+main > section .content-box {
+    animation: fade-in-up 1s ease-out forwards;
+    opacity: 0;
+}
+
+/* Control exacto de Delays por sección (Reemplaza .delay-1, .delay-img, etc.) */
+
+/* Sección 1 */
+main > section:nth-child(1) .content-box { animation-delay: 0s; }
+main > section:nth-child(1) .image-box { animation-delay: 0.4s; }
+
+/* Sección 2 */
+main > section:nth-child(2) .content-box { animation-delay: 0.3s; }
+main > section:nth-child(2) .image-box { animation-delay: 0.6s; }
+
+/* Sección 3 */
+main > section:nth-child(3) .image-box { animation-delay: 0.3s; }
+main > section:nth-child(3) .content-box { animation-delay: 0.6s; }
+
+
+/* =========================================
+   REGLAS ESTRUCTURALES Y ALINEACIÓN
+   ========================================= */
+
+/* Alineación por defecto (Móvil): Todo centrado */
+main > section .content-box {
+    text-align: center;
+}
+
+/* Margen superior para todos los párrafos */
+main > section .content-box > p {
+    margin-top: 1.5rem;
+}
+
+/* Tamaño base para los H2 en móvil */
+main > section .content-box > h2 {
+    font-size: 3rem;
+}
+
+/* Alterar propiedades de la sección 2 (Misión) que va en color oscuro */
+main > section:nth-child(even) .content-box > h2,
+main > section:nth-child(even) .content-box > p {
+    color: var(--color-negro);
+}
+
+
+/* =========================================
+   MEDIA QUERIES (Desktop >= 768px)
+   ========================================= */
+@media (min-width: 768px) {
+    
+    /* El H2 crece de 3rem a 4rem */
+    main > section .content-box > h2 {
+        font-size: 4rem;
+    }
+
+    /* Secciones Impares (1 y 3): Texto alineado a la derecha */
+    main > section:nth-child(odd) .content-box {
+        text-align: right;
+    }
+
+    /* Secciones Pares (2): Texto alineado a la izquierda */
+    main > section:nth-child(even) .content-box {
+        text-align: left;
+    }
 }
