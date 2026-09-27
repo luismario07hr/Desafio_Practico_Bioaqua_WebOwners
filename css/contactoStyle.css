@@ -34,6 +34,10 @@
     max-width: 800px;
 }
 
+.contact-hero-content p, .contact-hero-content h2 {
+    color: #fff
+}
+
 /* Sección Principal (Cyan) */
 .contact-main {
     padding: 4rem 1.5rem;
