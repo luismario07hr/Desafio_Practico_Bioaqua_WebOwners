@@ -32,7 +32,6 @@
                 <h2>Tu piel.<br><span class="text-dark">Tu clima.</span><br>Tu ritual.</h2>
                 <p>Cuidado especializado para las necesidades de la piel latina — hidratación, equilibrio, luminosidad y protección en cada paso, pensado para el clima tropical de Centroamérica.</p>
             </div>
-            <!-- Se agregan las clases animate-img y delay-img a la caja de la imagen -->
             <div class="image-box animate-img delay-img">
                 <img src="img/rosa.png" alt="Productos Pink" class="img-responsive">
             </div>
@@ -40,7 +39,6 @@
 
         <!-- SECCIÓN 2: COLECCIÓN -->
         <section class="split-section coleccion">
-            <!-- Aquí la imagen aparece primero, por lo que no necesita el delay -->
             <div class="image-box animate-img">
                 <img src="img/naranja.png" alt="Vitamina C" class="img-responsive">
             </div>
@@ -51,18 +49,98 @@
             </div>
         </section>
 
-        <!-- SECCIÓN 3: RITUAL -->
+        <!-- SECCIÓN 3: RITUAL (8 PASOS ANIMADOS) -->
         <section class="split-section ritual">
             <div class="content-box bg-blue animate-fade-in delay-2">
                 <h3>Ritual Bioaqua</h3>
-                <h2 class="title-large">DESMA<br>QUILLA</h2>
-                <p>Sabemos que después de un día largo e intenso, la cama te llama. Sin embargo, irte a dormir con el maquillaje puesto es el mayor error que puedes cometer en tu rutina de belleza.
-                    Durante la noche, nuestra piel entra en su fase natural de regeneración celular. Para que este proceso mágico ocurra, necesita respirar a través de un "lienzo" completamente limpio. 
-                    Desmaquillarte no es solo quitarte el rímel o la base; es liberar a tu rostro de la contaminación, el exceso de sebo y las impurezas acumuladas durante el día.</p>
+                
+                <!-- Contenedor Grid para apilar los 8 pasos automáticamente -->
+                <div class="ritual-slider">
+                    
+                    <!-- Paso 1 -->
+                    <div class="ritual-step step-1">
+                        <span class="step-number">PASO 01</span>
+                        <h2 class="title-large">DESMAQUILLA</h2>
+                        <h3 class="product-name">Desmaquillante Bifásico</h3>
+                        <p>Retira maquillaje, protector solar y partículas del día sin frotar. Fórmula bifásica pensada para el calor y la humedad del trópico.</p>
+                        <p class="instruction"><strong>Uso:</strong> Agita, aplica en algodón y desliza suavemente sobre rostro, ojos y labios.</p>
+                    </div>
+
+                    <!-- Paso 2 -->
+                    <div class="ritual-step step-2">
+                        <span class="step-number">PASO 02</span>
+                        <h2 class="title-large">LIMPIA</h2>
+                        <h3 class="product-name">Crema Espuma Limpiadora</h3>
+                        <p>Limpieza cremosa que respeta la barrera de la piel latina y elimina impurezas del día sin resecar.</p>
+                        <p class="instruction"><strong>Uso:</strong> Aplica sobre piel húmeda, emulsiona en círculos y enjuaga con agua fresca.</p>
+                    </div>
+
+                    <!-- Paso 3 -->
+                    <div class="ritual-step step-3">
+                        <span class="step-number">PASO 03</span>
+                        <h2 class="title-large">RENUEVA</h2>
+                        <h3 class="product-name">Gel Exfoliante de Arroz</h3>
+                        <p>Renueva la superficie de la piel, desobstruye poros y prepara para que activos y protector solar penetren mejor.</p>
+                        <p class="instruction"><strong>Uso:</strong> Aplica sobre piel seca, masajea en círculos y retira con agua tibia. 1–2 veces por semana.</p>
+                    </div>
+
+                    <!-- Paso 4 -->
+                    <div class="ritual-step step-4">
+                        <span class="step-number">PASO 04</span>
+                        <h2 class="title-large">FORTALECE</h2>
+                        <h3 class="product-name">Proteína de Seda</h3>
+                        <p>Suaviza, aporta elasticidad y devuelve una sensación de piel tersa y confortable — clave en climas cálidos.</p>
+                        <p class="instruction"><strong>Uso:</strong> Aplica mañana y noche antes del serum, con toques ascendentes.</p>
+                    </div>
+
+                    <!-- Paso 5 -->
+                    <div class="ritual-step step-5">
+                        <span class="step-number">PASO 05</span>
+                        <h2 class="title-large">TRATA</h2>
+                        <h3 class="product-name">Serum</h3>
+                        <p>Elige tu serum según lo que tu piel necesita hoy. <span class="instruction">Aplica 2–3 gotas sobre piel limpia antes de la crema.</span></p>
+                        <ul class="ritual-options">
+                            <li><strong>Ácido Hialurónico:</strong> Hidratación y elasticidad. <span>(Piel seca · deshidratada)</span></li>
+                            <li><strong>Vitamina C + AH:</strong> Luminosidad y antioxidante. <span>(Manchas · piel apagada)</span></li>
+                            <li><strong>Pure Skin 30 ml:</strong> Equilibra y difumina marcas. <span>(Piel grasa · tendencia acneica)</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Paso 6 -->
+                    <div class="ritual-step step-6">
+                        <span class="step-number">PASO 06</span>
+                        <h2 class="title-large">CUIDA LA MIRADA</h2>
+                        <h3 class="product-name">Contorno de Ojos</h3>
+                        <p>Hidrata la zona más delicada del rostro y suaviza la apariencia de líneas finas por el sol y la fatiga.</p>
+                        <p class="instruction"><strong>Uso:</strong> Aplica con el dedo anular con pequeños toques alrededor del ojo, mañana y noche.</p>
+                    </div>
+
+                    <!-- Paso 7 -->
+                    <div class="ritual-step step-7">
+                        <span class="step-number">PASO 07</span>
+                        <h2 class="title-large">HIDRATA</h2>
+                        <h3 class="product-name">Crema</h3>
+                        <p>Elige tu crema según tu objetivo de piel. <span class="instruction">Aplica en rostro y cuello con masajes ascendentes.</span></p>
+                        <ul class="ritual-options">
+                            <li><strong>Crema de Perlas Puras:</strong> Aclara, unifica y aporta luz. <span>(Manchas · piel apagada)</span></li>
+                            <li><strong>Crema Focalizada Pure Skin:</strong> Reduce imperfecciones y calma. <span>(Piel grasa · tendencia acneica)</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Paso 8 -->
+                    <div class="ritual-step step-8">
+                        <span class="step-number">PASO 08</span>
+                        <h2 class="title-large">PROTEGE</h2>
+                        <h3 class="product-name">Protector Solar SPF 50+</h3>
+                        <p>El paso más importante en el trópico: escudo diario amplio espectro contra UVA/UVB con acabado ligero.</p>
+                        <p class="instruction"><strong>Uso:</strong> Aplica como último paso de tu rutina de mañana. Reaplica cada 2 horas si hay exposición.</p>
+                    </div>
+
+                </div>
             </div>
-            <!-- Se agrega el delay para que aparezca después del texto del ritual -->
+            
             <div class="image-box animate-img delay-img">
-                 <img src="img/blanca.png" alt="Ritual Desmaquillante" class="img-responsive">
+                 <img src="img/blanca.png" alt="Ritual Bioaqua" class="img-responsive">
             </div>
         </section>
 

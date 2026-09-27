@@ -2,10 +2,10 @@
    PÁGINA DE PRODUCTOS (Mockup)
    ========================================= */
 
-/* Fondo de la página de productos basado en el mockup */
+/* Fondo de la página de productos */
 .bg-page-products {
-    background-color: #ffff;
-    color: var(--color-blanco);
+    background-color: #fdfcfb;
+    color: var(--color-negro);
 }
 
 .products-main-container {
@@ -35,35 +35,57 @@
 /* Contenedores Flexbox generales */
 .flex-grid {
     display: flex;
-    flex-direction: column; /* Mobile First: una columna */
+    flex-direction: column;
     gap: 2rem;
     align-items: center;
 }
 
-/* --- Best Sellers --- */
+/* =========================================
+   BEST SELLERS
+   ========================================= */
 .best-seller-item {
     text-align: center;
-    max-width: 250px;
+    max-width: 280px;
+    padding: 1.25rem;
+    background-color: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.best-seller-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
 }
 
 .best-seller-item h3 {
-    margin-top: 1rem;
-    font-size: 1.2rem;
+    margin-top: 0.7rem;
+    font-size: 1.15rem;
+    color: var(--color-negro);
+    letter-spacing: 0.2px;
+    text-align: left;
 }
 
-.best-seller-item p {
-    font-size: 0.85rem;
-    opacity: 0.8;
+/* ✅ Párrafos de best sellers ahora en NEGRO */
+.best-seller-item p,
+.product-description {
+    color: var(--color-negro);
+    font-size: 0.88rem;
+    line-height: 1.55;
+    margin-top: 0.35rem;
+    opacity: 0.85;
+    text-align: left;
 }
 
 .bs-img {
-    height: 250px;
-    background-color: transparent;
-    color: var(--color-negro);
+    height: 230px;
+    background-color: #faf7f5;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    padding: 0.5rem;
 }
 
 .bs-img img {
@@ -71,63 +93,86 @@
     height: 100%;
     object-fit: contain;
 }
-.product-title{
+
+.product-title {
     color: var(--color-negro);
 }
-.product-description{
-    color: var(--color-blanco)
-}
+
 /* =========================================
    EFECTO FLIP CARD (Tarjetas Giratorias)
    ========================================= */
 .flip-card {
     background-color: transparent;
     width: 100%;
-    max-width: 300px; /* Ancho máximo de la tarjeta */
-    height: 420px;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    border-radius: 15%;
+    max-width: 300px;
+    height: 430px;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.10);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
 }
 
 .flip-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 16px 28px rgba(0,0,0,0.3);
+    transform: translateY(-8px);
+    box-shadow: 0 22px 42px rgba(0, 0, 0, 0.18);
 }
 
-/* Las dos secciones permanecen visibles dentro de la misma tarjeta. */
 .flip-card-inner {
     width: 100%;
     height: 100%;
     text-align: center;
     display: flex;
     flex-direction: column;
-    border-radius: 10px;
+    border-radius: 14px;
+    background-color: #ffffff;
     overflow: hidden;
 }
 
-/* Estilos compartidos para las secciones de la tarjeta */
-.flip-card-front, .flip-card-back {
+.flip-card-front,
+.flip-card-back {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 1.5rem;
 }
 
-/* Frente de la tarjeta (Blanco con texto negro) */
 .flip-card-front {
-    height: 65%;
-    background-color: var(--color-blanco);
+    height: 64%;
+    padding: 0 1rem 0.7rem;
+    background-color: #ffffff;
     color: var(--color-negro);
+}
+
+.flip-card-front h4 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: 100%;
+    margin: 0;
+    text-align: left;
+    font-size: 1rem;
+}
+
+.flip-card-front h4::after {
+    content: "BIOAQUA";
+    flex: 0 0 auto;
+    padding: 0.35rem 0.55rem;
+    border-radius: 999px;
+    background-color: #ffff;
+    color: #00BFFF;
+    font-size: 0.62rem;
+    font-weight: 700;
 }
 
 .product-img {
     width: 100%;
-    height: 180px;
-    flex: 0 0 180px;
-    margin-bottom: 0.75rem;
+    height: 205px;
+    flex: 0 0 205px;
+    margin-bottom: 0.45rem;
+    border-radius: 10px;
+    background-color: #ffff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -140,11 +185,15 @@
     object-fit: contain;
 }
 
-/* La descripción ocupa la parte inferior de la tarjeta. */
-.flip-card-back {
-    height: 35%;
-    color: var(--color-blanco);
-    padding: 1rem 1.25rem;
+.flip-card-back,
+.flip-card-back.bg-card-desc {
+    height: 36%;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.3rem;
+    padding: 0.1rem 1.1rem 0.7rem;
+    background-color: #ffffff;
+    color: var(--color-negro);
 }
 
 .flip-card-back h4 {
@@ -152,8 +201,34 @@
 }
 
 .flip-card-back p {
-    font-size: 0.95rem;
-    line-height: 1.5;
+    color: #555555;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    letter-spacing: 0;
+    text-align: left;
+    margin: 0;
+}
+
+.product-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.35rem;
+}
+
+.best-seller-item .product-tags {
+    justify-content: center;
+    margin-top: 0.65rem;
+}
+
+.product-tags span {
+    padding: 0.25rem 0.55rem;
+    border-radius: 999px;
+    background-color: #e8f4f2;
+    color: #00BFFF;
+    font-size: 0.67rem;
+    line-height: 1.2;
+    white-space: nowrap;
 }
 
 /* =========================================
@@ -163,21 +238,19 @@
     .category-title {
         text-align: left;
     }
-    
-    /* Cambia a filas en escritorio usando Flexbox */
+
     .flex-grid {
         flex-direction: row;
-        justify-content: flex-start; /* Alinea a la izquierda en lugar de centrar */
-        flex-wrap: wrap; /* Permite que salten de línea si no caben */
+        justify-content: flex-start;
+        flex-wrap: wrap;
         gap: 3rem;
     }
 
-    /* Centra los Best Sellers como en el mockup */
     .best-sellers-grid {
-        justify-content: space-around;
+        justify-content: space-between;
     }
 
     .flip-card {
-        width: calc(33.333% - 2rem); /* 3 tarjetas por fila descontando el gap */
+        width: calc(33.333% - 2rem);
     }
 }
