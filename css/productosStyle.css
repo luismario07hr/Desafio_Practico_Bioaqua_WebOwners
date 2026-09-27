@@ -4,7 +4,7 @@
 
 /* Fondo de la página de productos basado en el mockup */
 .bg-page-products {
-    background-color: #1a1a9a; /* Un azul intenso similar al mockup */
+    background-color: #ffff;
     color: var(--color-blanco);
 }
 
@@ -21,14 +21,14 @@
 .category-title {
     font-size: 2.5rem;
     margin-bottom: 2rem;
-    color: var(--color-blanco);
+    color: var(--color-negro);
     text-align: center;
 }
 
 .category-subtitle {
     font-size: 1.5rem;
     margin-bottom: 1.5rem;
-    color: var(--color-blanco);
+    color: var(--color-negro);
     font-weight: normal;
 }
 
@@ -59,8 +59,17 @@
 .bs-img {
     height: 250px;
     background-color: transparent;
-    border: 1px dashed rgba(255,255,255,0.5);
-    color: var(--color-blanco);
+    color: var(--color-negro);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.bs-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 /* =========================================
@@ -70,71 +79,76 @@
     background-color: transparent;
     width: 100%;
     max-width: 300px; /* Ancho máximo de la tarjeta */
-    height: 400px; /* Altura de la tarjeta blanca del mockup */
-    perspective: 1000px; /* Da el efecto de profundidad 3D */
+    height: 420px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    border-radius: 15%;
 }
 
-/* Contenedor interno necesario para posicionar los lados */
+.flip-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 28px rgba(0,0,0,0.3);
+}
+
+/* Las dos secciones permanecen visibles dentro de la misma tarjeta. */
 .flip-card-inner {
-    position: relative;
     width: 100%;
     height: 100%;
     text-align: center;
-    transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1); /* Transición fluida */
-    transform-style: preserve-3d; /* Permite elementos 3D hijos */
-}
-
-/* Al hacer hover en la tarjeta, rota el contenedor interno en el eje Y */
-.flip-card:hover .flip-card-inner {
-    transform: rotateY(180deg);
-}
-
-/* Estilos compartidos para el frente y el reverso */
-.flip-card-front, .flip-card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    -webkit-backface-visibility: hidden; /* Safari */
-    backface-visibility: hidden; /* Oculta la parte trasera cuando está de espaldas */
+    display: flex;
+    flex-direction: column;
     border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Estilos compartidos para las secciones de la tarjeta */
+.flip-card-front, .flip-card-back {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 1.5rem;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
 /* Frente de la tarjeta (Blanco con texto negro) */
 .flip-card-front {
+    height: 65%;
     background-color: var(--color-blanco);
     color: var(--color-negro);
 }
 
 .product-img {
     width: 100%;
-    flex: 1;
-    background-color: #f5f5f5;
-    border: 1px dashed #ccc;
-    margin-bottom: 1rem;
-    min-height: 200px;
+    height: 180px;
+    flex: 0 0 180px;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 
-/* Reverso de la tarjeta (Gira y revela más info) */
+.product-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* La descripción ocupa la parte inferior de la tarjeta. */
 .flip-card-back {
-    /* bg-cyan se aplicará desde el HTML (color celeste de la marca) */
+    height: 35%;
     color: var(--color-blanco);
-    transform: rotateY(180deg); /* El reverso inicia girado a 180 grados */
+    padding: 1rem 1.25rem;
 }
 
 .flip-card-back h4 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+    display: none;
 }
 
 .flip-card-back p {
-    font-size: 1rem;
-    line-height: 1.6;
+    font-size: 0.95rem;
+    line-height: 1.5;
 }
 
 /* =========================================
