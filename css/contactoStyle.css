@@ -123,7 +123,7 @@
 }
 
 .contact-form input:focus:invalid {
-    border-color: #ff5252;
+    border-color: #000;
 }
 
 /* Grupo de Input de Celular (País + Número) */
