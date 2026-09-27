@@ -71,7 +71,12 @@
     height: 100%;
     object-fit: contain;
 }
-
+.product-title{
+    color: var(--color-negro);
+}
+.product-description{
+    color: var(--color-blanco)
+}
 /* =========================================
    EFECTO FLIP CARD (Tarjetas Giratorias)
    ========================================= */
