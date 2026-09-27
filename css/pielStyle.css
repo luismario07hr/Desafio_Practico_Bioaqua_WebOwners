@@ -2,10 +2,16 @@
    PÁGINA: TU TIPO DE PIEL (CSS Tabs)
    ========================================= */
 
-/* Hero Section */
+/* Colores Utilitarios Nuevos */
+.bg-white { background-color: var(--color-blanco); }
+.bg-deep-blue { background-color: #1a1a9a; color: var(--color-blanco); } 
+
+/* =========================================
+   HERO SECTION
+   ========================================= */
 .hero-skin {
     position: relative;
-    padding: 0; /* Quitamos padding para que la imagen ocupe todo */
+    padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -13,68 +19,49 @@
     min-height: 250px;
 }
 
-.hero-skin-content {
+/* Contenido de texto sobre el hero */
+.hero-skin > div:first-child {
     position: absolute;
     z-index: 2;
     padding: 2rem;
     max-width: 800px;
 }
 
-.skin-hero-bg {
+/* Imagen de fondo del hero */
+.hero-skin > div:last-child {
     width: 100%;
     min-height: 250px;
-    background-color: #555; /* Simula imagen oscura de fondo */
+    background-color: #555;
     opacity: 0.6;
 }
 
-/* Colores Utilitarios Nuevos */
-.bg-white { background-color: var(--color-blanco); }
-.text-dark { color: var(--color-negro); }
-.bg-deep-blue { background-color: #1a1a9a; color: var(--color-blanco); } /* Azul oscuro del mockup */
-
-/* Separador oscuro para fondos blancos */
-.separator-dark {
-    width: 50px;
-    border: 1px solid var(--color-negro);
-    margin: 1rem auto;
+.hero-skin > div:last-child > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
-/* Botón Azul Oscuro */
-.btn-dark-blue {
-    display: inline-block;
-    background-color: #1a1a9a;
-    color: var(--color-blanco);
-    text-decoration: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
-
-.btn-dark-blue:hover {
-    background-color: var(--color-azul);
-}
-
-.mt-1 { margin-top: 1.5rem; }
-
-/* Contenedor de Pestañas */
+/* =========================================
+   CONTENEDOR DE PESTAÑAS Y NAVEGACIÓN
+   ========================================= */
 .skin-tabs-container {
     width: 100%;
 }
 
 /* Ocultar los inputs de radio (Lógica del Tab) */
-.skin-tabs-container input[type="radio"] {
+.skin-tabs-container > input[type="radio"] {
     display: none;
 }
 
-/* Navegación de Pestañas */
-.skin-nav {
+/* Navegación de Pestañas (Submenú) */
+.skin-tabs-container > nav {
     display: flex;
-    flex-direction: column; /* Apilados en móvil */
-    background-color: #1a1a9a; /* Color base inactivo */
+    flex-direction: column;
+    background-color: #1a1a9a; 
 }
 
-.skin-tab-label {
+.skin-tabs-container > nav > label {
     padding: 1rem;
     text-align: center;
     color: var(--color-blanco);
@@ -84,79 +71,127 @@
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
-/* Ocultar todos los contenidos por defecto */
-.skin-panel-content {
+/* =========================================
+   LÓGICA CSS: PESTAÑAS (TABS)
+   ========================================= */
+
+/* Ocultar todos los artículos por defecto */
+.skin-tabs-container > div > article {
     display: none; 
-    animation: fadeInUp 0.5s ease forwards; /* Animación al mostrar */
+    animation: fade-in-up 0.5s ease forwards;
 }
 
-/* --- LÓGICA CSS: Mostrar contenido según el input seleccionado --- */
-#tab-acne:checked ~ .skin-content-wrapper #content-acne,
-#tab-grasa:checked ~ .skin-content-wrapper #content-grasa,
-#tab-seca:checked ~ .skin-content-wrapper #content-seca,
-#tab-manchas:checked ~ .skin-content-wrapper #content-manchas {
+/* Mostrar contenido según el input seleccionado usando combinador hermano general ~ */
+#tab-acne:checked ~ div > #content-acne,
+#tab-grasa:checked ~ div > #content-grasa,
+#tab-seca:checked ~ div > #content-seca,
+#tab-manchas:checked ~ div > #content-manchas {
     display: block;
 }
 
-/* --- LÓGICA CSS: Cambiar color de la pestaña seleccionada (Cyan) --- */
-#tab-acne:checked ~ .skin-nav label[for="tab-acne"],
-#tab-grasa:checked ~ .skin-nav label[for="tab-grasa"],
-#tab-seca:checked ~ .skin-nav label[for="tab-seca"],
-#tab-manchas:checked ~ .skin-nav label[for="tab-manchas"] {
-    background-color: var(--color-celeste); /* Cyan para el activo */
+/* Cambiar color de la pestaña (label) seleccionada a Cyan */
+#tab-acne:checked ~ nav > label[for="tab-acne"],
+#tab-grasa:checked ~ nav > label[for="tab-grasa"],
+#tab-seca:checked ~ nav > label[for="tab-seca"],
+#tab-manchas:checked ~ nav > label[for="tab-manchas"] {
+    background-color: var(--color-celeste);
     color: var(--color-blanco);
 }
 
-/* Imágenes de productos dentro de las tarjetas */
-.skin-product-img {
+/* =========================================
+   ESTILOS INTERNOS DE LOS ARTÍCULOS (CONTENIDO)
+   ========================================= */
+
+/* Ajustes de las imágenes dentro de los paneles (product-side) */
+.skin-tabs-container article .split-section > div > div:first-of-type {
     background-color: #f5f5f5;
     border-radius: 20px;
     margin: 1.5rem auto;
     width: 80%;
     min-height: 150px;
-    overflow: hidden; /* Corta el desbordamiento de la imagen para mantener los bordes redondos */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Ajustes específicos para los textos */
-.info-side h2 {
+.skin-tabs-container article .split-section > div > div:first-of-type > img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Ajustes específicos de texto y separadores (info-side) */
+.skin-tabs-container article hr {
+    width: 50px;
+    border: 1px solid var(--color-negro);
+    margin: 1rem auto;
+}
+
+.skin-tabs-container article span:first-of-type,
+.skin-tabs-container article span:last-of-type {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    display: block;
+}
+
+.skin-tabs-container article h2 {
     font-size: 2rem;
 }
 
-.info-side p {
+.skin-tabs-container article p {
     font-size: 1rem;
 }
 
+/* Diseño del enlace (Botón contactar) */
+.skin-tabs-container article a {
+    display: inline-block;
+    background-color: #1a1a9a;
+    color: var(--color-blanco);
+    text-decoration: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-top: 1.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.skin-tabs-container article a:hover {
+    background-color: var(--color-azul);
+}
+
 /* =========================================
-   MEDIA QUERIES - TU TIPO DE PIEL (Desktop >= 768px)
+   MEDIA QUERIES (Desktop >= 768px)
    ========================================= */
 @media (min-width: 768px) {
     /* Menú en fila horizontal */
-    .skin-nav {
+    .skin-tabs-container > nav {
         flex-direction: row;
     }
 
-    .skin-tab-label {
-        flex: 1; /* Todos miden lo mismo */
+    .skin-tabs-container > nav > label {
+        flex: 1; 
         border-bottom: none;
         border-right: 1px solid rgba(255,255,255,0.1);
     }
 
-    .skin-tab-label:last-child {
+    .skin-tabs-container > nav > label:last-child {
         border-right: none;
     }
 
-    /* En Flexbox, podemos cambiar el orden de las columnas visualmente.
-       Para Seca y Manchas, el lado blanco va a la izquierda en el mockup. */
+    /* Invertir el orden para Seca y Manchas (.reverse-desktop) */
     .reverse-desktop {
-        flex-direction: row; /* Fuerza fila */
+        flex-direction: row;
     }
 
-    /* Invertir el orden: info-side a la izquierda (1), product-side a la derecha (2) */
-    .reverse-desktop .info-side {
-        order: 1;
+    /* Usamos :first-child y :last-child en lugar de clases .info-side / .product-side */
+    .reverse-desktop > div:first-child {
+        order: 1; /* Caja Blanca */
     }
 
-    .reverse-desktop .product-side {
-        order: 2;
+    .reverse-desktop > div:last-child {
+        order: 2; /* Caja Azul */
     }
 }
