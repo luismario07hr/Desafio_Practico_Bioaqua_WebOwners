@@ -14,19 +14,6 @@
     }
 }
 
-/* Placeholders específicos para Sobre Nosotros */
-.placeholder-img-quienes {
-    background-color: #fce4ec; /* Tono rosa claro similar a los productos del mockup */
-}
-
-.placeholder-img-mision {
-    background-color: #e8f5e9; /* Tono verde claro */
-}
-
-.placeholder-img-vision {
-    background-color: #eeeeee; /* Tono grisáceo claro / tela blanca */
-}
-
 /* Fondo azul oscuro para las secciones ¿Quiénes somos? y Visión */
 .bg-deep-blue {
     background-color: #190082; /* Tono azul oscuro/violeta basado en el mockup */
