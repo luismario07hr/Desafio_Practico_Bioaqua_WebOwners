@@ -1,0 +1,222 @@
+/* =========================================
+   PÁGINA: INICIO (INDEX)
+   ========================================= */
+
+/* Animación exclusiva para las imágenes del index */
+@keyframes fade-scale-in {
+    0% { opacity: 0; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+.animate-img {
+    animation: fade-scale-in 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    opacity: 0;
+}
+
+.delay-img {
+    animation-delay: 0.4s;
+}
+
+/* =========================================
+   SECCIÓN: PUNTOS DE VENTA (Locations)
+   ========================================= */
+.locations-section {
+    padding: 4rem 2rem;
+}
+
+/* Contenedor del encabezado de ubicaciones */
+.locations-section > div:first-child h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.locations-section > div:first-child hr {
+    width: 50px;
+    border: 1px solid var(--color-blanco);
+    margin: 1rem auto 2rem auto;
+}
+
+/* Contenedor de las tarjetas */
+.locations-section > div:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+}
+
+/* Tarjeta (Article) */
+.locations-section article {
+    background-color: var(--color-blanco);
+    color: var(--color-negro);
+    padding: 2rem;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.locations-section article:hover {
+    transform: translateY(-10px);
+}
+
+/* Logo de la tienda dentro de la tarjeta */
+.locations-section article > div:first-child {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    min-height: 40px;
+}
+
+.locations-section article img {
+    max-width: 100%;
+    height: auto;
+    max-height: 45px;
+    object-fit: contain;
+}
+
+/* Títulos y Listas dentro de la tarjeta */
+.locations-section article > h4 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.locations-section article > ul {
+    list-style-type: none;
+    font-size: 0.85rem;
+    color: #555;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.locations-section article > ul > li {
+    margin-bottom: 0.5rem;
+    position: relative;
+    padding-left: 15px;
+}
+
+.locations-section article > ul > li::before {
+    content: "•";
+    color: var(--color-celeste);
+    position: absolute;
+    left: 0;
+}
+
+/* Botón de la tarjeta */
+.locations-section article > a {
+    margin-top: auto;
+    background-color: var(--color-celeste);
+    color: var(--color-blanco);
+    text-decoration: none;
+    padding: 0.8rem 1rem;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.locations-section article > a:hover {
+    background-color: var(--color-azul);
+}
+
+/* =========================================
+   ANIMACIÓN RITUAL BIOAQUA (8 PASOS - CSS PURO)
+   ========================================= */
+
+.ritual-slider {
+    display: grid;
+    align-items: start;
+    margin-top: 1rem;
+}
+
+.ritual-slider > div {
+    grid-area: 1 / 1;
+    opacity: 0;
+    pointer-events: none; 
+    animation: ritual-auto-fade 48s infinite;
+}
+
+/* Retrasos escalonados controlados con :nth-child en lugar de clases .step-1, .step-2 */
+.ritual-slider > div:nth-child(1) { animation-delay: 0s; }
+.ritual-slider > div:nth-child(2) { animation-delay: 6s; }
+.ritual-slider > div:nth-child(3) { animation-delay: 12s; }
+.ritual-slider > div:nth-child(4) { animation-delay: 18s; }
+.ritual-slider > div:nth-child(5) { animation-delay: 24s; }
+.ritual-slider > div:nth-child(6) { animation-delay: 30s; }
+.ritual-slider > div:nth-child(7) { animation-delay: 36s; }
+.ritual-slider > div:nth-child(8) { animation-delay: 42s; }
+
+@keyframes ritual-auto-fade {
+    0% { opacity: 0; transform: translateY(15px); }
+    2% { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    10% { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    12.5% { opacity: 0; transform: translateY(-15px); pointer-events: none; }
+    100% { opacity: 0; pointer-events: none; }
+}
+
+/* =========================================
+   ESTILOS INTERNOS DEL RITUAL BIOAQUA
+   ========================================= */
+
+/* Indicador de Paso (Ej. PASO 01) */
+.ritual-slider > div > span:first-child {
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    color: var(--color-negro);
+    font-weight: bold;
+    display: block;
+    margin-bottom: 15px;
+}
+
+/* Nombre del producto */
+.ritual-slider > div > h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    color: var(--color-negro);
+}
+
+/* Texto de instrucciones (Aplica al segundo párrafo o al span interno) */
+.ritual-slider > div > p:nth-of-type(2),
+.ritual-slider > div > p > span {
+    font-size: 0.9rem;
+    font-style: italic;
+    margin-top: 0.5rem;
+    opacity: 0.9;
+}
+
+/* Lista de opciones (Para los pasos 5 y 7) */
+.ritual-slider > div > ul {
+    list-style: none;
+    margin-top: 1rem;
+    padding: 0;
+    font-size: 0.9rem;
+}
+
+.ritual-slider > div > ul > li {
+    margin-bottom: 0.8rem;
+    padding-left: 12px;
+    border-left: 2px solid var(--color-negro);
+}
+
+.ritual-slider > div > ul > li > span {
+    display: block;
+    color: #444;
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+/* =========================================
+   MEDIA QUERIES (Desktop >= 768px)
+   ========================================= */
+@media (min-width: 768px) {
+    /* Tarjetas en fila para la sección Locations */
+    .locations-section > div:last-child {
+        flex-direction: row;
+        justify-content: center;
+        align-items: stretch;
+    }
+}

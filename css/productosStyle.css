@@ -37,7 +37,7 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    align-items: center;
+    align-items: stretch;
 }
 
 .products-cards-grid {
@@ -48,10 +48,18 @@
     gap: 2rem;
 }
 
+.best-sellers-grid{
+    align-items: stretch;
+}
+
 /* =========================================
    BEST SELLERS
    ========================================= */
 .best-seller-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distribuye el espacio y empuja elementos (como botones) al fondo */
+    height: 100%; /* Obliga a la tarjeta a estirarse al tamaño de la más alta del contenedor */
     text-align: center;
     max-width: 280px;
     padding: 1.25rem;
@@ -112,7 +120,7 @@
 .product-card {
     background-color: transparent;
     flex: 1 1 280px;             /* crece y se adapta, mínimo 280px */
-    max-width: 300px;            /* mantiene el ancho máximo */
+    max-width: 300px;   /* mantiene el ancho máximo */
     height: auto;
     display: flex;
     border-radius: 14px;

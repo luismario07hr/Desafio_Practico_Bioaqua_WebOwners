@@ -4,13 +4,13 @@
 :root {
     --color-negro: #231F20;
     --color-azul: #2A7DE1;
-    --color-celeste: #00BFFF; /* Ajustado ligeramente para contraste en pantalla según mockup */
+    --color-celeste: #00BFFF;
     --color-blanco: #FFFFFF;
     --font-principal: 'Gilroy', sans-serif;
 }
 
 /* =========================================
-   RESET GENERAL
+   RESET GENERAL Y COMPORTAMIENTO BASE
    ========================================= */
 * {
     margin: 0;
@@ -25,31 +25,27 @@ body {
 }
 
 /* =========================================
-   CLASES UTILITARIAS Y COLORES
+   CLASES UTILITARIAS Y COLORES GLOBALES
    ========================================= */
 .bg-dark { background-color: var(--color-negro); color: var(--color-blanco); }
 .bg-blue { background-color: var(--color-azul); color: var(--color-blanco); }
 .bg-cyan { background-color: var(--color-celeste); color: var(--color-blanco); }
 .text-center { text-align: center; }
 .text-right { text-align: right; }
+.text-dark { color: var(--color-negro); }
+.title-large { font-size: 3rem !important; }
 
 /* =========================================
-   ANIMACIONES (Keyframes)
+   ANIMACIONES GLOBALES (Keyframes)
    ========================================= */
-@keyframes fadeInUp {
-    0% {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+@keyframes fade-in-up {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
-    animation: fadeInUp 1s ease-out forwards;
-    opacity: 0; /* Oculto inicialmente hasta que inicie la animación */
+    animation: fade-in-up 1s ease-out forwards;
+    opacity: 0;
 }
 
 .delay-1 { animation-delay: 0.3s; }
@@ -65,20 +61,22 @@ body {
     padding: 1rem;
 }
 
-.logo-text {
-    font-weight: 800;
-    font-size: 1.8rem;
-    letter-spacing: 1px;
+/* Contenedor del Logo */
+.header > div {
+    display: flex;
+    align-items: center;
 }
 
-.logo-france {
+/* Imagen del Logo */
+.header img {
+    max-height: 60px;
+    width: auto;
+    object-fit: contain;
     display: block;
-    font-weight: 300;
-    font-size: 0.9rem;
-    letter-spacing: 4px;
 }
 
-.nav-links {
+/* Navegación */
+.header nav > ul {
     list-style: none;
     display: flex;
     flex-direction: column;
@@ -87,14 +85,15 @@ body {
     text-align: center;
 }
 
-.nav-links a {
+.header nav a {
     text-decoration: none;
     color: var(--color-blanco);
     font-size: 0.9rem;
     transition: color 0.3s ease;
 }
 
-.nav-links a.active, .nav-links a:hover {
+.header nav a.active, 
+.header nav a:hover {
     color: var(--color-celeste);
 }
 
@@ -103,9 +102,10 @@ body {
    ========================================= */
 .split-section {
     display: flex;
-    flex-direction: column; /* Apilado en móvil */
+    flex-direction: column;
 }
 
+/* Caja de contenido de texto */
 .content-box {
     padding: 3rem 2rem;
     display: flex;
@@ -113,36 +113,33 @@ body {
     justify-content: center;
 }
 
-.content-box .overline {
+/* Selectores estructurales para el contenido interno (reemplaza .overline, h2, p) */
+.content-box > span:first-of-type {
     font-size: 0.8rem;
     letter-spacing: 2px;
     margin-bottom: 1rem;
     text-transform: uppercase;
 }
 
-.content-box h2 {
+.content-box > h2 {
     font-size: 2.5rem;
     line-height: 1.1;
     margin-bottom: 1rem;
     font-weight: bold;
 }
 
-.content-box h3 {
+.content-box > h3 {
     font-size: 1.2rem;
     font-weight: normal;
     margin-bottom: 0.5rem;
 }
 
-.content-box .title-large {
-    font-size: 3rem;
-}
-
-.content-box p {
+.content-box > p {
     font-size: 0.95rem;
     opacity: 0.9;
 }
 
-/* Placeholders para imágenes */
+/* Caja de imagen y comportamiento responsivo global de imágenes */
 .image-box {
     min-height: 300px;
     display: flex;
@@ -151,109 +148,11 @@ body {
     background-color: #eee;
 }
 
-.placeholder-img-hero { background-color: #fce4ec; }
-.placeholder-img-vitc { background-color: #e65100; color: white;}
-.placeholder-img-ritual { background-color: #e0e0e0; }
-
-.placeholder-text {
-    font-style: italic;
-    color: #666;
-    border: 1px dashed #999;
-    padding: 10px;
-}
-
-/* =========================================
-   SECCIÓN DE PUNTOS DE VENTA (Cards)
-   ========================================= */
-.locations-section {
-    padding: 4rem 2rem;
-}
-
-.locations-header h2 {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-}
-
-.separator {
-    width: 50px;
-    border: 1px solid var(--color-blanco);
-    margin: 1rem auto 2rem auto;
-}
-
-.cards-container {
-    display: flex;
-    flex-direction: column; /* Apilado en móvil */
-    gap: 2rem;
-    align-items: center;
-}
-
-.card {
-    background-color: var(--color-blanco);
-    color: var(--color-negro);
-    padding: 2rem;
-    border-radius: 15px;
+.image-box > img {
     width: 100%;
-    max-width: 350px;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-10px); /* Efecto hover en tarjetas */
-}
-
-.card-logo {
-    font-weight: bold;
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-    min-height: 40px;
-}
-
-.text-pink { color: #d81b60; }
-.text-red { color: #d32f2f; }
-
-.card h4 {
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-}
-
-.card-list {
-    list-style-type: none;
-    font-size: 0.85rem;
-    color: #555;
-    margin-bottom: 2rem;
-    text-align: left;
-}
-
-.card-list li {
-    margin-bottom: 0.5rem;
-    position: relative;
-    padding-left: 15px;
-}
-
-.card-list li::before {
-    content: "•";
-    color: var(--color-celeste);
-    position: absolute;
-    left: 0;
-}
-
-.btn-primary {
-    margin-top: auto; /* Empuja el botón al fondo de la tarjeta */
-    background-color: var(--color-celeste);
-    color: var(--color-blanco);
-    text-decoration: none;
-    padding: 0.8rem 1rem;
-    border-radius: 25px;
-    font-weight: bold;
-    font-size: 0.9rem;
-    transition: background-color 0.3s ease;
-}
-
-.btn-primary:hover {
-    background-color: var(--color-azul);
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 /* =========================================
@@ -272,45 +171,36 @@ body {
    MEDIA QUERIES (Desktop >= 768px)
    ========================================= */
 @media (min-width: 768px) {
-    /* Header en fila */
     .header {
         flex-direction: row;
         justify-content: space-between;
         padding: 1.5rem 4rem;
     }
 
-    .nav-links {
+    .header nav > ul {
         flex-direction: row;
         gap: 30px;
         margin-top: 0;
     }
 
-    /* Secciones 50/50 */
     .split-section {
-        flex-direction: row; /* Coloca imagen y texto lado a lado */
+        flex-direction: row;
     }
 
     .content-box, .image-box {
-        flex: 1; /* Mitad de la pantalla cada uno */
+        flex: 1;
     }
 
     .content-box {
         padding: 4rem;
     }
 
-    .content-box h2 {
+    .content-box > h2 {
         font-size: 3.5rem;
     }
     
-    .content-box .title-large {
-        font-size: 4rem;
-    }
-
-    /* Tarjetas en fila */
-    .cards-container {
-        flex-direction: row;
-        justify-content: center;
-        align-items: stretch; /* Iguala la altura de las tarjetas */
+    .content-box > .title-large {
+        font-size: 4rem !important;
     }
     
     .footer {
@@ -319,166 +209,4 @@ body {
         padding: 2rem 4rem;
         text-align: left;
     }
-}
-
-.img-responsive {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Evita que la imagen se deforme o aplaste */
-    display: block
-}
-
-/* Animación suave para imágenes (Zoom in + Fade) */
-@keyframes fadeScaleIn {
-    0% {
-        opacity: 0;
-        transform: scale(0.95); /* Comienza ligeramente reducida */
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1); /* Alcanza su tamaño natural */
-    }
-}
-
-.animate-img {
-    animation: fadeScaleIn 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    opacity: 0; /* Se mantiene oculta hasta que inicia la animación */
-}
-
-/* Retraso opcional para que la imagen cargue justo después del texto */
-.delay-img {
-    animation-delay: 0.4s;
-}
-
-/* Control de tamaño para los logos de las tarjetas */
-.logo-tienda {
-    max-width: 100%;
-    height: auto;
-    max-height: 45px; /* Limita la altura para que todos los logos se vean parejos */
-    object-fit: contain; /* Asegura que el logo no se recorte ni se estire */
-}
-
-.text-dark { 
-    color: #231F20;
-}
-
-.logo-img {
-    max-height: 60px; /* Controla la altura del logo dentro del header */
-    width: auto; /* Mantiene la proporción original de la imagen */
-    object-fit: contain; /* Evita cualquier tipo de distorsión */
-    display: block;
-}
-
-/* =========================================
-   ANIMACIÓN RITUAL BIOAQUA (8 PASOS - CSS PURO)
-   ========================================= */
-
-.ritual-slider {
-    display: grid;
-    align-items: start;
-    margin-top: 1rem;
-}
-
-.ritual-step {
-    grid-area: 1 / 1;
-    opacity: 0;
-    pointer-events: none; 
-    
-    /* Animación de 48 segundos infinitos (6 segundos por cada uno de los 8 pasos) */
-    animation: ritualAutoFade 48s infinite;
-}
-
-/* Retrasos escalonados de 6 en 6 segundos */
-.step-1 { animation-delay: 0s; }
-.step-2 { animation-delay: 6s; }
-.step-3 { animation-delay: 12s; }
-.step-4 { animation-delay: 18s; }
-.step-5 { animation-delay: 24s; }
-.step-6 { animation-delay: 30s; }
-.step-7 { animation-delay: 36s; }
-.step-8 { animation-delay: 42s; }
-
-/* 
-   Keyframes ajustados para 8 pasos:
-   Cada paso tiene un "turno" que representa el 12.5% del tiempo total (6 segundos de 48).
-   2%   = ~1 segundo (Transición de entrada)
-   10%  = ~4 segundos (Tiempo de lectura estático)
-   12.5% = ~1 segundo (Transición de salida)
-*/
-@keyframes ritualAutoFade {
-    0% {
-        opacity: 0;
-        transform: translateY(15px);
-    }
-    2% {
-        opacity: 1;
-        transform: translateY(0);
-        pointer-events: auto;
-    }
-    10% {
-        opacity: 1;
-        transform: translateY(0);
-        pointer-events: auto;
-    }
-    12.5% {
-        opacity: 0;
-        transform: translateY(-15px);
-        pointer-events: none;
-    }
-    100% {
-        opacity: 0;
-        pointer-events: none;
-    }
-}
-
-/* =========================================
-   ESTILOS INTERNOS DEL RITUAL BIOAQUA
-   ========================================= */
-
-/* Indicador de Paso (Ej. PASO 01) */
-.step-number {
-    font-size: 0.85rem;
-    letter-spacing: 3px;
-    color: var(--color-negro);
-    font-weight: bold;
-    display: block;
-    margin-bottom: 15px; /* Acerca el título grande */
-}
-
-/* Nombre del producto */
-.product-name {
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-top: 0.5rem;
-    margin-bottom: 1rem;
-    color: var(--color-negro);
-}
-
-/* Texto de instrucciones */
-.instruction {
-    font-size: 0.9rem;
-    font-style: italic;
-    margin-top: 0.5rem;
-    opacity: 0.9;
-}
-
-/* Lista de opciones (Para los pasos 5 y 7) */
-.ritual-options {
-    list-style: none;
-    margin-top: 1rem;
-    padding: 0;
-    font-size: 0.9rem;
-}
-
-.ritual-options li {
-    margin-bottom: 0.8rem;
-    padding-left: 12px;
-    border-left: 2px solid var(--color-negro); /* Línea lateral minimalista */
-}
-
-.ritual-options span {
-    display: block;
-    color: #444;
-    font-size: 0.85rem;
-    font-style: italic;
 }
