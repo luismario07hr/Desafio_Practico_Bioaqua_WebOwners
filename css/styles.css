@@ -367,3 +367,117 @@ body {
     object-fit: contain; /* Evita cualquier tipo de distorsión */
     display: block;
 }
+
+/* =========================================
+   ANIMACIÓN RITUAL BIOAQUA (8 PASOS - CSS PURO)
+   ========================================= */
+
+.ritual-slider {
+    display: grid;
+    align-items: start;
+    margin-top: 1rem;
+}
+
+.ritual-step {
+    grid-area: 1 / 1;
+    opacity: 0;
+    pointer-events: none; 
+    
+    /* Animación de 48 segundos infinitos (6 segundos por cada uno de los 8 pasos) */
+    animation: ritualAutoFade 48s infinite;
+}
+
+/* Retrasos escalonados de 6 en 6 segundos */
+.step-1 { animation-delay: 0s; }
+.step-2 { animation-delay: 6s; }
+.step-3 { animation-delay: 12s; }
+.step-4 { animation-delay: 18s; }
+.step-5 { animation-delay: 24s; }
+.step-6 { animation-delay: 30s; }
+.step-7 { animation-delay: 36s; }
+.step-8 { animation-delay: 42s; }
+
+/* 
+   Keyframes ajustados para 8 pasos:
+   Cada paso tiene un "turno" que representa el 12.5% del tiempo total (6 segundos de 48).
+   2%   = ~1 segundo (Transición de entrada)
+   10%  = ~4 segundos (Tiempo de lectura estático)
+   12.5% = ~1 segundo (Transición de salida)
+*/
+@keyframes ritualAutoFade {
+    0% {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    2% {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+    10% {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+    12.5% {
+        opacity: 0;
+        transform: translateY(-15px);
+        pointer-events: none;
+    }
+    100% {
+        opacity: 0;
+        pointer-events: none;
+    }
+}
+
+/* =========================================
+   ESTILOS INTERNOS DEL RITUAL BIOAQUA
+   ========================================= */
+
+/* Indicador de Paso (Ej. PASO 01) */
+.step-number {
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    color: var(--color-negro);
+    font-weight: bold;
+    display: block;
+    margin-bottom: 15px; /* Acerca el título grande */
+}
+
+/* Nombre del producto */
+.product-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    color: var(--color-negro);
+}
+
+/* Texto de instrucciones */
+.instruction {
+    font-size: 0.9rem;
+    font-style: italic;
+    margin-top: 0.5rem;
+    opacity: 0.9;
+}
+
+/* Lista de opciones (Para los pasos 5 y 7) */
+.ritual-options {
+    list-style: none;
+    margin-top: 1rem;
+    padding: 0;
+    font-size: 0.9rem;
+}
+
+.ritual-options li {
+    margin-bottom: 0.8rem;
+    padding-left: 12px;
+    border-left: 2px solid var(--color-negro); /* Línea lateral minimalista */
+}
+
+.ritual-options span {
+    display: block;
+    color: #444;
+    font-size: 0.85rem;
+    font-style: italic;
+}
