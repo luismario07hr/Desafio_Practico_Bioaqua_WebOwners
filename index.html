@@ -11,7 +11,7 @@
     <!-- ENCABEZADO OSCURO -->
     <header class="header bg-dark">
         <div class="logo-container">
-            <h1 class="logo-text">BIOAQUA <span class="logo-france">FRANCE</span></h1>
+            <img src="img/logo.png" alt="Logo Bioaqua" class="logo-img">
         </div>
         <nav class="main-nav">
             <ul class="nav-links">
@@ -28,26 +28,26 @@
         <!-- SECCIÓN 1: HERO -->
         <section class="split-section hero">
             <div class="content-box bg-blue animate-fade-in">
-                <span class="overline">--- SKINCARE PARA PIEL LATINA</span>
-                <h2>Tu piel.<br>Tu clima.<br>Tu ritual.</h2>
-                <p>Cuidado especializado para las necesidades de la piel latina - hidratación, equilibrio, luminosidad y protección en cada paso, pensado para el clima tropical de Centroamérica.</p>
+                <span class="overline">---- SKINCARE PARA PIEL LATINA</span>
+                <h2>Tu piel.<br><span class="text-dark">Tu clima.</span><br>Tu ritual.</h2>
+                <p>Cuidado especializado para las necesidades de la piel latina — hidratación, equilibrio, luminosidad y protección en cada paso, pensado para el clima tropical de Centroamérica.</p>
             </div>
-            <!-- Espacio para imagen de productos rosa -->
-            <div class="image-box placeholder-img-hero">
-                <span class="placeholder-text">Imagen: Productos Pink</span>
+            <!-- Se agregan las clases animate-img y delay-img a la caja de la imagen -->
+            <div class="image-box animate-img delay-img">
+                <img src="img/rosa.png" alt="Productos Pink" class="img-responsive">
             </div>
         </section>
 
         <!-- SECCIÓN 2: COLECCIÓN -->
         <section class="split-section coleccion">
-            <!-- Espacio para imagen de productos vitamina C -->
-            <div class="image-box placeholder-img-vitc">
-                <span class="placeholder-text">Imagen: Vitamina C</span>
+            <!-- Aquí la imagen aparece primero, por lo que no necesita el delay -->
+            <div class="image-box animate-img">
+                <img src="img/naranja.png" alt="Vitamina C" class="img-responsive">
             </div>
             <div class="content-box bg-cyan animate-fade-in delay-1">
-                <span class="overline">--- SKINCARE PARA PIEL LATINA</span>
-                <h2 class="text-right">La<br>colección<br>uno a uno</h2>
-                <p class="text-right">Cuidado especializado para las necesidades de la piel latina - hidratación, equilibrio, luminosidad y protección en cada paso, pensado para el clima tropical de Centroamérica.</p>
+                <span class="overline">---- SKINCARE PARA PIEL LATINA</span>
+                <h2 class="text-right">La<br><span class="text-dark">colección</span><br>uno a uno</h2>
+                <p class="text-right">Cuidado especializado para las necesidades de la piel latina — hidratación, equilibrio, luminosidad y protección en cada paso, pensado para el clima tropical de Centroamérica.</p>
             </div>
         </section>
 
@@ -56,15 +56,13 @@
             <div class="content-box bg-blue animate-fade-in delay-2">
                 <h3>Ritual Bioaqua</h3>
                 <h2 class="title-large">DESMA<br>QUILLA</h2>
-                <p>Sabemos que después de un día largo e intenso, la cama te llama. Sin embargo, irte a dormir con el maquillaje puesto es el mayor error que puedes cometer en tu rutina de belleza.</p>
-                <br>
-                <p>Durante la noche, nuestra piel entra en su fase natural de regeneración celular. Para que este proceso mágico ocurra, necesita respirar a través de un "lienzo" completamente limpio.</p>
-                <br>
-                <p>Desmaquillarte no es solo quitarte el rímel o la base es liberar a tu rostro de la contaminación, el exceso de sebo y las impurezas acumuladas durante el día.</p>
+                <p>Sabemos que después de un día largo e intenso, la cama te llama. Sin embargo, irte a dormir con el maquillaje puesto es el mayor error que puedes cometer en tu rutina de belleza.
+                    Durante la noche, nuestra piel entra en su fase natural de regeneración celular. Para que este proceso mágico ocurra, necesita respirar a través de un "lienzo" completamente limpio. 
+                    Desmaquillarte no es solo quitarte el rímel o la base; es liberar a tu rostro de la contaminación, el exceso de sebo y las impurezas acumuladas durante el día.</p>
             </div>
-            <!-- Espacio para imagen sobre tela blanca -->
-            <div class="image-box placeholder-img-ritual">
-                 <span class="placeholder-text">Imagen: Ritual Desmaquillante</span>
+            <!-- Se agrega el delay para que aparezca después del texto del ritual -->
+            <div class="image-box animate-img delay-img">
+                 <img src="img/blanca.png" alt="Ritual Desmaquillante" class="img-responsive">
             </div>
         </section>
 
@@ -79,39 +77,45 @@
             <div class="cards-container">
                 <!-- Tarjeta Siman -->
                 <article class="card">
-                    <div class="card-logo">Logo Siman</div>
+                     <div class="card-logo">
+                        <img src="img/siman.png" alt="Logo Siman" class="logo-tienda">
+                    </div>
                     <h4>Almacenes Siman</h4>
                     <ul class="card-list">
                         <li>San Salvador, La Libertad, Santa Ana y San Miguel</li>
                         <li>Lunes a Domingo: 9:00 am - 8:00 pm</li>
-                    </ul>
-                    <a href="#" class="btn-primary">Tiendas cerca mío</a>
+                    </ul> 
+                    <a href="https://www.google.com/maps/search/?api=1&query=Almacenes+Siman+El+Salvador" target="_blank" class="btn-primary">Tiendas cerca mío</a>
                 </article>
 
                 <!-- Tarjeta San Nicolás -->
-                <article class="card">
-                    <div class="card-logo text-pink">Farmacias San Nicolás</div>
-                    <h4>Farmacias San Nicolás</h4>
-                    <ul class="card-list">
-                        <li>San Salvador, La Libertad, Santa Ana y San Miguel</li>
-                        <li>Lunes a Domingo: 9:00 am - 8:00 pm</li>
-                    </ul>
-                    <a href="#" class="btn-primary">Tiendas cerca mío</a>
-                </article>
+                 <article class="card">
+                    <div class="card-logo">
+                         <img src="img/san nicolas.png" alt="Logo Farmacias San Nicolás" class="logo-tienda">
+                        </div>
+                        <h4>Farmacias San Nicolás</h4>
+                        <ul class="card-list">
+                            <li>San Salvador, La Libertad, Santa Ana y San Miguel</li>
+                            <li>Lunes a Domingo: 9:00 am - 8:00 pm</li>
+                        </ul>
+                        <a href="https://www.google.com/maps/search/?api=1&query=Farmacias+San+Nicolas+El+Salvador" target="_blank" class="btn-primary">Tiendas cerca mío</a>
+                    </article>
 
-                <!-- Tarjeta Económicas -->
-                <article class="card">
-                    <div class="card-logo text-red">Farmacias Económicas</div>
-                    <h4>Farmacias Económicas</h4>
-                    <ul class="card-list">
-                        <li>San Salvador, La Libertad, Santa Ana y San Miguel</li>
-                        <li>Lunes a Domingo: 9:00 am - 8:00 pm</li>
-                    </ul>
-                    <a href="#" class="btn-primary">Tiendas cerca mío</a>
-                </article>
-            </div>
-        </section>
-    </main>
+                    <!-- Tarjeta Económicas -->
+                     <article class="card">
+                        <div class="card-logo">
+                              <img src="img/farm econo.png" alt="Logo Farmacias Económicas" class="logo-tienda">
+                            </div>
+                            <h4>Farmacias Económicas</h4>
+                            <ul class="card-list">
+                                <li>San Salvador, La Libertad, Santa Ana y San Miguel</li>
+                                <li>Lunes a Domingo: 9:00 am - 8:00 pm</li>
+                            </ul>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Farmacias+Economicas+El+Salvador" target="_blank" class="btn-primary">Tiendas cerca mío</a>
+                        </article>
+                    </div>
+                </section>
+            </main>
 
     <!-- PIE DE PÁGINA -->
     <footer class="footer bg-dark">
