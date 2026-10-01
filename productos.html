@@ -14,22 +14,23 @@
 
 <!-- ENCABEZADO OSCURO -->
     <header class="header bg-dark">
-        <div class="header-container">
-            <div class="logo">
-                <img src="img/logo.png" alt="Logo Bioaqua">
-            </div>
-            
-            <!-- Botón Hamburguesa para Móviles -->
-            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </button>
+        <div class="logo">
+            <img src="img/logo.png" alt="Logo Bioaqua">
         </div>
+        
+        <!-- Checkbox Hack para menú sin JS -->
+        <input type="checkbox" id="menu-toggle" class="menu-checkbox">
+        
+        <!-- El Label funciona como el botón hamburguesa -->
+        <label for="menu-toggle" class="menu-label">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </label>
 
-        <nav id="main-nav">
+        <!-- Navegación -->
+        <nav class="main-nav">
             <ul>
-                <!-- Ajusta la clase "active" dependiendo de la página en la que estés -->
                 <li><a href="index.html" class="active">Inicio</a></li>
                 <li><a href="productos.html">Productos</a></li>
                 <li><a href="tipo-de-piel.html">Tu tipo de piel</a></li>

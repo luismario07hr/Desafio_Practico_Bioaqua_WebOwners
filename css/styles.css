@@ -210,3 +210,118 @@ body {
         text-align: left;
     }
 }
+
+/* =========================================
+   ENCABEZADO Y MENÚ DESPLEGABLE (CSS PURO)
+   ========================================= */
+
+.header {
+    display: flex;
+    flex-wrap: wrap; /* Permite que el nav baje a una nueva línea en móvil */
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    position: relative;
+}
+
+.logo img {
+    max-height: 50px;
+}
+
+/* Ocultar el checkbox de lógica */
+.menu-checkbox {
+    display: none;
+}
+
+/* Estilo del botón hamburguesa (Label) */
+.menu-label {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 5px;
+    z-index: 10;
+}
+
+.menu-label .bar {
+    width: 30px;
+    height: 3px;
+    background-color: var(--color-blanco, #ffffff);
+    transition: all 0.3s ease;
+    border-radius: 3px;
+}
+
+/* --- Navegación Móvil (Oculta por defecto) --- */
+.main-nav {
+    display: none; /* Oculto en móvil */
+    width: 100%;
+    text-align: center;
+    margin-top: 1rem;
+    animation: fade-in-up 0.3s ease forwards;
+}
+
+.main-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-bottom: 1rem;
+}
+
+.main-nav ul li a {
+    color: var(--color-blanco, #ffffff);
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+    display: block;
+}
+
+/* LÓGICA CSS: Mostrar menú cuando el checkbox está marcado */
+.menu-checkbox:checked ~ .main-nav {
+    display: block;
+}
+
+/* Animación del icono hamburguesa al abrir (se convierte en X) */
+.menu-checkbox:checked ~ .menu-label .bar:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+.menu-checkbox:checked ~ .menu-label .bar:nth-child(2) {
+    opacity: 0;
+}
+.menu-checkbox:checked ~ .menu-label .bar:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+/* =========================================
+   MEDIA QUERIES - ESCRITORIO (>= 768px)
+   ========================================= */
+@media (min-width: 768px) {
+    .header {
+        padding: 1rem 3rem;
+        flex-wrap: nowrap; /* Evita que el nav baje en escritorio */
+    }
+
+    /* Ocultar botón hamburguesa */
+    .menu-label {
+        display: none;
+    }
+
+    /* Mostrar menú horizontal siempre en escritorio (Sobrescribe la lógica del checkbox) */
+    .main-nav {
+        display: block !important; 
+        width: auto;
+        margin-top: 0;
+    }
+
+    .main-nav ul {
+        flex-direction: row;
+        gap: 2.5rem;
+        padding-bottom: 0;
+    }
+
+    .main-nav ul li a {
+        font-size: 1rem;
+    }
+}
