@@ -6,7 +6,7 @@
     --color-azul: #2A7DE1;
     --color-celeste: #00BFFF;
     --color-blanco: #FFFFFF;
-    --font-principal: 'Gilroy', sans-serif;
+    --font-principal: 'Gilroy', 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* =========================================
@@ -22,6 +22,11 @@ body {
     font-family: var(--font-principal);
     line-height: 1.5;
     background-color: var(--color-blanco);
+    overflow-x: hidden;
+}
+
+img {
+    max-width: 100%;
 }
 
 /* =========================================
@@ -33,7 +38,13 @@ body {
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .text-dark { color: var(--color-negro); }
-.title-large { font-size: 3rem !important; }
+
+/* Títulos grandes del ritual: fluidos para que nunca desborden en móvil */
+.title-large {
+    font-size: clamp(1.75rem, 9vw, 3rem);
+    overflow-wrap: anywhere;
+    line-height: 1.1;
+}
 
 /* =========================================
    ANIMACIONES GLOBALES (Keyframes)
@@ -52,49 +63,121 @@ body {
 .delay-2 { animation-delay: 0.6s; }
 
 /* =========================================
-   HEADER Y NAVEGACIÓN (Mobile First)
+   ENCABEZADO Y MENÚ DESPLEGABLE (CSS PURO)
+   Mobile first: logo a la izquierda, hamburguesa a la derecha,
+   el menú se despliega debajo ocupando todo el ancho.
    ========================================= */
 .header {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;            /* el nav baja a una segunda línea en móvil */
+    justify-content: space-between;
     align-items: center;
-    padding: 1rem;
+    padding: 0.75rem 1.25rem;
+    position: relative;
 }
 
-/* Contenedor del Logo */
-.header > div {
+.logo {
     display: flex;
     align-items: center;
 }
 
-/* Imagen del Logo */
-.header img {
-    max-height: 60px;
+.logo img {
+    display: block;
+    height: 44px;
     width: auto;
     object-fit: contain;
-    display: block;
 }
 
-/* Navegación */
-.header nav > ul {
+/* Checkbox de lógica: oculto visualmente pero accesible con teclado */
+.menu-checkbox {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+}
+
+/* Botón hamburguesa (label) con área táctil de 44x44 */
+.menu-label {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.menu-checkbox:focus-visible ~ .menu-label {
+    outline: 2px solid var(--color-celeste);
+    outline-offset: 2px;
+}
+
+.menu-label .bar {
+    width: 28px;
+    height: 3px;
+    background-color: var(--color-blanco);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    border-radius: 3px;
+}
+
+/* --- Navegación móvil (oculta por defecto) --- */
+.main-nav {
+    display: none;
+    flex-basis: 100%;
+    width: 100%;
+    margin-top: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    animation: fade-in-up 0.3s ease forwards;
+}
+
+.main-nav ul {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin-top: 1rem;
-    text-align: center;
 }
 
-.header nav a {
+.main-nav ul li a {
+    display: block;
+    padding: 0.9rem 0.5rem;
+    text-align: center;
     text-decoration: none;
     color: var(--color-blanco);
-    font-size: 0.9rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     transition: color 0.3s ease;
 }
 
-.header nav a.active, 
-.header nav a:hover {
+.main-nav ul li:last-child a {
+    border-bottom: none;
+}
+
+.main-nav a.active,
+.main-nav a:hover,
+.main-nav a:focus-visible {
     color: var(--color-celeste);
+}
+
+/* LÓGICA CSS: mostrar el menú cuando el checkbox está marcado */
+.menu-checkbox:checked ~ .main-nav {
+    display: block;
+}
+
+/* El icono hamburguesa se convierte en X al abrir
+   (separación entre barras = 3px de alto + 6px de gap = 9px) */
+.menu-checkbox:checked ~ .menu-label .bar:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+.menu-checkbox:checked ~ .menu-label .bar:nth-child(2) {
+    opacity: 0;
+}
+.menu-checkbox:checked ~ .menu-label .bar:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
 }
 
 /* =========================================
@@ -107,13 +190,13 @@ body {
 
 /* Caja de contenido de texto */
 .content-box {
-    padding: 3rem 2rem;
+    padding: 3rem 1.5rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    min-width: 0;
 }
 
-/* Selectores estructurales para el contenido interno (reemplaza .overline, h2, p) */
 .content-box > span:first-of-type {
     font-size: 0.8rem;
     letter-spacing: 2px;
@@ -122,10 +205,11 @@ body {
 }
 
 .content-box > h2 {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
     line-height: 1.1;
     margin-bottom: 1rem;
     font-weight: bold;
+    overflow-wrap: break-word;
 }
 
 .content-box > h3 {
@@ -146,6 +230,7 @@ body {
     align-items: center;
     justify-content: center;
     background-color: #eee;
+    min-width: 0;
 }
 
 .image-box > img {
@@ -159,7 +244,7 @@ body {
    FOOTER
    ========================================= */
 .footer {
-    padding: 2rem;
+    padding: 2rem 1.5rem;
     text-align: center;
     font-size: 0.8rem;
     display: flex;
@@ -168,26 +253,67 @@ body {
 }
 
 /* =========================================
-   MEDIA QUERIES (Desktop >= 768px)
+   MOVIMIENTO REDUCIDO (accesibilidad)
+   ========================================= */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    .animate-fade-in,
+    .animate-img {
+        animation: none;
+        opacity: 1;
+    }
+}
+
+/* =========================================
+   MEDIA QUERIES - ESCRITORIO (>= 768px)
    ========================================= */
 @media (min-width: 768px) {
     .header {
-        flex-direction: row;
-        justify-content: space-between;
-        padding: 1.5rem 4rem;
+        flex-wrap: nowrap;
+        padding: 1rem 3rem;
     }
 
-    .header nav > ul {
-        flex-direction: row;
-        gap: 30px;
+    .logo img {
+        height: 50px;
+    }
+
+    /* Ocultar botón hamburguesa */
+    .menu-label {
+        display: none;
+    }
+
+    /* Menú horizontal siempre visible (sobrescribe la lógica del checkbox) */
+    .main-nav,
+    .menu-checkbox:checked ~ .main-nav {
+        display: block;
+        flex-basis: auto;
+        width: auto;
         margin-top: 0;
+        border-top: none;
+        animation: none;
+    }
+
+    .main-nav ul {
+        flex-direction: row;
+        gap: 2.5rem;
+    }
+
+    .main-nav ul li a {
+        padding: 0.25rem 0;
+        font-size: 1rem;
+        border-bottom: none;
     }
 
     .split-section {
         flex-direction: row;
     }
 
-    .content-box, .image-box {
+    .content-box,
+    .image-box {
         flex: 1;
     }
 
@@ -198,130 +324,15 @@ body {
     .content-box > h2 {
         font-size: 3.5rem;
     }
-    
-    .content-box > .title-large {
-        font-size: 4rem !important;
+
+    .title-large {
+        font-size: clamp(2rem, 4vw, 4rem);
     }
-    
+
     .footer {
         flex-direction: row;
         justify-content: space-between;
         padding: 2rem 4rem;
         text-align: left;
-    }
-}
-
-/* =========================================
-   ENCABEZADO Y MENÚ DESPLEGABLE (CSS PURO)
-   ========================================= */
-
-.header {
-    display: flex;
-    flex-wrap: wrap; /* Permite que el nav baje a una nueva línea en móvil */
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    position: relative;
-}
-
-.logo img {
-    max-height: 50px;
-}
-
-/* Ocultar el checkbox de lógica */
-.menu-checkbox {
-    display: none;
-}
-
-/* Estilo del botón hamburguesa (Label) */
-.menu-label {
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 5px;
-    z-index: 10;
-}
-
-.menu-label .bar {
-    width: 30px;
-    height: 3px;
-    background-color: var(--color-blanco, #ffffff);
-    transition: all 0.3s ease;
-    border-radius: 3px;
-}
-
-/* --- Navegación Móvil (Oculta por defecto) --- */
-.main-nav {
-    display: none; /* Oculto en móvil */
-    width: 100%;
-    text-align: center;
-    margin-top: 1rem;
-    animation: fade-in-up 0.3s ease forwards;
-}
-
-.main-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    padding-bottom: 1rem;
-}
-
-.main-nav ul li a {
-    color: var(--color-blanco, #ffffff);
-    text-decoration: none;
-    font-size: 1.2rem;
-    font-weight: 500;
-    display: block;
-}
-
-/* LÓGICA CSS: Mostrar menú cuando el checkbox está marcado */
-.menu-checkbox:checked ~ .main-nav {
-    display: block;
-}
-
-/* Animación del icono hamburguesa al abrir (se convierte en X) */
-.menu-checkbox:checked ~ .menu-label .bar:nth-child(1) {
-    transform: translateY(9px) rotate(45deg);
-}
-.menu-checkbox:checked ~ .menu-label .bar:nth-child(2) {
-    opacity: 0;
-}
-.menu-checkbox:checked ~ .menu-label .bar:nth-child(3) {
-    transform: translateY(-9px) rotate(-45deg);
-}
-
-/* =========================================
-   MEDIA QUERIES - ESCRITORIO (>= 768px)
-   ========================================= */
-@media (min-width: 768px) {
-    .header {
-        padding: 1rem 3rem;
-        flex-wrap: nowrap; /* Evita que el nav baje en escritorio */
-    }
-
-    /* Ocultar botón hamburguesa */
-    .menu-label {
-        display: none;
-    }
-
-    /* Mostrar menú horizontal siempre en escritorio (Sobrescribe la lógica del checkbox) */
-    .main-nav {
-        display: block !important; 
-        width: auto;
-        margin-top: 0;
-    }
-
-    .main-nav ul {
-        flex-direction: row;
-        gap: 2.5rem;
-        padding-bottom: 0;
-    }
-
-    .main-nav ul li a {
-        font-size: 1rem;
     }
 }

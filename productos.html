@@ -19,20 +19,20 @@
         </div>
         
         <!-- Checkbox Hack para menú sin JS -->
-        <input type="checkbox" id="menu-toggle" class="menu-checkbox">
+        <input type="checkbox" id="menu-toggle" class="menu-checkbox" aria-label="Mostrar u ocultar el menú de navegación">
         
         <!-- El Label funciona como el botón hamburguesa -->
-        <label for="menu-toggle" class="menu-label">
+        <label for="menu-toggle" class="menu-label" aria-hidden="true">
             <span class="bar"></span>
             <span class="bar"></span>
             <span class="bar"></span>
         </label>
 
         <!-- Navegación -->
-        <nav class="main-nav">
+        <nav class="main-nav" aria-label="Navegación principal">
             <ul>
-                <li><a href="index.html" class="active">Inicio</a></li>
-                <li><a href="productos.html">Productos</a></li>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="productos.html" class="active" aria-current="page">Productos</a></li>
                 <li><a href="tipo-de-piel.html">Tu tipo de piel</a></li>
                 <li><a href="sobre-nosotros.html">Sobre nosotros</a></li>
                 <li><a href="contacto.html">Contacto</a></li>
@@ -49,7 +49,7 @@
 
                 <article>
                     <div>
-                        <img src="img/suero-acido-hialuronico-clean.png" alt="Suero de Ácido Hialurónico">
+                        <img loading="lazy" src="img/suero-acido-hialuronico-clean.png" alt="Suero de Ácido Hialurónico">
                     </div>
                     <h3>Suero de Ácido Hialurónico</h3>
                     <p>Hidrata en profundidad, aporta elasticidad y reduce la apariencia de líneas finas por deshidratación.</p>
@@ -61,7 +61,7 @@
 
                 <article>
                     <div>
-                        <img src="img/protector-facial-clean.png" alt="Bloqueador Solar SPF 50+">
+                        <img loading="lazy" src="img/protector-facial-clean.png" alt="Bloqueador Solar SPF 50+">
                     </div>
                     <h3>Bloqueador Solar</h3>
                     <p>Protección amplio espectro SPF 50+ contra rayos UVA/UVB con acabado ligero, invisible y no graso.</p>
@@ -73,7 +73,7 @@
 
                 <article>
                     <div>
-                        <img src="img/proteina-de-seda-clean (1).png" alt="Crema de Perlas Puras">
+                        <img loading="lazy" src="img/crema-aclarante-perlas-puras-clean.png" alt="Crema de Perlas Puras">
                     </div>
                     <h3>Perlas Puras</h3>
                     <p>Aclara progresivamente las manchas y aporta luminosidad con una textura sedosa inspirada en el brillo de las perlas.</p>
@@ -95,7 +95,7 @@
                     <div>
                         <div>
                             <div>
-                                <img src="img/desmaquillante-bifasico-clean.png" alt="Desmaquillante Bifásico">
+                                <img loading="lazy" src="img/desmaquillante-bifasico-clean.png" alt="Desmaquillante Bifásico">
                             </div>
                             <h4>Desmaquillante Bifásico</h4>
                         </div>
@@ -113,7 +113,7 @@
                     <div>
                         <div>
                             <div>
-                                <img src="img/gel-exfoliante-arroz-clean.png" alt="Gel Exfoliante de Arroz">
+                                <img loading="lazy" src="img/gel-exfoliante-arroz-clean.png" alt="Gel Exfoliante de Arroz">
                             </div>
                             <h4>Gel Exfoliante de Arroz</h4>
                         </div>
@@ -139,7 +139,7 @@
                     <div>
                         <div>
                             <div>
-                                <img src="img/proteina-de-seda-clean (1).png" alt="Proteína de Seda">
+                                <img loading="lazy" src="img/proteina-de-seda-clean (1).png" alt="Proteína de Seda">
                             </div>
                             <h4>Proteína de Seda</h4>
                         </div>
@@ -157,7 +157,7 @@
                     <div>
                         <div>
                             <div>
-                                <img src="img/crema-aclarante-perlas-puras-clean.png" alt="Crema de Perlas Puras">
+                                <img loading="lazy" src="img/crema-aclarante-perlas-puras-clean.png" alt="Crema de Perlas Puras">
                             </div>
                             <h4>Crema de Perlas Puras</h4>
                         </div>
@@ -175,7 +175,7 @@
                     <div>
                         <div>
                             <div>
-                                <img src="img/crema-focalizada-anti-acne-clean.png" alt="Crema Focalizada Pure Skin">
+                                <img loading="lazy" src="img/crema-focalizada-anti-acne-clean.png" alt="Crema Focalizada Pure Skin">
                             </div>
                             <h4>Crema Focalizada Pure Skin</h4>
                         </div>
@@ -201,7 +201,7 @@
                     <div>
                         <div>
                             <div>
-                                <img src="img/suero-acido-hialuronico-clean.png" alt="Suero de Ácido Hialurónico">
+                                <img loading="lazy" src="img/suero-acido-hialuronico-clean.png" alt="Suero de Ácido Hialurónico">
                             </div>
                             <h4>Suero de Ácido Hialurónico</h4>
                         </div>
@@ -219,7 +219,7 @@
                     <div>
                         <div>
                             <div>
-                                <img src="img/serum-vitamina-c-ah-clean.png" alt="Serum Vitamina C + AH">
+                                <img loading="lazy" src="img/serum-vitamina-c-ah-clean.png" alt="Serum Vitamina C + AH">
                             </div>
                             <h4>Serum Vitamina C + AH</h4>
                         </div>
@@ -237,7 +237,7 @@
                     <div>
                         <div>
                             <div>
-                                <img src="img/suero-aclarante-anti-acne-clean.png" alt="Suero Pure Skin">
+                                <img loading="lazy" src="img/suero-aclarante-anti-acne-clean.png" alt="Suero Pure Skin">
                             </div>
                             <h4>Suero Pure Skin</h4>
                         </div>
@@ -262,7 +262,7 @@
                     <div>
                         <div>
                             <div>
-                                <img src="img/suero-crecimiento-pestanas-clean.png" alt="Serum de Pestañas">
+                                <img loading="lazy" src="img/suero-crecimiento-pestanas-clean.png" alt="Serum de Pestañas">
                             </div>
                             <h4>Serum de Pestañas</h4>
                         </div>
@@ -286,7 +286,7 @@
                     <div>
                         <div>
                             <div>
-                                <img src="img/protector-facial-clean.png" alt="Protector Solar SPF 50+">
+                                <img loading="lazy" src="img/protector-facial-clean.png" alt="Protector Solar SPF 50+">
                             </div>
                             <h4>Protector Solar SPF 50+</h4>
                         </div>
@@ -310,7 +310,7 @@
                     <div>
                         <div>
                             <div>
-                                <img src="img/ginger-sense-shampoo-clean.png" alt="Ginger Essence Shampoo">
+                                <img loading="lazy" src="img/ginger-sense-shampoo-clean.png" alt="Ginger Essence Shampoo">
                             </div>
                             <h4>Ginger Essence Shampoo</h4>
                         </div>

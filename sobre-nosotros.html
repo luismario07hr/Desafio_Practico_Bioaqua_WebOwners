@@ -16,22 +16,22 @@
         </div>
         
         <!-- Checkbox Hack para menú sin JS -->
-        <input type="checkbox" id="menu-toggle" class="menu-checkbox">
+        <input type="checkbox" id="menu-toggle" class="menu-checkbox" aria-label="Mostrar u ocultar el menú de navegación">
         
         <!-- El Label funciona como el botón hamburguesa -->
-        <label for="menu-toggle" class="menu-label">
+        <label for="menu-toggle" class="menu-label" aria-hidden="true">
             <span class="bar"></span>
             <span class="bar"></span>
             <span class="bar"></span>
         </label>
 
         <!-- Navegación -->
-        <nav class="main-nav">
+        <nav class="main-nav" aria-label="Navegación principal">
             <ul>
-                <li><a href="index.html" class="active">Inicio</a></li>
+                <li><a href="index.html">Inicio</a></li>
                 <li><a href="productos.html">Productos</a></li>
                 <li><a href="tipo-de-piel.html">Tu tipo de piel</a></li>
-                <li><a href="sobre-nosotros.html">Sobre nosotros</a></li>
+                <li><a href="sobre-nosotros.html" class="active" aria-current="page">Sobre nosotros</a></li>
                 <li><a href="contacto.html">Contacto</a></li>
             </ul>
         </nav>
@@ -57,14 +57,14 @@
                 <p>Poner al alcance de todos los salvadoreños productos de alta calidad, formulados con ingredientes activos reconocidos mundialmente como el ácido hialurónico, la vitamina C, el extracto de arroz, la centella asiática y el aloe vera.</p>
             </div>
             <div class="image-box">
-                <img src="img/naranja.png" alt="Nuestra Misión">
+                <img loading="lazy" src="img/naranja.png" alt="Nuestra Misión">
             </div>
         </section>
 
         <!-- SECCIÓN 3: VISIÓN -->
         <section class="split-section">
             <div class="image-box">
-                <img src="img/blanca.png" alt="Nuestra Visión">
+                <img loading="lazy" src="img/blanca.png" alt="Nuestra Visión">
             </div>
             <div class="content-box bg-deep-blue">
                 <h2>Visión</h2>

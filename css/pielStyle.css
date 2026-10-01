@@ -12,23 +12,24 @@
 .hero-skin {
     position: relative;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    display: grid;              /* texto e imagen en la misma celda: la altura se adapta al texto */
     min-height: 250px;
 }
 
 /* Contenido de texto sobre el hero */
 .hero-skin > div:first-child {
-    position: absolute;
+    grid-area: 1 / 1;
+    position: relative;
     z-index: 2;
-    padding: 2rem;
+    padding: 2.5rem 1.5rem;
     max-width: 800px;
+    margin: 0 auto;
+    align-self: center;
 }
 
 /* Imagen de fondo del hero */
 .hero-skin > div:last-child {
+    grid-area: 1 / 1;
     width: 100%;
     min-height: 250px;
     background-color: #555;
@@ -47,11 +48,24 @@
    ========================================= */
 .skin-tabs-container {
     width: 100%;
+    position: relative;
 }
 
 /* Ocultar los inputs de radio (Lógica del Tab) */
 .skin-tabs-container > input[type="radio"] {
-    display: none;
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+}
+
+#tab-acne:focus-visible ~ nav > label[for="tab-acne"],
+#tab-grasa:focus-visible ~ nav > label[for="tab-grasa"],
+#tab-seca:focus-visible ~ nav > label[for="tab-seca"],
+#tab-manchas:focus-visible ~ nav > label[for="tab-manchas"] {
+    outline: 3px solid var(--color-blanco);
+    outline-offset: -3px;
 }
 
 /* Navegación de Pestañas (Submenú) */

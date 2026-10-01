@@ -40,7 +40,8 @@ main > section:first-child > div {
 }
 
 main > section:first-child > div > h2 {
-    font-size: 3rem;
+    font-size: clamp(1.9rem, 9vw, 3rem);
+    overflow-wrap: anywhere;
     color: var(--color-blanco);
 }
 
