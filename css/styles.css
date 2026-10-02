@@ -253,22 +253,6 @@ img {
 }
 
 /* =========================================
-   MOVIMIENTO REDUCIDO (accesibilidad)
-   ========================================= */
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-    .animate-fade-in,
-    .animate-img {
-        animation: none;
-        opacity: 1;
-    }
-}
-
-/* =========================================
    MEDIA QUERIES - ESCRITORIO (>= 768px)
    ========================================= */
 @media (min-width: 768px) {

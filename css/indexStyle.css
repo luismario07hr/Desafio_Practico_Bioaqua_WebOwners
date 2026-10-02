@@ -221,17 +221,3 @@
     }
 }
 
-/* Si el usuario prefiere menos movimiento, se muestran los 8 pasos apilados */
-@media (prefers-reduced-motion: reduce) {
-    .ritual-slider {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
-
-    .ritual-slider > div {
-        opacity: 1;
-        pointer-events: auto;
-        animation: none;
-    }
-}
