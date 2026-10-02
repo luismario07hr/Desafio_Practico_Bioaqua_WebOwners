@@ -95,7 +95,6 @@ img {
     opacity: 0;
     width: 1px;
     height: 1px;
-    pointer-events: none;
 }
 
 /* Botón hamburguesa (label) con área táctil de 44x44 */
