@@ -30,6 +30,10 @@ main > section:first-child > img {
     opacity: 0.6;
 }
 
+.form-container {
+    padding-left: 50px;
+}
+
 /* Contenedor del texto Hero */
 main > section:first-child > div {
     position: relative;
