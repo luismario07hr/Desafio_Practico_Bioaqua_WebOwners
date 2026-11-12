@@ -1,0 +1,105 @@
+rules_version = '2';
+
+// ============================================================================
+// ARCHIVO: firestore.rules
+// PROYECTO: Plataforma de Catálogo y Asesoría Skincare Bioaqua (SV & GT)
+// DESCRIPCIÓN: Reglas de seguridad para control de acceso basado en roles
+// ('admin' y 'cliente') sobre las colecciones users, productos, rutinas y resenas.
+// ============================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ------------------------------------------------------------------------
+    // FUNCIONES AUXILIARES DE SEGURIDAD
+    // ------------------------------------------------------------------------
+
+    // Verifica si el usuario ha iniciado sesión en Firebase Authentication
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Verifica si el usuario autenticado es el propietario del documento
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Consulta el documento del usuario en la colección 'users' para verificar si su rol es 'admin'
+    function isAdmin() {
+      return isAuthenticated() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.rol == 'admin';
+    }
+
+    // Valida la integridad mínima de un producto Bioaqua antes de guardar en Firestore
+    function isValidProductData(data) {
+      return data.nombre is string && data.nombre.size() >= 4 &&
+             data.precioReferenciaUSD is number && data.precioReferenciaUSD > 0 &&
+             data.precioReferenciaGTQ is number && data.precioReferenciaGTQ > 0 &&
+             data.disponibilidadPais in ['SV', 'GT', 'Ambos'] &&
+             data.stockEstado in ['En Stock', 'Stock Bajo', 'Agotado'];
+    }
+
+    // ------------------------------------------------------------------------
+    // 1. COLECCIÓN: users (Perfiles de usuario y roles)
+    // ------------------------------------------------------------------------
+    match /users/{userId} {
+      // Cada usuario puede leer su propio perfil; los administradores pueden leer cualquiera
+      allow read: if isOwner(userId) || isAdmin();
+
+      // En el registro público, el usuario solo puede crear su propio perfil con rol == 'cliente'
+      allow create: if isOwner(userId) &&
+                    request.resource.data.rol == 'cliente' &&
+                    request.resource.data.pais in ['El Salvador', 'Guatemala'];
+
+      // El usuario puede actualizar sus datos básicos sin escalar su rol; el admin puede gestionar roles
+      allow update: if isAdmin() || (
+                      isOwner(userId) &&
+                      request.resource.data.rol == resource.data.rol
+                    );
+
+      allow delete: if isAdmin();
+    }
+
+    // ------------------------------------------------------------------------
+    // 2. COLECCIÓN PRINCIPAL: productos (Catálogo Regional Bioaqua SV & GT)
+    // ------------------------------------------------------------------------
+    match /productos/{productoId} {
+      // Lectura pública: visitantes, clientes y administradores pueden explorar el catálogo
+      allow read: if true;
+
+      // Escritura (CRUD): EXCLUSIVO para usuarios con rol == 'admin' en Firestore
+      allow create, update: if isAdmin() && isValidProductData(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // ------------------------------------------------------------------------
+    // 3. COLECCIÓN SECUNDARIA A: rutinas (Armador de Rutina Personalizada)
+    // ------------------------------------------------------------------------
+    match /rutinas/{userId} {
+      // Solo el cliente propietario de la rutina (o un admin) puede leerla, crearla, editarla o eliminarla
+      allow read, create, update, delete: if isOwner(userId) || isAdmin();
+    }
+
+    // ------------------------------------------------------------------------
+    // 4. COLECCIÓN SECUNDARIA B: resenas (Valoraciones y Reseñas de Clientes)
+    // ------------------------------------------------------------------------
+    match /resenas/{resenaId} {
+      // Cualquier visitante o cliente puede leer las reseñas de los productos
+      allow read: if true;
+
+      // Solo usuarios autenticados pueden crear reseñas a su propio nombre con calificación de 1 a 5
+      allow create: if isAuthenticated() &&
+                    request.resource.data.uid == request.auth.uid &&
+                    request.resource.data.calificacion is number &&
+                    request.resource.data.calificacion >= 1 &&
+                    request.resource.data.calificacion <= 5 &&
+                    request.resource.data.comentario is string &&
+                    request.resource.data.comentario.size() >= 10;
+
+      // Solo el autor de la reseña o un administrador puede editarla o eliminarla
+      allow update, delete: if (isAuthenticated() && resource.data.uid == request.auth.uid) || isAdmin();
+    }
+  }
+}
+

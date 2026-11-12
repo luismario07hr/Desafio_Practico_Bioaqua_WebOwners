@@ -1,0 +1,1321 @@
+/* ============================================================================
+   ARCHIVO: css/appBioaqua.css
+   RESPONSABILIDAD: Estilos modulares para la plataforma interactiva Bioaqua
+   El Salvador & Guatemala (Auth, Roles, Panel Admin, Armador de Rutina,
+   Filtros Multicriterio, KPIs, Reseñas, Modales, Toasts y Skeletons).
+   Respeta la paleta de marca definida en css/styles.css.
+   ============================================================================ */
+
+/* Utilidades de visibilidad y accesibilidad */
+.hidden {
+    display: none !important;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.text-muted {
+    color: #777;
+}
+
+/* ============================================================================
+   1. BARRA DE USUARIO Y REGIÓN EN EL HEADER (.bio-header-toolbar)
+   ============================================================================ */
+.bio-header-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    width: 100%;
+    padding-top: 0.6rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+@media (min-width: 992px) {
+    .bio-header-toolbar {
+        width: auto;
+        padding-top: 0;
+        margin-top: 0;
+        border-top: none;
+    }
+}
+
+.bio-region-select {
+    background-color: rgba(255, 255, 255, 0.12);
+    color: var(--color-blanco);
+    border: 1px solid rgba(0, 191, 255, 0.55);
+    border-radius: 999px;
+    padding: 0.35rem 0.75rem;
+    font-family: var(--font-principal);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.bio-region-select:hover,
+.bio-region-select:focus {
+    outline: none;
+    background-color: rgba(0, 191, 255, 0.22);
+    border-color: var(--color-celeste);
+}
+
+.bio-region-select option {
+    background-color: var(--color-negro);
+    color: var(--color-blanco);
+}
+
+.bio-status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.32rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--color-blanco);
+    transition: all 0.2s ease;
+}
+
+.bio-status-chip:hover {
+    background-color: rgba(255, 255, 255, 0.18);
+}
+
+.bio-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.bio-status-chip--live .bio-status-dot {
+    background-color: #2ecc71;
+    box-shadow: 0 0 6px #2ecc71;
+}
+
+.bio-status-chip--demo .bio-status-dot {
+    background-color: var(--color-celeste);
+    box-shadow: 0 0 6px var(--color-celeste);
+}
+
+.bio-user-session {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.bio-user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.bio-user-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-blanco);
+}
+
+.bio-role-badge {
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.bio-role-badge--admin {
+    background-color: #ff9f43;
+    color: var(--color-negro);
+}
+
+.bio-role-badge--client {
+    background-color: rgba(0, 191, 255, 0.22);
+    color: var(--color-celeste);
+    border: 1px solid rgba(0, 191, 255, 0.5);
+}
+
+/* ============================================================================
+   2. SISTEMA DE BOTONES (.bio-btn)
+   ============================================================================ */
+.bio-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    font-family: var(--font-principal);
+    font-weight: 600;
+    font-size: 0.88rem;
+    padding: 0.6rem 1.15rem;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.22s ease;
+    white-space: nowrap;
+}
+
+.bio-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.bio-btn--sm {
+    font-size: 0.82rem;
+    padding: 0.45rem 0.95rem;
+}
+
+.bio-btn--xs {
+    font-size: 0.75rem;
+    padding: 0.32rem 0.72rem;
+}
+
+.bio-btn--block {
+    width: 100%;
+}
+
+.bio-btn--primary {
+    background-color: var(--color-azul);
+    color: var(--color-blanco);
+}
+
+.bio-btn--primary:hover:not(:disabled) {
+    background-color: #1b65c4;
+    transform: translateY(-1px);
+}
+
+.bio-btn--cyan {
+    background-color: var(--color-celeste);
+    color: var(--color-negro);
+    font-weight: 700;
+}
+
+.bio-btn--cyan:hover:not(:disabled) {
+    background-color: #29caff;
+    transform: translateY(-1px);
+}
+
+.bio-btn--success {
+    background-color: #1e9e5a;
+    color: var(--color-blanco);
+}
+
+.bio-btn--danger {
+    background-color: #d63031;
+    color: var(--color-blanco);
+}
+
+.bio-btn--danger-outline {
+    background-color: transparent;
+    border-color: #d63031;
+    color: #d63031;
+}
+
+.bio-btn--danger-outline:hover:not(:disabled) {
+    background-color: #d63031;
+    color: var(--color-blanco);
+}
+
+.bio-btn--outline {
+    background-color: var(--color-blanco);
+    border-color: #cbd5e1;
+    color: var(--color-negro);
+}
+
+.bio-btn--outline:hover:not(:disabled) {
+    border-color: var(--color-azul);
+    color: var(--color-azul);
+}
+
+.bio-btn--outline-light {
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.45);
+    color: var(--color-blanco);
+}
+
+.bio-btn--outline-light:hover:not(:disabled) {
+    border-color: var(--color-celeste);
+    color: var(--color-celeste);
+}
+
+.bio-btn--ghost {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-blanco);
+}
+
+.bio-btn--ghost:hover:not(:disabled) {
+    background-color: rgba(255, 255, 255, 0.22);
+}
+
+/* ============================================================================
+   3. BLOQUE DE INDICADORES CALCULADOS CON JS (.bio-kpis-grid)
+   ============================================================================ */
+.bio-kpis-section {
+    margin-bottom: 2.2rem !important;
+}
+
+.bio-kpis-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.1rem;
+}
+
+.bio-kpi-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f4f9fd 100%);
+    border: 1px solid #e1eef8;
+    border-left: 4px solid var(--color-azul);
+    border-radius: 14px;
+    padding: 1.15rem 1.25rem;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.bio-kpi-card__label {
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #55697d;
+    font-weight: 700;
+}
+
+.bio-kpi-card__value {
+    font-size: 1.45rem;
+    color: var(--color-negro);
+    line-height: 1.2;
+}
+
+.bio-kpi-card__sub {
+    font-size: 0.78rem;
+    color: #4a5568;
+}
+
+/* ============================================================================
+   4. PANEL DE ADMINISTRACIÓN REGIONAL (PROCESO 1 - ROL ADMIN)
+   ============================================================================ */
+.bio-admin-banner {
+    background: linear-gradient(135deg, var(--color-negro) 0%, #1a2a44 100%);
+    color: var(--color-blanco);
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+    border: 1px solid rgba(0, 191, 255, 0.35);
+}
+
+@media (min-width: 768px) {
+    .bio-admin-banner {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.bio-admin-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--color-celeste);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+.bio-admin-banner__info h3 {
+    font-size: 1.35rem;
+    margin-bottom: 0.35rem;
+    color: var(--color-blanco);
+}
+
+.bio-admin-banner__info p {
+    font-size: 0.88rem;
+    opacity: 0.9;
+}
+
+.bio-admin-banner__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+/* ============================================================================
+   5. SECCIÓN MI RUTINA BIOAQUA (PROCESO 2 - ROL CLIENTE)
+   ============================================================================ */
+.bio-routine-panel {
+    background-color: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #dbeafe;
+    box-shadow: 0 10px 26px rgba(42, 125, 225, 0.08);
+    padding: 1.6rem;
+}
+
+.bio-routine-panel--guest {
+    background: linear-gradient(135deg, var(--color-azul) 0%, #1556a8 100%);
+    color: var(--color-blanco);
+    border: none;
+}
+
+.bio-routine-guest-content h3 {
+    font-size: 1.4rem;
+    margin: 0.35rem 0 0.5rem;
+}
+
+.bio-routine-guest-content p {
+    font-size: 0.92rem;
+    max-width: 780px;
+    margin-bottom: 1.1rem;
+    opacity: 0.95;
+}
+
+.bio-routine-guest-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.bio-routine-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--color-azul);
+}
+
+.bio-routine-panel--guest .bio-routine-eyebrow {
+    color: var(--color-celeste);
+}
+
+.bio-routine-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid #edf2f7;
+}
+
+@media (min-width: 900px) {
+    .bio-routine-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.bio-routine-name-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.bio-routine-name-row h3 {
+    font-size: 1.45rem;
+    color: var(--color-negro);
+    margin: 0;
+}
+
+.bio-routine-kpis {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.bio-routine-kpi {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0.6rem 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.bio-routine-kpi.highlight {
+    background-color: #ebf8ff;
+    border-color: var(--color-celeste);
+}
+
+.bio-routine-kpi__label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #4a5568;
+    font-weight: 600;
+}
+
+.bio-routine-kpi__value {
+    font-size: 1.05rem;
+    color: var(--color-negro);
+}
+
+.bio-routine-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.15rem 0;
+}
+
+.bio-routine-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.bio-routine-tab {
+    background-color: #f1f5f9;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 0.42rem 0.95rem;
+    font-family: var(--font-principal);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.bio-routine-tab.active,
+.bio-routine-tab:hover {
+    background-color: var(--color-negro);
+    color: var(--color-blanco);
+}
+
+.bio-routine-hint {
+    font-size: 0.8rem;
+    color: #475569;
+}
+
+.bio-routine-steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 1.15rem;
+}
+
+.bio-routine-step-card {
+    background-color: #fdfefe;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.75rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.bio-routine-step-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+}
+
+.bio-routine-step-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bio-step-number {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--color-azul);
+}
+
+.bio-step-schedule-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background-color: #e0f2fe;
+    color: #0369a1;
+}
+
+.bio-routine-step-card__body {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+}
+
+.bio-routine-step-card__body img {
+    width: 68px;
+    height: 68px;
+    object-fit: contain;
+    background-color: #f8fafc;
+    border-radius: 10px;
+    padding: 0.25rem;
+    flex-shrink: 0;
+}
+
+.bio-routine-step-card__info h4 {
+    font-size: 0.95rem;
+    color: var(--color-negro);
+    margin-bottom: 0.15rem;
+}
+
+.bio-step-meta {
+    display: block;
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-bottom: 0.3rem;
+}
+
+.bio-step-prices {
+    font-size: 0.8rem;
+    color: var(--color-negro);
+    display: flex;
+    gap: 0.4rem;
+    margin-bottom: 0.3rem;
+}
+
+.bio-step-notes {
+    font-size: 0.78rem;
+    color: #475569;
+    line-height: 1.35;
+}
+
+.bio-routine-step-card__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding-top: 0.55rem;
+    border-top: 1px dashed #e2e8f0;
+}
+
+/* ============================================================================
+   6. BARRA DE BÚSQUEDA Y FILTROS MULTICRITERIO (.bio-filter-card)
+   ============================================================================ */
+.bio-filters-section {
+    margin-bottom: 2.5rem !important;
+}
+
+.bio-filter-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 1.35rem 1.5rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    border: 1px solid #edf2f7;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.bio-filter-card__top,
+.bio-filter-card__bottom {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+    align-items: end;
+}
+
+@media (min-width: 768px) {
+    .bio-filter-card__top {
+        grid-template-columns: 2fr 1fr 1fr;
+    }
+    .bio-filter-card__bottom {
+        grid-template-columns: repeat(4, 1fr) auto;
+    }
+}
+
+.bio-search-box,
+.bio-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.bio-search-box label,
+.bio-filter-group label {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #334155;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.bio-search-box input,
+.bio-filter-group select {
+    width: 100%;
+    padding: 0.62rem 0.85rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-family: var(--font-principal);
+    font-size: 0.88rem;
+    color: var(--color-negro);
+    background-color: #f8fafc;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.bio-search-box input:focus,
+.bio-filter-group select:focus {
+    outline: none;
+    border-color: var(--color-azul);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(42, 125, 225, 0.14);
+}
+
+/* ============================================================================
+   7. ENRIQUECIMIENTO DE TARJETAS DE CATÁLOGO (Precios, Stock, País, Acciones)
+   ============================================================================ */
+.bio-section-heading {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.bio-section-heading h2 {
+    font-size: 2rem;
+    color: var(--color-negro);
+    margin: 0;
+}
+
+.bio-section-badge {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+}
+
+.bio-category-block {
+    margin-bottom: 3rem;
+}
+
+.bio-category-subtitle {
+    font-size: 1.35rem;
+    color: var(--color-negro);
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 2px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.bio-category-subtitle span {
+    font-size: 0.9rem;
+    color: var(--color-azul);
+    font-weight: 600;
+}
+
+.bio-card-img-wrap {
+    position: relative;
+}
+
+.bio-card-country-chip {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background-color: rgba(35, 31, 32, 0.85);
+    color: var(--color-blanco);
+    font-size: 0.66rem;
+    font-weight: 700;
+    padding: 0.22rem 0.55rem;
+    border-radius: 999px;
+    z-index: 2;
+}
+
+.bio-card-stock-chip {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.22rem 0.55rem;
+    border-radius: 999px;
+    z-index: 2;
+}
+
+.bio-card-stock-chip.stock-ok {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.bio-card-stock-chip.stock-low {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.bio-card-stock-chip.stock-out {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.bio-card-price-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    width: 100%;
+    margin: 0.45rem 0;
+}
+
+.bio-price-tag {
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+.bio-price-tag.active-currency {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    font-weight: 800;
+    border: 1px solid #bae6fd;
+}
+
+.bio-rating-pill {
+    margin-left: auto;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #d97706;
+}
+
+.bio-card-ingredients {
+    font-size: 0.75rem !important;
+    color: #334155 !important;
+    margin-top: 0.25rem !important;
+}
+
+.bio-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    width: 100%;
+    margin-top: 0.75rem;
+    padding-top: 0.65rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* ============================================================================
+   8. MODALES Y FORMULARIOS (.bio-modal-overlay, .bio-form)
+   ============================================================================ */
+.bio-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(3px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    z-index: 9990;
+}
+
+.bio-modal-overlay.active {
+    display: flex;
+    animation: fade-in-up 0.22s ease forwards;
+}
+
+.bio-modal {
+    background-color: var(--color-blanco);
+    color: var(--color-negro);
+    width: 100%;
+    max-width: 520px;
+    max-height: 92vh;
+    overflow-y: auto;
+    border-radius: 16px;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+}
+
+.bio-modal--sm {
+    max-width: 440px;
+}
+
+.bio-modal--lg {
+    max-width: 720px;
+}
+
+.bio-modal__header {
+    background-color: var(--color-negro);
+    color: var(--color-blanco);
+    padding: 1.15rem 1.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.bio-modal__eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--color-celeste);
+    font-weight: 700;
+    display: block;
+}
+
+.bio-modal__header h3 {
+    font-size: 1.2rem;
+    margin-top: 0.2rem;
+}
+
+.bio-modal__subtitle {
+    font-size: 0.82rem;
+    color: #cbd5e1;
+    margin-top: 0.2rem;
+}
+
+.bio-modal__close {
+    background: transparent;
+    border: none;
+    color: var(--color-blanco);
+    font-size: 1.65rem;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.bio-modal__close:hover {
+    opacity: 1;
+    color: var(--color-celeste);
+}
+
+.bio-modal__body {
+    padding: 1.35rem 1.4rem;
+}
+
+.bio-modal__footer {
+    padding: 1rem 1.4rem;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.65rem;
+}
+
+/* Tabs del Modal de Auth */
+.bio-auth-tabs {
+    display: flex;
+    border-bottom: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+}
+
+.bio-auth-tab {
+    flex: 1;
+    padding: 0.85rem;
+    border: none;
+    background: transparent;
+    font-family: var(--font-principal);
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #64748b;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+}
+
+.bio-auth-tab.active {
+    color: var(--color-azul);
+    border-bottom-color: var(--color-azul);
+    background-color: #ffffff;
+}
+
+.bio-quick-demo-box {
+    background-color: #f0f9ff;
+    border: 1px dashed #7dd3fc;
+    border-radius: 10px;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 0.78rem;
+    color: #0369a1;
+}
+
+.bio-quick-demo-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 0.45rem;
+}
+
+/* Formularios dentro de modales (Sobrescribe reglas genéricas de contactoStyle.css) */
+.bio-form {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.95rem !important;
+}
+
+.bio-form-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.85rem !important;
+}
+
+@media (min-width: 600px) {
+    .bio-form-row {
+        flex-direction: row !important;
+    }
+}
+
+.bio-form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.3rem;
+}
+
+.bio-form-group label {
+    color: var(--color-negro) !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 0 !important;
+}
+
+.bio-form-group input,
+.bio-form-group select,
+.bio-form-group textarea {
+    width: 100%;
+    padding: 0.65rem 0.85rem !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    font-family: var(--font-principal);
+    font-size: 0.9rem !important;
+    color: var(--color-negro) !important;
+    background-color: #ffffff !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.bio-form-group input:focus,
+.bio-form-group select:focus,
+.bio-form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-azul) !important;
+    box-shadow: 0 0 0 3px rgba(42, 125, 225, 0.15) !important;
+}
+
+.bio-form-check {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.85rem;
+}
+
+.bio-form-check input[type="checkbox"] {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.bio-form-help {
+    font-size: 0.78rem;
+    color: #475569;
+    line-height: 1.4;
+}
+
+.bio-crud-preview-box {
+    width: 96px;
+    height: 96px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0.35rem;
+    flex-shrink: 0;
+}
+
+.bio-crud-preview-box img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Mensajes de error de validación JS */
+.bio-error-list {
+    list-style: none;
+    background-color: #fef2f2;
+    border-left: 4px solid #ef4444;
+    color: #991b1b;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.82rem;
+}
+
+.bio-error-list li + li {
+    margin-top: 0.3rem;
+}
+
+/* ============================================================================
+   9. LISTA DE RESEÑAS EN MODAL (.bio-reviews-list)
+   ============================================================================ */
+.bio-reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+}
+
+.bio-review-item {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+}
+
+.bio-review-item__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.4rem;
+}
+
+.bio-review-country {
+    font-size: 0.74rem;
+    background-color: #e2e8f0;
+    color: #334155;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    margin-left: 0.4rem;
+}
+
+.bio-review-stars {
+    color: #f59e0b;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+}
+
+.bio-review-item__comment {
+    font-size: 0.86rem;
+    color: #1e293b;
+    margin-bottom: 0.45rem;
+}
+
+.bio-review-item__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.74rem;
+    color: #64748b;
+}
+
+.bio-divider {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 1.25rem 0;
+}
+
+.bio-review-guest-prompt {
+    background-color: #f0f9ff;
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: 0.88rem;
+}
+
+/* ============================================================================
+   10. TOASTS, SPINNERS, SKELETONS Y EMPTY STATES
+   ============================================================================ */
+.bio-toast-container {
+    position: fixed;
+    top: 1.15rem;
+    right: 1.15rem;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-width: 360px;
+    width: calc(100% - 2.3rem);
+}
+
+.bio-toast {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.85rem 1rem;
+    border-radius: 12px;
+    background-color: var(--color-negro);
+    color: var(--color-blanco);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+    font-size: 0.85rem;
+    animation: fade-in-up 0.25s ease forwards;
+    border-left: 5px solid var(--color-celeste);
+}
+
+.bio-toast--success {
+    border-left-color: #2ecc71;
+}
+
+.bio-toast--error {
+    border-left-color: #ef4444;
+}
+
+.bio-toast--warning {
+    border-left-color: #f59e0b;
+}
+
+.bio-toast--closing {
+    opacity: 0;
+    transform: translateX(20px);
+    transition: all 0.22s ease;
+}
+
+.bio-toast__icon {
+    font-weight: 800;
+    font-size: 1rem;
+}
+
+.bio-toast__text {
+    flex: 1;
+    line-height: 1.35;
+}
+
+.bio-toast__close {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+/* Estados de Carga (Spinner + Skeletons) */
+.bio-loading-wrapper {
+    padding: 1.5rem 0;
+}
+
+.bio-spinner-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-azul);
+    font-weight: 600;
+}
+
+.bio-spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid #dbeafe;
+    border-top-color: var(--color-azul);
+    border-radius: 50%;
+    animation: bio-spin 0.75s linear infinite;
+}
+
+@keyframes bio-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.bio-skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+}
+
+.bio-skeleton-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 1.2rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.bio-skeleton {
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: bio-shimmer 1.4s infinite;
+    border-radius: 8px;
+}
+
+@keyframes bio-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.bio-skeleton--img {
+    height: 170px;
+    margin-bottom: 0.9rem;
+}
+
+.bio-skeleton--title {
+    height: 20px;
+    width: 75%;
+    margin-bottom: 0.6rem;
+}
+
+.bio-skeleton--text {
+    height: 13px;
+    width: 100%;
+    margin-bottom: 0.4rem;
+}
+
+.bio-skeleton--text.short {
+    width: 60%;
+}
+
+.bio-skeleton-tags {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+}
+
+.bio-skeleton--pill {
+    height: 22px;
+    width: 70px;
+    border-radius: 999px;
+}
+
+/* Estado Vacío (Empty State) */
+.bio-empty-state {
+    background-color: #ffffff;
+    border: 2px dashed #cbd5e1;
+    border-radius: 16px;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    max-width: 580px;
+    margin: 1rem auto;
+}
+
+.bio-empty-state__icon {
+    font-size: 2.4rem;
+    margin-bottom: 0.6rem;
+}
+
+.bio-empty-state__title {
+    font-size: 1.15rem;
+    color: var(--color-negro);
+    margin-bottom: 0.4rem;
+}
+
+.bio-empty-state__message {
+    font-size: 0.88rem;
+    color: #64748b;
+    margin-bottom: 1.1rem;
+}
+
