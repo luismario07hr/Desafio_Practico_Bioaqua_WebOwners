@@ -267,67 +267,6 @@ export const INITIAL_REVIEWS_SEED = [
     }
 ];
 
-export const INITIAL_ROUTINES_SEED = [
-    {
-        id: "rutina-cliente-demo-sv",
-        uid: "cliente-demo-sv",
-        nombreRutina: "Mi Ritual Equilibrio Tropical SV",
-        actualizadoEn: "2026-11-08T12:00:00.000Z",
-        pasos: [
-            {
-                pasoId: "step-101",
-                productoId: "bio-desmaquillante-bifasico",
-                horario: "Noche",
-                notas: "Aplicar con algodón suave para retirar el protector solar del día."
-            },
-            {
-                pasoId: "step-102",
-                productoId: "bio-serum-vitamina-c",
-                horario: "Día",
-                notas: "3 gotas en rostro limpio cada mañana para dar luminosidad."
-            },
-            {
-                pasoId: "step-103",
-                productoId: "bio-suero-hialuronico",
-                horario: "Día y Noche",
-                notas: "Aplicar sobre piel ligeramente húmeda."
-            },
-            {
-                pasoId: "step-104",
-                productoId: "bio-protector-solar-spf50",
-                horario: "Día",
-                notas: "Dos dedos de producto como último paso de la mañana."
-            }
-        ]
-    },
-    {
-        id: "rutina-cliente-demo-gt",
-        uid: "cliente-demo-gt",
-        nombreRutina: "Rutina Hidratación Profunda GT",
-        actualizadoEn: "2026-11-09T15:30:00.000Z",
-        pasos: [
-            {
-                pasoId: "step-201",
-                productoId: "bio-suero-hialuronico",
-                horario: "Día y Noche",
-                notas: "Hidratación base antes de la crema."
-            },
-            {
-                pasoId: "step-202",
-                productoId: "bio-proteina-seda",
-                horario: "Noche",
-                notas: "Masaje ascendente en rostro y cuello antes de dormir."
-            },
-            {
-                pasoId: "step-203",
-                productoId: "bio-protector-solar-spf50",
-                horario: "Día",
-                notas: "Reaplicar al mediodía."
-            }
-        ]
-    }
-];
-
 /**
  * Imágenes locales disponibles en el repositorio para facilitar la selección en el CRUD Admin.
  */

@@ -177,33 +177,6 @@ export function validateProductForm(product) {
 }
 
 /**
- * Valida la adición o edición de un paso en la Rutina Personalizada del Cliente.
- * @param {Object} step Datos del paso de rutina.
- * @returns {{ isValid: boolean, errors: string[] }}
- */
-export function validateRoutineStepForm(step) {
-    const errors = [];
-    const productoId = (step.productoId || "").trim();
-    const horario = (step.horario || "").trim();
-    const notas = (step.notas || "").trim();
-
-    if (!productoId) {
-        errors.push("Debes seleccionar un producto válido para agregar a tu rutina.");
-    }
-    if (!["Día", "Noche", "Día y Noche"].includes(horario)) {
-        errors.push("Selecciona el horario de aplicación (Día, Noche o Día y Noche).");
-    }
-    if (notas.length > 220) {
-        errors.push("Las notas personales del paso no pueden exceder los 220 caracteres.");
-    }
-
-    return {
-        isValid: errors.length === 0,
-        errors
-    };
-}
-
-/**
  * Valida el formulario de publicación de Reseña y Calificación de un producto.
  * @param {Object} review Datos de la reseña.
  * @returns {{ isValid: boolean, errors: string[] }}

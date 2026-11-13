@@ -74,15 +74,7 @@ service cloud.firestore {
     }
 
     // ------------------------------------------------------------------------
-    // 3. COLECCIÓN SECUNDARIA A: rutinas (Armador de Rutina Personalizada)
-    // ------------------------------------------------------------------------
-    match /rutinas/{userId} {
-      // Solo el cliente propietario de la rutina (o un admin) puede leerla, crearla, editarla o eliminarla
-      allow read, create, update, delete: if isOwner(userId) || isAdmin();
-    }
-
-    // ------------------------------------------------------------------------
-    // 4. COLECCIÓN SECUNDARIA B: resenas (Valoraciones y Reseñas de Clientes)
+    // 3. COLECCIÓN SECUNDARIA: resenas (Valoraciones y Reseñas de Clientes)
     // ------------------------------------------------------------------------
     match /resenas/{resenaId} {
       // Cualquier visitante o cliente puede leer las reseñas de los productos
