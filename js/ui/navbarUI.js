@@ -232,7 +232,7 @@ function ensureAuthModalInDOM() {
 
                 <!-- ACCESO RÁPIDO PARA EVALUACIÓN Y DEFENSA TÉCNICA -->
                 <div class="bio-quick-demo-box">
-                    <span>⚡ Acceso rápido de prueba (1 clic):</span>
+                    <span>Acceso rápido de prueba (1 clic):</span>
                     <div class="bio-quick-demo-btns">
                         <button type="button" class="bio-btn bio-btn--xs bio-btn--outline" id="btn-demo-admin">
                             Entrar como Admin (SV/GT)
@@ -301,7 +301,7 @@ function ensureAuthModalInDOM() {
                         </div>
                     </div>
                     <p class="bio-form-help">
-                        🔒 Nota: El registro público crea tu perfil con rol <strong>cliente</strong> para que armes tu rutina Bioaqua y publiques reseñas.
+                        Nota: El registro público crea tu perfil con rol <strong>cliente</strong> para que armes tu rutina Bioaqua y publiques reseñas.
                     </p>
                     <button type="submit" class="bio-btn bio-btn--primary bio-btn--block" id="btn-submit-register">
                         Crear mi cuenta Bioaqua
@@ -498,7 +498,7 @@ function ensureFirebaseConfigModalInDOM() {
             <div class="bio-modal__body">
                 <p class="bio-form-help" style="margin-bottom: 1rem;">
                     Estado actual: <strong>${isLive
-            ? "✅ Conectado a Firebase Cloud Firestore (" + escapeHTML(currentCfg.projectId) + ")"
+            ? "Conectado a Firebase Cloud Firestore (" + escapeHTML(currentCfg.projectId) + ")"
             : "⚡ Modo Emulación Local Activo (Sin llaves aún)"
         }</strong>.<br>
                     Puedes colocar tus llaves en <code>js/config/firebaseConfig.js</code> o pegarlas aquí directamente:
