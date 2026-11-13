@@ -6,7 +6,7 @@ Aplicación web desarrollada para la asignatura **Desarrollo Web I (Desafío Pr�
 
 ## 1. Descripción del Problema y Procesos Implementados
 
-**Bioaqua France (Distribución Oficial en El Salvador y Guatemala)** requería transformar su sitio informativo y catálogo estático en una plataforma interactiva de catálogo regional y asesoría de cuidado facial (*skincare*) adaptada al clima tropical centroamericano.
+**BioaquaFrance (Distribución Oficial en El Salvador y Guatemala)** requería transformar su sitio informativo y catálogo estático en una plataforma interactiva de catálogo regional y asesoría de cuidado facial (*skincare*) adaptada al clima tropical centroamericano.
 
 La aplicación resuelve este problema mediante **dos procesos funcionales interconectados** con control de acceso basado en dos roles (`admin` y `cliente`):
 
