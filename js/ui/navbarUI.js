@@ -107,7 +107,7 @@ function renderHeaderToolbar(container, user) {
         container.innerHTML = `
             ${regionSelectHTML}
             <div class="bio-user-session">
-                <a href="${isAdmin ? "dashboard-admin.html" : "productos.html#mi-rutina-section"}" class="bio-user-info" title="${isAdmin ? "Ir a Panel de Administración" : "Ir a Mi Rutina"}" style="text-decoration:none; cursor:pointer;">
+                <a href="${isAdmin ? "dashboard-admin.html" : "productos.html"}" class="bio-user-info" title="${isAdmin ? "Ir a Panel de Administración" : "Ir al Catálogo de Productos"}" style="text-decoration:none; cursor:pointer;">
                     <span class="bio-user-name">${escapeHTML(user.nombre || user.email)}</span>
                     ${roleBadge}
                 </a>

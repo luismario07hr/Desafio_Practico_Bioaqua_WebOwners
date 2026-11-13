@@ -251,15 +251,35 @@ body {
     margin: 0;
 }
 
-/* Controles CRUD exclusivos para el Rol Administrador dentro de las tarjetas */
+/* Controles de acción y CRUD dentro de las tarjetas (Responsive sin desbordamiento) */
 .bio-card-admin-actions {
     display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.45rem;
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     margin-top: 0.75rem;
     padding-top: 0.65rem;
     border-top: 1px dashed #e2e8f0;
+}
+
+.bio-card-admin-actions .bio-btn {
+    flex: 1 1 calc(50% - 0.45rem);
+    min-width: 95px;
+    max-width: 100%;
+    box-sizing: border-box;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.75rem;
+    padding: 0.38rem 0.55rem;
+    white-space: nowrap;
+}
+
+.bio-card-admin-actions .bio-card-btn-reviews {
+    flex: 1 1 100%;
 }
 
 
