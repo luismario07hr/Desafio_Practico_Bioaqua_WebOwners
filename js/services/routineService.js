@@ -25,6 +25,43 @@ import { INITIAL_REVIEWS_SEED, INITIAL_ROUTINES_SEED } from "./seed.js";
 const ROUTINES_COLLECTION = "rutinas";
 const REVIEWS_COLLECTION  = "resenas";
 
+const LOCAL_ROUTINES_KEY = "bioaqua_local_rutinas";
+const LOCAL_REVIEWS_KEY  = "bioaqua_local_resenas";
+
+function getLocalRoutines() {
+    try {
+        const raw = localStorage.getItem(LOCAL_ROUTINES_KEY);
+        if (!raw) {
+            localStorage.setItem(LOCAL_ROUTINES_KEY, JSON.stringify(INITIAL_ROUTINES_SEED));
+            return JSON.parse(JSON.stringify(INITIAL_ROUTINES_SEED));
+        }
+        return JSON.parse(raw);
+    } catch {
+        return JSON.parse(JSON.stringify(INITIAL_ROUTINES_SEED));
+    }
+}
+
+function saveLocalRoutines(list) {
+    localStorage.setItem(LOCAL_ROUTINES_KEY, JSON.stringify(list));
+}
+
+function getLocalReviews() {
+    try {
+        const raw = localStorage.getItem(LOCAL_REVIEWS_KEY);
+        if (!raw) {
+            localStorage.setItem(LOCAL_REVIEWS_KEY, JSON.stringify(INITIAL_REVIEWS_SEED));
+            return JSON.parse(JSON.stringify(INITIAL_REVIEWS_SEED));
+        }
+        return JSON.parse(raw);
+    } catch {
+        return JSON.parse(JSON.stringify(INITIAL_REVIEWS_SEED));
+    }
+}
+
+function saveLocalReviews(list) {
+    localStorage.setItem(LOCAL_REVIEWS_KEY, JSON.stringify(list));
+}
+
 // ============================================================================
 // GESTIÓN DE RUTINAS PERSONALIZADAS (`rutinas`)
 // ============================================================================
@@ -41,6 +78,18 @@ export async function getUserRoutine(uid) {
     }
 
     try {
+        if (!db) {
+            const found = getLocalRoutines().find((r) => r.uid === uid);
+            return (
+                found || {
+                    uid,
+                    nombreRutina: "Mi Ritual Bioaqua",
+                    pasos: [],
+                    actualizadoEn: new Date().toISOString()
+                }
+            );
+        }
+
         const docRef = doc(db, ROUTINES_COLLECTION, uid);
         const snap   = await getDoc(docRef);
 
@@ -94,6 +143,15 @@ export async function addOrUpdateRoutineStep(uid, { productoId, horario, notas, 
             actualizadoEn: new Date().toISOString()
         };
 
+        if (!db) {
+            const list = getLocalRoutines();
+            const idx = list.findIndex((r) => r.uid === uid);
+            if (idx >= 0) list[idx] = updatedRoutine;
+            else list.push(updatedRoutine);
+            saveLocalRoutines(list);
+            return updatedRoutine;
+        }
+
         await setDoc(doc(db, ROUTINES_COLLECTION, uid), {
             ...updatedRoutine,
             updatedAt: serverTimestamp()
@@ -122,6 +180,15 @@ export async function updateRoutineTitle(uid, nuevoNombre) {
             nombreRutina: (nuevoNombre || "Mi Ritual Bioaqua").trim(),
             actualizadoEn: new Date().toISOString()
         };
+
+        if (!db) {
+            const list = getLocalRoutines();
+            const idx = list.findIndex((r) => r.uid === uid);
+            if (idx >= 0) list[idx] = updatedRoutine;
+            else list.push(updatedRoutine);
+            saveLocalRoutines(list);
+            return updatedRoutine;
+        }
 
         await setDoc(doc(db, ROUTINES_COLLECTION, uid), {
             ...updatedRoutine,
@@ -155,6 +222,14 @@ export async function removeStepFromRoutine(uid, productoId) {
             actualizadoEn: new Date().toISOString()
         };
 
+        if (!db) {
+            const list = getLocalRoutines();
+            const idx = list.findIndex((r) => r.uid === uid);
+            if (idx >= 0) list[idx] = updatedRoutine;
+            saveLocalRoutines(list);
+            return updatedRoutine;
+        }
+
         await setDoc(doc(db, ROUTINES_COLLECTION, uid), {
             ...updatedRoutine,
             updatedAt: serverTimestamp()
@@ -178,6 +253,10 @@ export async function removeStepFromRoutine(uid, productoId) {
  */
 export async function getAllReviews() {
     try {
+        if (!db) {
+            return getLocalReviews();
+        }
+
         const snap = await getDocs(collection(db, REVIEWS_COLLECTION));
 
         if (snap.empty) {
@@ -210,6 +289,14 @@ export async function createReview({ productoId, uid, nombreUsuario, pais, calif
             fecha:         new Date().toISOString()
         };
 
+        if (!db) {
+            const list = getLocalReviews();
+            const created = { id: `rev-${Date.now()}`, ...payload };
+            list.unshift(created);
+            saveLocalReviews(list);
+            return created;
+        }
+
         const docRef = await addDoc(collection(db, REVIEWS_COLLECTION), {
             ...payload,
             createdAt: serverTimestamp()
@@ -230,6 +317,10 @@ export async function createReview({ productoId, uid, nombreUsuario, pais, calif
  */
 export async function deleteReview(reviewId) {
     try {
+        if (!db) {
+            saveLocalReviews(getLocalReviews().filter((r) => r.id !== reviewId));
+            return;
+        }
         await deleteDoc(doc(db, REVIEWS_COLLECTION, reviewId));
     } catch (error) {
         console.error("Error en deleteReview:", error);
@@ -244,6 +335,12 @@ export async function deleteReview(reviewId) {
  */
 export async function seedReviewsAndRoutines() {
     try {
+        if (!db) {
+            saveLocalReviews(INITIAL_REVIEWS_SEED);
+            saveLocalRoutines(INITIAL_ROUTINES_SEED);
+            return;
+        }
+
         for (const rev of INITIAL_REVIEWS_SEED) {
             const { id, ...data } = rev;
             await setDoc(doc(db, REVIEWS_COLLECTION, id), data);

@@ -22,6 +22,24 @@ import { db } from "../config/firebaseConfig.js";
 import { INITIAL_PRODUCTS_SEED } from "./seed.js";
 
 const COLLECTION_NAME = "productos";
+const LOCAL_PRODUCTS_KEY = "bioaqua_local_productos";
+
+function getLocalProducts() {
+    try {
+        const raw = localStorage.getItem(LOCAL_PRODUCTS_KEY);
+        if (!raw) {
+            localStorage.setItem(LOCAL_PRODUCTS_KEY, JSON.stringify(INITIAL_PRODUCTS_SEED));
+            return JSON.parse(JSON.stringify(INITIAL_PRODUCTS_SEED));
+        }
+        return JSON.parse(raw);
+    } catch {
+        return JSON.parse(JSON.stringify(INITIAL_PRODUCTS_SEED));
+    }
+}
+
+function saveLocalProducts(products) {
+    localStorage.setItem(LOCAL_PRODUCTS_KEY, JSON.stringify(products));
+}
 
 /**
  * READ (Todos): Obtiene todos los documentos de la colección `productos`.
@@ -30,6 +48,10 @@ const COLLECTION_NAME = "productos";
  */
 export async function getAllProducts() {
     try {
+        if (!db) {
+            return getLocalProducts();
+        }
+
         const snap = await getDocs(collection(db, COLLECTION_NAME));
 
         if (snap.empty) {
@@ -52,6 +74,9 @@ export async function getAllProducts() {
  */
 export async function getProductById(productId) {
     try {
+        if (!db) {
+            return getLocalProducts().find((p) => p.id === productId) || null;
+        }
         const snap = await getDoc(doc(db, COLLECTION_NAME, productId));
         return snap.exists() ? { id: snap.id, ...snap.data() } : null;
     } catch (error) {
@@ -67,6 +92,14 @@ export async function getProductById(productId) {
  */
 export async function createProduct(productData) {
     try {
+        if (!db) {
+            const list = getLocalProducts();
+            const created = { id: `bio-${Date.now()}`, ...productData };
+            list.unshift(created);
+            saveLocalProducts(list);
+            return created;
+        }
+
         const payload = {
             ...productData,
             createdAt: serverTimestamp(),
@@ -88,6 +121,17 @@ export async function createProduct(productData) {
  */
 export async function updateProduct(productId, updatedData) {
     try {
+        if (!db) {
+            const list = getLocalProducts();
+            const idx = list.findIndex((p) => p.id === productId);
+            if (idx !== -1) {
+                list[idx] = { ...list[idx], ...updatedData, id: productId };
+                saveLocalProducts(list);
+                return list[idx];
+            }
+            return { id: productId, ...updatedData };
+        }
+
         const docRef = doc(db, COLLECTION_NAME, productId);
         await updateDoc(docRef, {
             ...updatedData,
@@ -107,6 +151,11 @@ export async function updateProduct(productId, updatedData) {
  */
 export async function deleteProduct(productId) {
     try {
+        if (!db) {
+            const list = getLocalProducts().filter((p) => p.id !== productId);
+            saveLocalProducts(list);
+            return;
+        }
         await deleteDoc(doc(db, COLLECTION_NAME, productId));
     } catch (error) {
         console.error("Error en deleteProduct:", error);
@@ -121,6 +170,11 @@ export async function deleteProduct(productId) {
  */
 export async function seedProductsToFirestore() {
     try {
+        if (!db) {
+            saveLocalProducts(INITIAL_PRODUCTS_SEED);
+            return JSON.parse(JSON.stringify(INITIAL_PRODUCTS_SEED));
+        }
+
         for (const item of INITIAL_PRODUCTS_SEED) {
             const { id, ...data } = item;
             await setDoc(doc(db, COLLECTION_NAME, id), {

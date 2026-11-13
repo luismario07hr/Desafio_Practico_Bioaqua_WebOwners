@@ -8,6 +8,7 @@
  */
 
 import { initNavbarUI } from "./ui/navbarUI.js";
+import { initAuthPages } from "./ui/auth-pages.js";
 import { initCatalogPage } from "./ui/catalogUI.js";
 import { showToast } from "./ui/notificationsUI.js";
 
@@ -15,17 +16,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 1. Inicializar barra de Autenticación, Roles y Selector Regional (SV/GT) en el Header
     initNavbarUI();
 
-    // 2. Si estamos en `productos.html`, inicializar el Catálogo Dinámico, Panel Admin y Mi Rutina
+    // 2. Si estamos en `login.html` o `registro.html`, inicializar controladores de Autenticación
+    initAuthPages();
+
+    // 3. Si estamos en `productos.html`, inicializar el Catálogo Dinámico, Panel Admin y Mi Rutina
     if (document.querySelector(".products-main-container")) {
         await initCatalogPage();
     }
 
-    // 3. Si estamos en `tipo-de-piel.html`, enriquecer las fichas con acceso directo al catálogo filtrado
+    // 4. Si estamos en `tipo-de-piel.html`, enriquecer las fichas con acceso directo al catálogo filtrado
     if (document.querySelector(".skin-tabs-container")) {
         enhanceSkinTypePage();
     }
 
-    // 4. Si estamos en `contacto.html`, validar el formulario con JS sin recargar la página
+    // 5. Si estamos en `contacto.html`, validar el formulario con JS sin recargar la página
     if (document.querySelector(".form-container form")) {
         enhanceContactForm();
     }
@@ -99,4 +103,3 @@ function enhanceContactForm() {
         form.reset();
     });
 }
-

@@ -150,6 +150,82 @@
     border: 1px solid rgba(0, 191, 255, 0.5);
 }
 
+/* Botón de "Iniciar Sesión / Registrarse" integrado directamente en el <nav class="main-nav"> */
+.main-nav ul {
+    align-items: center;
+}
+
+#nav-auth-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+@media (min-width: 768px) {
+    #nav-auth-item {
+        padding: 0;
+    }
+}
+
+.main-nav ul li a.nav-auth-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-celeste);
+    color: var(--color-negro) !important;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.48rem 1.1rem;
+    border-radius: 999px;
+    border-bottom: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.main-nav ul li a.nav-auth-btn:hover,
+.main-nav ul li a.nav-auth-btn.active {
+    background-color: var(--color-azul);
+    color: var(--color-blanco) !important;
+    transform: translateY(-1px);
+}
+
+.nav-user-session {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+}
+
+.main-nav ul li a.nav-user-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.32rem 0.75rem;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-bottom: none;
+    font-size: 0.88rem;
+}
+
+.nav-logout-btn {
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    color: var(--color-blanco);
+    font-family: var(--font-principal);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-logout-btn:hover {
+    border-color: var(--color-celeste);
+    color: var(--color-celeste);
+}
+
 /* ============================================================================
    2. SISTEMA DE BOTONES (.bio-btn)
    ============================================================================ */
