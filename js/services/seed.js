@@ -109,7 +109,7 @@ export const INITIAL_PRODUCTS_SEED = [
         stockEstado: "Stock Bajo",
         descripcion: "Fortalece la barrera hidrolipídica, suaviza asperezas y devuelve una sensación de piel tersa, firme y confortable frente al calor centroamericano.",
         ingredientesClave: "Fibroína de Seda Hidrolizada, Ceramidas NP, Escualano Vegetal",
-        imagenUrl: "img/proteina-de-seda-clean (1).png",
+        imagenUrl: "img/proteina-de-seda-clean.png", // ✅ corregido: eliminado espacio en nombre de archivo
         destacado: false
     },
     {
@@ -332,20 +332,19 @@ export const INITIAL_ROUTINES_SEED = [
  * Imágenes locales disponibles en el repositorio para facilitar la selección en el CRUD Admin.
  */
 export const AVAILABLE_LOCAL_IMAGES = [
-    { label: "Suero Ácido Hialurónico", path: "img/suero-acido-hialuronico-clean.png" },
-    { label: "Protector Solar SPF 50+", path: "img/protector-facial-clean.png" },
-    { label: "Crema Perlas Puras", path: "img/crema-aclarante-perlas-puras-clean.png" },
-    { label: "Desmaquillante Bifásico", path: "img/desmaquillante-bifasico-clean.png" },
-    { label: "Gel Exfoliante de Arroz", path: "img/gel-exfoliante-arroz-clean.png" },
+    { label: "Suero Ácido Hialurónico",     path: "img/suero-acido-hialuronico-clean.png" },
+    { label: "Protector Solar SPF 50+",     path: "img/protector-facial-clean.png" },
+    { label: "Crema Perlas Puras",          path: "img/crema-aclarante-perlas-puras-clean.png" },
+    { label: "Desmaquillante Bifásico",     path: "img/desmaquillante-bifasico-clean.png" },
+    { label: "Gel Exfoliante de Arroz",     path: "img/gel-exfoliante-arroz-clean.png" },
     { label: "Espuma Limpiadora Pure Skin", path: "img/crema-limpiadora-pure-skin.png" },
-    { label: "Crema Proteína de Seda", path: "img/proteina-de-seda-clean (1).png" },
-    { label: "Crema Focalizada Anti-Acné", path: "img/crema-focalizada-anti-acne-clean.png" },
-    { label: "Sérum Vitamina C + AH", path: "img/serum-vitamina-c-ah-clean.png" },
-    { label: "Suero Pure Skin Anti-Acné", path: "img/suero-aclarante-anti-acne-clean.png" },
-    { label: "Sérum de Pestañas", path: "img/suero-crecimiento-pestanas-clean.png" },
-    { label: "Shampoo Jengibre Capilar", path: "img/ginger-sense-shampoo-clean.png" },
-    { label: "Crema de Arroz Rice Raw Pulp", path: "img/piel/crema-arroz.png" },
-    { label: "Set Anti-Acné Bioaqua", path: "img/piel/set-acne.png" },
-    { label: "Esencia Vitamina C", path: "img/piel/vitaminaC.png" }
+    { label: "Crema Proteína de Seda",      path: "img/proteina-de-seda-clean.png" }, // ✅ corregido
+    { label: "Crema Focalizada Anti-Acné",  path: "img/crema-focalizada-anti-acne-clean.png" },
+    { label: "Sérum Vitamina C + AH",       path: "img/serum-vitamina-c-ah-clean.png" },
+    { label: "Suero Pure Skin Anti-Acné",   path: "img/suero-aclarante-anti-acne-clean.png" },
+    { label: "Sérum de Pestañas",           path: "img/suero-crecimiento-pestanas-clean.png" },
+    { label: "Shampoo Jengibre Capilar",    path: "img/ginger-sense-shampoo-clean.png" },
+    { label: "Crema de Arroz Rice Raw Pulp",path: "img/piel/crema-arroz.png" },
+    { label: "Set Anti-Acné Bioaqua",       path: "img/piel/set-acne.png" },
+    { label: "Esencia Vitamina C",          path: "img/piel/vitaminaC.png" }
 ];
-

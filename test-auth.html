@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Prueba de AuthService</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 5px; }
+        button:hover { background: #0056b3; }
+        pre { background: #222; color: #0f0; padding: 15px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Prueba de Conexión: authService.js</h1>
+    
+    <button id="btn-register">1. Registrar Usuario de Prueba</button>
+    <button id="btn-login">2. Iniciar Sesión de Prueba</button>
+    <button id="btn-update">3. Actualizar Rol a Admin</button>
+    <button id="btn-logout">4. Cerrar Sesión</button>
+
+    <h3>Consola de Resultados:</h3>
+    <pre id="log">Esperando acciones...</pre>
+
+    <!-- Usamos type="module" para poder importar tu servicio -->
+    <script type="module">
+        import { 
+            registerUser, 
+            loginUser, 
+            logoutUser, 
+            updateUserProfileData,
+            subscribeToAuthChanges 
+        } from './js/services/authService.js';
+
+        const logDiv = document.getElementById('log');
+        function printLog(msg) {
+            logDiv.innerHTML += `\n> ${msg}`;
+        }
+
+        // Datos de prueba
+        const testUser = {
+            nombre: "Usuario Prueba Firebase",
+            email: "prueba@bioaqua.com",
+            password: "Password123!",
+            pais: "El Salvador",
+            tipoPiel: "Grasa"
+        };
+
+        // Escuchar el estado de la sesión en tiempo real
+        subscribeToAuthChanges((user) => {
+            if (user) {
+                printLog(`[STATE] Sesión activa: ${user.email} (Rol: ${user.rol})`);
+            } else {
+                printLog(`[STATE] No hay usuario en sesión.`);
+            }
+        });
+
+        // 1. REGISTRAR
+        document.getElementById('btn-register').addEventListener('click', async () => {
+            try {
+                printLog("Registrando usuario...");
+                const profile = await registerUser(testUser);
+                printLog(`Éxito! Usuario creado: ${JSON.stringify(profile, null, 2)}`);
+            } catch (error) {
+                printLog(`Error de Registro: ${error.message}`);
+            }
+        });
+
+        // 2. LOGIN
+        document.getElementById('btn-login').addEventListener('click', async () => {
+            try {
+                printLog("Iniciando sesión...");
+                const profile = await loginUser({ email: testUser.email, password: testUser.password });
+                printLog(`Éxito! Logueado como: ${profile.nombre}`);
+            } catch (error) {
+                printLog(`Error de Login: ${error.message}`);
+            }
+        });
+
+        // 3. ACTUALIZAR A ADMIN
+        document.getElementById('btn-update').addEventListener('click', async () => {
+            try {
+                // Truco para cambiar rápidamente a admin y probar tu seguridad
+                const { getCurrentUser } = await import('./js/services/authService.js');
+                const currentUser = getCurrentUser();
+                
+                if(!currentUser) throw new Error("Debes iniciar sesión primero.");
+                
+                printLog("Actualizando rol a admin en Firestore...");
+                const updated = await updateUserProfileData(currentUser.uid, { rol: "admin" });
+                printLog(`Éxito! Nuevo perfil: ${JSON.stringify(updated, null, 2)}`);
+            } catch (error) {
+                printLog(`Error actualizando: ${error.message}`);
+            }
+        });
+
+        // 4. LOGOUT
+        document.getElementById('btn-logout').addEventListener('click', async () => {
+            try {
+                printLog("Cerrando sesión...");
+                await logoutUser();
+                printLog("Éxito! Sesión cerrada.");
+            } catch (error) {
+                printLog(`Error de Logout: ${error.message}`);
+            }
+        });
+    </script>
+</body>
+</html>

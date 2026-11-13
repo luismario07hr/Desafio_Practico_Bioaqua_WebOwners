@@ -3,8 +3,8 @@
  * ARCHIVO: js/services/routineService.js
  * RESPONSABILIDAD: Operaciones remotas con Firestore para las entidades
  * secundarias relacionadas a `productos` y `users`:
- * 1. `rutinas`: Armador de Rutina Personalizada de Skincare por usuario (Día/Noche).
- * 2. `resenas`: Valoraciones (1-5 estrellas) y reseñas de clientes SV/GT.
+ * 1. `rutinas`: Armador de Rutina Personalizada de Skincare por usuario.
+ * 2. `resenas`: Valoraciones (1-5 estrellas) y reseñas de clientes.
  * ============================================================================
  */
 
@@ -16,68 +16,24 @@ import {
     setDoc,
     addDoc,
     deleteDoc,
-    query,
-    where,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import { db, isFirebaseConfigured } from "../config/firebaseConfig.js";
+import { db } from "../config/firebaseConfig.js";
 import { INITIAL_REVIEWS_SEED, INITIAL_ROUTINES_SEED } from "./seed.js";
 
 const ROUTINES_COLLECTION = "rutinas";
-const REVIEWS_COLLECTION = "resenas";
-
-const LOCAL_ROUTINES_KEY = "bioaqua_local_rutinas";
-const LOCAL_REVIEWS_KEY = "bioaqua_local_resenas";
+const REVIEWS_COLLECTION  = "resenas";
 
 // ============================================================================
-// HELPERS DE ALMACENAMIENTO LOCAL (MODO RESPALDO)
-// ============================================================================
-
-function getLocalRoutinesStore() {
-    try {
-        const raw = localStorage.getItem(LOCAL_ROUTINES_KEY);
-        if (!raw) {
-            localStorage.setItem(LOCAL_ROUTINES_KEY, JSON.stringify(INITIAL_ROUTINES_SEED));
-            return JSON.parse(JSON.stringify(INITIAL_ROUTINES_SEED));
-        }
-        return JSON.parse(raw);
-    } catch (err) {
-        console.error("Error leyendo rutinas locales:", err);
-        return JSON.parse(JSON.stringify(INITIAL_ROUTINES_SEED));
-    }
-}
-
-function saveLocalRoutinesStore(routines) {
-    localStorage.setItem(LOCAL_ROUTINES_KEY, JSON.stringify(routines));
-}
-
-function getLocalReviewsStore() {
-    try {
-        const raw = localStorage.getItem(LOCAL_REVIEWS_KEY);
-        if (!raw) {
-            localStorage.setItem(LOCAL_REVIEWS_KEY, JSON.stringify(INITIAL_REVIEWS_SEED));
-            return JSON.parse(JSON.stringify(INITIAL_REVIEWS_SEED));
-        }
-        return JSON.parse(raw);
-    } catch (err) {
-        console.error("Error leyendo reseñas locales:", err);
-        return JSON.parse(JSON.stringify(INITIAL_REVIEWS_SEED));
-    }
-}
-
-function saveLocalReviewsStore(reviews) {
-    localStorage.setItem(LOCAL_REVIEWS_KEY, JSON.stringify(reviews));
-}
-
-// ============================================================================
-// GESTIÓN DE RUTINAS PERSONALIZADAS DE SKINCARE (`rutinas`)
+// GESTIÓN DE RUTINAS PERSONALIZADAS (`rutinas`)
 // ============================================================================
 
 /**
- * Obtiene la rutina personalizada del usuario autenticado (`uid`).
+ * Obtiene la rutina personalizada del usuario autenticado.
+ * Si no existe en Firestore, retorna una estructura vacía sin crearla todavía.
  * @param {string} uid UID del cliente.
- * @returns {Promise<Object>} Documento de rutina `{ uid, nombreRutina, pasos: [] }`.
+ * @returns {Promise<Object>} Documento de rutina { uid, nombreRutina, pasos: [] }
  */
 export async function getUserRoutine(uid) {
     if (!uid) {
@@ -85,30 +41,15 @@ export async function getUserRoutine(uid) {
     }
 
     try {
-        if (isFirebaseConfigured() && db) {
-            const docRef = doc(db, ROUTINES_COLLECTION, uid);
-            const snap = await getDoc(docRef);
-            if (snap.exists()) {
-                return { id: snap.id, ...snap.data() };
-            }
-            // Si aún no tiene rutina creada en Firestore, inicializar estructura vacía
-            const emptyRoutine = {
-                uid,
-                nombreRutina: "Mi Ritual Bioaqua",
-                pasos: [],
-                actualizadoEn: new Date().toISOString()
-            };
-            return emptyRoutine;
+        const docRef = doc(db, ROUTINES_COLLECTION, uid);
+        const snap   = await getDoc(docRef);
+
+        if (snap.exists()) {
+            return { id: snap.id, ...snap.data() };
         }
 
-        // Modo Respaldo Local
-        await new Promise((r) => setTimeout(r, 150));
-        const routines = getLocalRoutinesStore();
-        const found = routines.find((r) => r.uid === uid);
-        if (found) return found;
-
+        // Sin documento en Firestore: retornar estructura vacía (no se guarda hasta que el usuario agregue algo)
         return {
-            id: `rutina-${uid}`,
             uid,
             nombreRutina: "Mi Ritual Bioaqua",
             pasos: [],
@@ -121,22 +62,22 @@ export async function getUserRoutine(uid) {
 }
 
 /**
- * Agrega un producto como paso a la rutina del cliente o actualiza el paso si ya estaba.
+ * Agrega un producto como paso a la rutina del cliente, o actualiza el paso si ya existía.
  * @param {string} uid UID del cliente.
- * @param {Object} stepData ({ productoId, horario, notas, nombreRutina })
+ * @param {Object} stepData { productoId, horario, notas, nombreRutina }
  * @returns {Promise<Object>} Rutina actualizada.
  */
 export async function addOrUpdateRoutineStep(uid, { productoId, horario, notas, nombreRutina }) {
     try {
         const currentRoutine = await getUserRoutine(uid);
-        const pasos = Array.isArray(currentRoutine.pasos) ? [...currentRoutine.pasos] : [];
+        const pasos          = Array.isArray(currentRoutine.pasos) ? [...currentRoutine.pasos] : [];
 
         const existingIndex = pasos.findIndex((p) => p.productoId === productoId);
         const stepObj = {
-            pasoId: existingIndex >= 0 ? pasos[existingIndex].pasoId : `step-${Date.now()}`,
+            pasoId:     existingIndex >= 0 ? pasos[existingIndex].pasoId : `step-${Date.now()}`,
             productoId,
-            horario: horario || "Día y Noche",
-            notas: (notas || "").trim(),
+            horario:    horario || "Día y Noche",
+            notas:      (notas || "").trim(),
             agregadoEn: new Date().toISOString()
         };
 
@@ -153,27 +94,15 @@ export async function addOrUpdateRoutineStep(uid, { productoId, horario, notas, 
             actualizadoEn: new Date().toISOString()
         };
 
-        if (isFirebaseConfigured() && db) {
-            await setDoc(doc(db, ROUTINES_COLLECTION, uid), {
-                ...updatedRoutine,
-                updatedAt: serverTimestamp()
-            });
-            return updatedRoutine;
-        }
+        await setDoc(doc(db, ROUTINES_COLLECTION, uid), {
+            ...updatedRoutine,
+            updatedAt: serverTimestamp()
+        });
 
-        await new Promise((r) => setTimeout(r, 200));
-        const routines = getLocalRoutinesStore();
-        const idx = routines.findIndex((r) => r.uid === uid);
-        if (idx >= 0) {
-            routines[idx] = updatedRoutine;
-        } else {
-            routines.push(updatedRoutine);
-        }
-        saveLocalRoutinesStore(routines);
         return updatedRoutine;
     } catch (error) {
         console.error("Error en addOrUpdateRoutineStep:", error);
-        throw new Error("No se pudo guardar el producto en tu rutina Bioaqua.");
+        throw new Error("No se pudo guardar el producto en tu rutina.");
     }
 }
 
@@ -186,6 +115,7 @@ export async function addOrUpdateRoutineStep(uid, { productoId, horario, notas, 
 export async function updateRoutineTitle(uid, nuevoNombre) {
     try {
         const currentRoutine = await getUserRoutine(uid);
+
         const updatedRoutine = {
             ...currentRoutine,
             uid,
@@ -193,23 +123,11 @@ export async function updateRoutineTitle(uid, nuevoNombre) {
             actualizadoEn: new Date().toISOString()
         };
 
-        if (isFirebaseConfigured() && db) {
-            await setDoc(doc(db, ROUTINES_COLLECTION, uid), {
-                ...updatedRoutine,
-                updatedAt: serverTimestamp()
-            });
-            return updatedRoutine;
-        }
+        await setDoc(doc(db, ROUTINES_COLLECTION, uid), {
+            ...updatedRoutine,
+            updatedAt: serverTimestamp()
+        });
 
-        await new Promise((r) => setTimeout(r, 150));
-        const routines = getLocalRoutinesStore();
-        const idx = routines.findIndex((r) => r.uid === uid);
-        if (idx >= 0) {
-            routines[idx] = updatedRoutine;
-        } else {
-            routines.push(updatedRoutine);
-        }
-        saveLocalRoutinesStore(routines);
         return updatedRoutine;
     } catch (error) {
         console.error("Error en updateRoutineTitle:", error);
@@ -218,7 +136,7 @@ export async function updateRoutineTitle(uid, nuevoNombre) {
 }
 
 /**
- * Elimina un producto/paso específico de la rutina del usuario.
+ * Elimina un paso específico de la rutina del usuario.
  * @param {string} uid UID del cliente.
  * @param {string} productoId ID del producto a quitar.
  * @returns {Promise<Object>} Rutina actualizada.
@@ -226,32 +144,22 @@ export async function updateRoutineTitle(uid, nuevoNombre) {
 export async function removeStepFromRoutine(uid, productoId) {
     try {
         const currentRoutine = await getUserRoutine(uid);
-        const filteredSteps = (currentRoutine.pasos || []).filter(
+        const filteredSteps  = (currentRoutine.pasos || []).filter(
             (p) => p.productoId !== productoId && p.pasoId !== productoId
         );
 
         const updatedRoutine = {
             ...currentRoutine,
             uid,
-            pasos: filteredSteps,
+            pasos:         filteredSteps,
             actualizadoEn: new Date().toISOString()
         };
 
-        if (isFirebaseConfigured() && db) {
-            await setDoc(doc(db, ROUTINES_COLLECTION, uid), {
-                ...updatedRoutine,
-                updatedAt: serverTimestamp()
-            });
-            return updatedRoutine;
-        }
+        await setDoc(doc(db, ROUTINES_COLLECTION, uid), {
+            ...updatedRoutine,
+            updatedAt: serverTimestamp()
+        });
 
-        await new Promise((r) => setTimeout(r, 180));
-        const routines = getLocalRoutinesStore();
-        const idx = routines.findIndex((r) => r.uid === uid);
-        if (idx >= 0) {
-            routines[idx] = updatedRoutine;
-            saveLocalRoutinesStore(routines);
-        }
         return updatedRoutine;
     } catch (error) {
         console.error("Error en removeStepFromRoutine:", error);
@@ -260,36 +168,34 @@ export async function removeStepFromRoutine(uid, productoId) {
 }
 
 // ============================================================================
-// GESTIÓN DE RESEÑAS Y VALORACIONES DE CLIENTES (`resenas`)
+// GESTIÓN DE RESEÑAS Y VALORACIONES (`resenas`)
 // ============================================================================
 
 /**
- * Obtiene todas las reseñas de productos desde Firestore (o LocalStorage).
+ * Obtiene todas las reseñas desde Firestore.
+ * Si la colección está vacía, ejecuta el seed inicial.
  * @returns {Promise<Array<Object>>}
  */
 export async function getAllReviews() {
     try {
-        if (isFirebaseConfigured() && db) {
-            const snap = await getDocs(collection(db, REVIEWS_COLLECTION));
-            if (snap.empty) {
-                await seedReviewsAndRoutines();
-                const retrySnap = await getDocs(collection(db, REVIEWS_COLLECTION));
-                return retrySnap.docs.map((d) => ({ id: d.id, ...d.data() }));
-            }
-            return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        const snap = await getDocs(collection(db, REVIEWS_COLLECTION));
+
+        if (snap.empty) {
+            await seedReviewsAndRoutines();
+            const retrySnap = await getDocs(collection(db, REVIEWS_COLLECTION));
+            return retrySnap.docs.map((d) => ({ id: d.id, ...d.data() }));
         }
 
-        await new Promise((r) => setTimeout(r, 140));
-        return getLocalReviewsStore();
+        return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
     } catch (error) {
         console.error("Error en getAllReviews:", error);
-        return getLocalReviewsStore();
+        throw new Error("No se pudieron cargar las reseñas.");
     }
 }
 
 /**
- * Publica una nueva reseña y calificación (1 a 5 estrellas) sobre un producto Bioaqua.
- * @param {Object} reviewData ({ productoId, uid, nombreUsuario, pais, calificacion, comentario })
+ * Publica una nueva reseña sobre un producto.
+ * @param {Object} reviewData { productoId, uid, nombreUsuario, pais, calificacion, comentario }
  * @returns {Promise<Object>} Reseña creada.
  */
 export async function createReview({ productoId, uid, nombreUsuario, pais, calificacion, comentario }) {
@@ -298,50 +204,33 @@ export async function createReview({ productoId, uid, nombreUsuario, pais, calif
             productoId,
             uid,
             nombreUsuario: nombreUsuario || "Cliente Bioaqua",
-            pais: pais || "El Salvador",
-            calificacion: Number(calificacion),
-            comentario: comentario.trim(),
-            fecha: new Date().toISOString()
+            pais:          pais || "El Salvador",
+            calificacion:  Number(calificacion),
+            comentario:    comentario.trim(),
+            fecha:         new Date().toISOString()
         };
 
-        if (isFirebaseConfigured() && db) {
-            const docRef = await addDoc(collection(db, REVIEWS_COLLECTION), {
-                ...payload,
-                createdAt: serverTimestamp()
-            });
-            return { id: docRef.id, ...payload };
-        }
+        const docRef = await addDoc(collection(db, REVIEWS_COLLECTION), {
+            ...payload,
+            createdAt: serverTimestamp()
+        });
 
-        await new Promise((r) => setTimeout(r, 240));
-        const reviews = getLocalReviewsStore();
-        const newReview = {
-            id: `rev-${Date.now()}`,
-            ...payload
-        };
-        reviews.unshift(newReview);
-        saveLocalReviewsStore(reviews);
-        return newReview;
+        return { id: docRef.id, ...payload };
     } catch (error) {
         console.error("Error en createReview:", error);
-        throw new Error("No se pudo publicar tu reseña en este momento.");
+        throw new Error("No se pudo publicar tu reseña.");
     }
 }
 
 /**
- * Elimina una reseña (permitido al autor de la reseña o al administrador).
+ * Elimina una reseña. Permitido al autor o al administrador
+ * (la restricción real la aplican las Firestore Rules).
  * @param {string} reviewId ID de la reseña.
  * @returns {Promise<void>}
  */
 export async function deleteReview(reviewId) {
     try {
-        if (isFirebaseConfigured() && db) {
-            await deleteDoc(doc(db, REVIEWS_COLLECTION, reviewId));
-            return;
-        }
-
-        await new Promise((r) => setTimeout(r, 180));
-        const reviews = getLocalReviewsStore();
-        saveLocalReviewsStore(reviews.filter((r) => r.id !== reviewId));
+        await deleteDoc(doc(db, REVIEWS_COLLECTION, reviewId));
     } catch (error) {
         console.error("Error en deleteReview:", error);
         throw new Error("No se pudo eliminar la reseña.");
@@ -349,25 +238,21 @@ export async function deleteReview(reviewId) {
 }
 
 /**
- * Carga las reseñas y rutinas iniciales en Firestore o LocalStorage.
+ * Carga reseñas y rutinas iniciales en Firestore (seed).
+ * Usa IDs fijos para evitar duplicados en cada ejecución.
+ * @returns {Promise<void>}
  */
 export async function seedReviewsAndRoutines() {
     try {
-        if (isFirebaseConfigured() && db) {
-            for (const rev of INITIAL_REVIEWS_SEED) {
-                const { id, ...data } = rev;
-                await setDoc(doc(db, REVIEWS_COLLECTION, id), data);
-            }
-            for (const rut of INITIAL_ROUTINES_SEED) {
-                await setDoc(doc(db, ROUTINES_COLLECTION, rut.uid), rut);
-            }
-            return;
+        for (const rev of INITIAL_REVIEWS_SEED) {
+            const { id, ...data } = rev;
+            await setDoc(doc(db, REVIEWS_COLLECTION, id), data);
         }
-
-        saveLocalReviewsStore(INITIAL_REVIEWS_SEED);
-        saveLocalRoutinesStore(INITIAL_ROUTINES_SEED);
+        for (const rut of INITIAL_ROUTINES_SEED) {
+            await setDoc(doc(db, ROUTINES_COLLECTION, rut.uid), rut);
+        }
     } catch (error) {
         console.error("Error en seedReviewsAndRoutines:", error);
+        throw new Error("Error al cargar los datos iniciales.");
     }
 }
-

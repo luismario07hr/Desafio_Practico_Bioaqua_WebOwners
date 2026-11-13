@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Prueba de ProductService</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #e9ecef; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; background: #28a745; color: white; border: none; border-radius: 5px; }
+        button:hover { background: #218838; }
+        .danger { background: #dc3545; }
+        .danger:hover { background: #c82333; }
+        pre { background: #343a40; color: #20c997; padding: 15px; border-radius: 5px; overflow-x: auto; max-height: 400px;}
+    </style>
+</head>
+<body>
+    <h1>Prueba de Conexión: productService.js</h1>
+    
+    <button id="btn-seed">1. Poblar Catálogo Inicial (Seed)</button>
+    <button id="btn-get-all">2. Obtener Todos los Productos</button>
+    <button id="btn-create">3. Crear Producto Nuevo</button>
+    <button id="btn-update">4. Actualizar Producto Creado</button>
+    <button id="btn-delete" class="danger">5. Eliminar Producto Creado</button>
+
+    <h3>Consola de Resultados:</h3>
+    <pre id="log">Esperando acciones...</pre>
+
+    <script type="module">
+        import { 
+            getAllProducts, 
+            getProductById, 
+            createProduct, 
+            updateProduct, 
+            deleteProduct,
+            seedProductsToFirestore 
+        } from './js/services/productService.js';
+
+        const logDiv = document.getElementById('log');
+        function printLog(msg) {
+            logDiv.innerHTML += `\n> ${msg}`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        let tempProductId = null; // Guardará el ID del producto creado para probar Update y Delete
+
+        // 1. POBLAR CATÁLOGO (SEED)
+        document.getElementById('btn-seed').addEventListener('click', async () => {
+            try {
+                printLog("Ejecutando Seed (poblando Firestore)...");
+                const seeded = await seedProductsToFirestore();
+                printLog(`Éxito! Se cargaron ${seeded.length} productos iniciales.`);
+            } catch (error) {
+                printLog(`Error en Seed: ${error.message}`);
+            }
+        });
+
+        // 2. OBTENER TODOS
+        document.getElementById('btn-get-all').addEventListener('click', async () => {
+            try {
+                printLog("Obteniendo catálogo de productos...");
+                const products = await getAllProducts();
+                printLog(`Éxito! Se encontraron ${products.length} productos:\n${JSON.stringify(products, null, 2)}`);
+            } catch (error) {
+                printLog(`Error obteniendo productos: ${error.message}`);
+            }
+        });
+
+        // 3. CREAR PRODUCTO
+        document.getElementById('btn-create').addEventListener('click', async () => {
+            const newProductData = {
+                nombre: "Sérum Anti-Edad Firebase",
+                precio: 15.99,
+                categoria: "Sérums",
+                descripcion: "Sérum de prueba creado desde el test.",
+                stock: 50
+            };
+            
+            try {
+                printLog("Creando nuevo producto...");
+                const newProduct = await createProduct(newProductData);
+                tempProductId = newProduct.id; // Guardamos el ID para usarlo luego
+                printLog(`Éxito! Producto creado con ID: ${tempProductId}\n${JSON.stringify(newProduct, null, 2)}`);
+            } catch (error) {
+                printLog(`Error creando producto: ${error.message}`);
+            }
+        });
+
+        // 4. ACTUALIZAR PRODUCTO
+        document.getElementById('btn-update').addEventListener('click', async () => {
+            if (!tempProductId) {
+                printLog("Error: Debes crear un producto primero (Paso 3) para tener un ID que actualizar.");
+                return;
+            }
+            
+            const updates = {
+                precio: 12.99,
+                descripcion: "Precio actualizado por promoción de prueba."
+            };
+
+            try {
+                printLog(`Actualizando producto con ID: ${tempProductId}...`);
+                const updatedProduct = await updateProduct(tempProductId, updates);
+                printLog(`Éxito! Producto actualizado:\n${JSON.stringify(updatedProduct, null, 2)}`);
+            } catch (error) {
+                printLog(`Error actualizando producto: ${error.message}`);
+            }
+        });
+
+        // 5. ELIMINAR PRODUCTO
+        document.getElementById('btn-delete').addEventListener('click', async () => {
+             if (!tempProductId) {
+                printLog("Error: Debes crear un producto primero (Paso 3) para tener un ID que eliminar.");
+                return;
+            }
+
+            try {
+                printLog(`Eliminando producto con ID: ${tempProductId}...`);
+                await deleteProduct(tempProductId);
+                printLog(`Éxito! Producto eliminado de Firestore.`);
+                tempProductId = null; // Reseteamos el ID
+            } catch (error) {
+                printLog(`Error eliminando producto: ${error.message}`);
+            }
+        });
+    </script>
+</body>
+</html>
