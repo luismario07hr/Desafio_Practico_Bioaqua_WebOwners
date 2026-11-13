@@ -3,13 +3,14 @@
  * ARCHIVO: js/ui/catalogUI.js
  * RESPONSABILIDAD: Renderizado 100% dinámico del Catálogo de Productos Bioaqua
  * desde Firestore (Cero catálogo estático), barra de búsqueda y filtrado
- * multicriterio en tiempo real, ordenamiento y vistas basadas en roles
- * (Cliente: solo lectura | Admin: controles CRUD en tarjetas y panel superior).
+ * multicriterio en tiempo real, ordenamiento e integración de los dos procesos:
+ * - Proceso 1 (Rol Admin): Gestión CRUD de productos en el catálogo.
+ * - Proceso 2 (Rol Cliente): Armador de Rutina Personalizada ("Mi Rutina") y Reseñas.
  * ============================================================================
  */
 
 import { getAllProducts } from "../services/productService.js";
-import { getAllReviews } from "../services/routineService.js";
+import { getAllReviews, getUserRoutine } from "../services/routineService.js";
 import { subscribeToAuthChanges, getCurrentUser } from "../services/authService.js";
 import {
     filterProducts,
@@ -24,12 +25,18 @@ import {
 } from "../utils/validators.js";
 import { renderLoadingState, renderEmptyState, showToast } from "./notificationsUI.js";
 import { renderAdminPanel, openProductModal, handleDeleteProduct } from "./adminUI.js";
+import {
+    renderClientRoutineSection,
+    openAddRoutineModal,
+    openProductReviewsModal
+} from "./clientRoutineUI.js";
 import { getActiveRegion, escapeHTML } from "./navbarUI.js";
 
 // Estado reactivo del catálogo en memoria para filtrado y ordenamiento instantáneo
 let rawProducts = [];
 let allReviews = [];
 let enrichedProducts = [];
+let userRoutineProductIds = new Set();
 
 const currentFilters = {
     search: "",
@@ -83,21 +90,24 @@ export async function initCatalogPage() {
     }
 
     // 2. Preparar contenedores estructurales en `productos.html`
-    // (Se eliminó el banner azul de crear cuenta y se reemplazó con la barra de filtros avanzados)
+    // (Sin el banner azul de invitados; la rutina solo se muestra cuando el usuario inicia sesión)
     mainContainer.innerHTML = `
         <!-- 1. PANEL EXCLUSIVO ROL ADMIN (Proceso 1) -->
         <section id="admin-panel-mount" class="hidden" aria-label="Panel de Administración"></section>
 
-        <!-- 2. BARRA DE FILTROS AVANZADOS EN TIEMPO REAL -->
+        <!-- 2. SECCIÓN MI RUTINA BIOAQUA (Proceso 2 - Solo visible con sesión activa, sin banner azul de invitado) -->
+        <section id="client-routine-mount" class="hidden" aria-label="Mi Rutina Personalizada Bioaqua"></section>
+
+        <!-- 3. BARRA DE FILTROS AVANZADOS EN TIEMPO REAL -->
         <section id="catalog-filters-mount" class="bio-filters-section" aria-label="Filtros y búsqueda del catálogo"></section>
 
-        <!-- 3. SECCIÓN DINÁMICA: BEST SELLERS -->
+        <!-- 4. SECCIÓN DINÁMICA: BEST SELLERS -->
         <section id="best-sellers-section">
             <h2>Best sellers</h2>
             <div id="best-sellers-dynamic-grid" class="best-sellers-grid"></div>
         </section>
 
-        <!-- 4. SECCIÓN DINÁMICA: CATÁLOGO DE PRODUCTOS POR CATEGORÍA / FILTROS -->
+        <!-- 5. SECCIÓN DINÁMICA: CATÁLOGO DE PRODUCTOS POR CATEGORÍA / FILTROS -->
         <section id="all-products-section">
             <div id="catalog-dynamic-container"></div>
         </section>
@@ -110,7 +120,8 @@ export async function initCatalogPage() {
     await reloadCatalogAndReviews();
 
     // Suscribirse a cambios de sesión (Login/Logout/Cambio de Rol) para actualizar vistas sin recargar
-    subscribeToAuthChanges((userProfile) => {
+    subscribeToAuthChanges(async (userProfile) => {
+        await syncUserRoutineSet(userProfile);
         refreshAllCatalogViews(userProfile);
     });
 
@@ -140,7 +151,9 @@ export async function reloadCatalogAndReviews() {
         allReviews = reviewsData;
         enrichedProducts = enrichProductsWithRatings(rawProducts, allReviews);
 
-        refreshAllCatalogViews(getCurrentUser());
+        const user = getCurrentUser();
+        await syncUserRoutineSet(user);
+        refreshAllCatalogViews(user);
     } catch (error) {
         console.error("Error cargando catálogo:", error);
         showToast(error.message || "Error al conectar con el catálogo.", "error");
@@ -154,14 +167,27 @@ export async function reloadCatalogAndReviews() {
     }
 }
 
+async function syncUserRoutineSet(user) {
+    if (!user) {
+        userRoutineProductIds = new Set();
+        return;
+    }
+    try {
+        const routine = await getUserRoutine(user.uid);
+        userRoutineProductIds = new Set((routine.pasos || []).map((p) => p.productoId));
+    } catch {
+        userRoutineProductIds = new Set();
+    }
+}
+
 /**
- * Refresca el Panel Admin y las tarjetas del Catálogo según el rol del usuario.
+ * Refresca el Panel Admin, Mi Rutina (si hay sesión) y las tarjetas del Catálogo según el rol.
  * @param {Object|null} user
  */
 function refreshAllCatalogViews(user) {
     const metrics = calculateCatalogMetrics(enrichedProducts, allReviews);
 
-    // 1. Panel Admin (solo visible si rol === 'admin')
+    // 1. Panel Admin (Proceso 1: solo visible si rol === 'admin')
     renderAdminPanel(
         document.getElementById("admin-panel-mount"),
         user,
@@ -169,7 +195,22 @@ function refreshAllCatalogViews(user) {
         reloadCatalogAndReviews
     );
 
-    // 2. Productos Filtrados y Ordenados (Rol Cliente: solo lectura | Rol Admin: botones CRUD)
+    // 2. Sección Mi Rutina Bioaqua (Proceso 2: solo visible si hay usuario autenticado, sin banner azul de invitado)
+    const routineMount = document.getElementById("client-routine-mount");
+    if (routineMount) {
+        if (user) {
+            routineMount.classList.remove("hidden");
+            renderClientRoutineSection(routineMount, user, enrichedProducts, async () => {
+                await syncUserRoutineSet(user);
+                renderFilteredProducts(user);
+            });
+        } else {
+            routineMount.innerHTML = "";
+            routineMount.classList.add("hidden");
+        }
+    }
+
+    // 3. Productos Filtrados y Ordenados
     renderFilteredProducts(user);
 }
 
@@ -348,7 +389,7 @@ function renderFilteredProducts(user) {
                 .slice(0, 3)
                 .map((prod) => createBestSellerCardHTML(prod, user, activeRegion))
                 .join("");
-            bindProductCardEvents(bestSellersGrid);
+            bindProductCardEvents(bestSellersGrid, user);
         } else {
             bestSellersSection.classList.add("hidden");
             bestSellersGrid.innerHTML = "";
@@ -403,38 +444,60 @@ function renderFilteredProducts(user) {
             .join("");
     }
 
-    bindProductCardEvents(catalogContainer);
+    bindProductCardEvents(catalogContainer, user);
 }
 
 /**
- * Genera los botones CRUD (Editar, Eliminar) únicamente cuando el usuario logueado tiene rol 'admin'.
- * Para el rol 'cliente' (o visitante), devuelve cadena vacía (solo lectura).
+ * Genera los controles de interacción en cada tarjeta según la sesión y el rol:
+ * - Visitante sin sesión: solo lectura (sin botones).
+ * - Rol 'cliente' (autenticado): botones del Proceso 2 ("+ Mi Rutina" y "★ Reseñas").
+ * - Rol 'admin': botones del Proceso 2 + botones CRUD del Proceso 1 ("✎ Editar", "🗑 Eliminar").
  */
-function renderAdminCardControlsHTML(prod, isAdmin) {
-    if (!isAdmin) return "";
+function renderCardRoleControlsHTML(prod, user) {
+    if (!user) return "";
+
+    const isAdmin = user.rol === "admin";
+    const inRoutine = userRoutineProductIds.has(prod.id);
+
     return `
         <footer class="bio-card-admin-actions">
-            <button type="button" class="bio-btn bio-btn--xs bio-btn--cyan" data-action="edit-product" data-id="${escapeHTML(prod.id)}" title="Editar producto">
-                ✎ Editar
+            <button
+                type="button"
+                class="bio-btn bio-btn--xs ${inRoutine ? "bio-btn--success" : "bio-btn--primary"}"
+                data-action="add-routine"
+                data-id="${escapeHTML(prod.id)}"
+                ${prod.stockEstado === "Agotado" ? "disabled" : ""}
+            >
+                ${inRoutine ? "✓ En Mi Rutina" : "+ Mi Rutina"}
             </button>
-            <button type="button" class="bio-btn bio-btn--xs bio-btn--danger" data-action="delete-product" data-id="${escapeHTML(prod.id)}" title="Eliminar producto">
-                🗑 Eliminar
+            <button
+                type="button"
+                class="bio-btn bio-btn--xs bio-btn--outline"
+                data-action="open-reviews"
+                data-id="${escapeHTML(prod.id)}"
+            >
+                ★ Reseñas (${prod.totalResenas || 0})
             </button>
+            ${
+                isAdmin
+                    ? `
+                    <button type="button" class="bio-btn bio-btn--xs bio-btn--cyan" data-action="edit-product" data-id="${escapeHTML(prod.id)}" title="Editar producto">
+                        ✎ Editar
+                    </button>
+                    <button type="button" class="bio-btn bio-btn--xs bio-btn--danger" data-action="delete-product" data-id="${escapeHTML(prod.id)}" title="Eliminar producto">
+                        🗑 Eliminar
+                    </button>
+                `
+                    : ""
+            }
         </footer>
     `;
 }
 
 /**
- * Genera el HTML de una tarjeta de la sección Best Sellers basado en el nuevo diseño:
- * <article>
- *     <div><img ...></div>
- *     <h3>...</h3>
- *     <p>...</p>
- *     <ul><li>...</li></ul>
- * </article>
+ * Genera el HTML de una tarjeta de la sección Best Sellers basado en el nuevo diseño.
  */
 function createBestSellerCardHTML(prod, user, activeRegion) {
-    const isAdmin = Boolean(user && user.rol === "admin");
     const imgSrc = normalizeImageUrl(prod.imagenUrl);
     const priceLabel = formatProductPrice(prod, activeRegion);
     const featureTag = prod.linea || prod.categoria || "Hidratación";
@@ -451,28 +514,15 @@ function createBestSellerCardHTML(prod, user, activeRegion) {
                 <li>${escapeHTML(featureTag)}</li>
                 <li>${escapeHTML(priceLabel)}</li>
             </ul>
-            ${renderAdminCardControlsHTML(prod, isAdmin)}
+            ${renderCardRoleControlsHTML(prod, user)}
         </article>
     `;
 }
 
 /**
- * Genera el HTML de una tarjeta estándar de producto basado en el nuevo diseño (.product-card):
- * <article class="product-card">
- *     <div>
- *         <div>
- *             <div><img ...></div>
- *             <h4>...</h4>
- *         </div>
- *         <div>
- *             <p>...</p>
- *             <ul><li>...</li></ul>
- *         </div>
- *     </div>
- * </article>
+ * Genera el HTML de una tarjeta estándar de producto basado en el nuevo diseño (.product-card).
  */
 function createStandardProductCardHTML(prod, user, activeRegion) {
-    const isAdmin = Boolean(user && user.rol === "admin");
     const imgSrc = normalizeImageUrl(prod.imagenUrl);
     const priceLabel = formatProductPrice(prod, activeRegion);
     const primaryTag = prod.categoria || "Skincare";
@@ -494,7 +544,7 @@ function createStandardProductCardHTML(prod, user, activeRegion) {
                         <li>${escapeHTML(secondaryTag)}</li>
                         <li>${escapeHTML(priceLabel)}</li>
                     </ul>
-                    ${renderAdminCardControlsHTML(prod, isAdmin)}
+                    ${renderCardRoleControlsHTML(prod, user)}
                 </div>
             </div>
         </article>
@@ -502,14 +552,38 @@ function createStandardProductCardHTML(prod, user, activeRegion) {
 }
 
 /**
- * Conecta los eventos de los botones CRUD ("✎ Editar", "🗑 Eliminar") para el rol Administrador.
+ * Conecta los eventos de los botones del Proceso 2 ("+ Mi Rutina", "★ Reseñas")
+ * y del Proceso 1 ("✎ Editar", "🗑 Eliminar" para el rol Administrador).
  */
-function bindProductCardEvents(container) {
+function bindProductCardEvents(container, user) {
     if (!container) return;
 
     const findProd = (id) => enrichedProducts.find((p) => p.id === id);
 
-    // 1. Editar Producto (Exclusivo Admin)
+    // 1. Agregar a Mi Rutina (Proceso 2 - Cliente / Usuario autenticado)
+    container.querySelectorAll('[data-action="add-routine"]').forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const prod = findProd(btn.dataset.id);
+            if (!prod) return;
+            openAddRoutineModal(prod, user, null, async () => {
+                await syncUserRoutineSet(getCurrentUser());
+                refreshAllCatalogViews(getCurrentUser());
+            });
+        });
+    });
+
+    // 2. Ver / Publicar Reseñas (Proceso 2 - Cliente / Usuario autenticado)
+    container.querySelectorAll('[data-action="open-reviews"]').forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const prod = findProd(btn.dataset.id);
+            if (!prod) return;
+            openProductReviewsModal(prod, allReviews, getCurrentUser(), async () => {
+                await reloadCatalogAndReviews();
+            });
+        });
+    });
+
+    // 3. Editar Producto (Proceso 1 - Exclusivo Admin)
     container.querySelectorAll('[data-action="edit-product"]').forEach((btn) => {
         btn.addEventListener("click", () => {
             const prod = findProd(btn.dataset.id);
@@ -518,7 +592,7 @@ function bindProductCardEvents(container) {
         });
     });
 
-    // 2. Eliminar Producto (Exclusivo Admin)
+    // 4. Eliminar Producto (Proceso 1 - Exclusivo Admin)
     container.querySelectorAll('[data-action="delete-product"]').forEach((btn) => {
         btn.addEventListener("click", () => {
             const prod = findProd(btn.dataset.id);
