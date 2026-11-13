@@ -104,13 +104,14 @@ export function filterProducts(products, filters = {}) {
 export function sortProducts(products, sortBy = "destacados", activeRegion = "SV") {
     const list = [...products];
     const priceKey = activeRegion === "GT" ? "precioReferenciaGTQ" : "precioReferenciaUSD";
+    const getPrice = (p) => Number(p[priceKey] ?? p.precio) || 0;
 
     switch (sortBy) {
         case "precio-asc":
-            return list.sort((a, b) => (Number(a[priceKey]) || 0) - (Number(b[priceKey]) || 0));
+            return list.sort((a, b) => getPrice(a) - getPrice(b));
 
         case "precio-desc":
-            return list.sort((a, b) => (Number(b[priceKey]) || 0) - (Number(a[priceKey]) || 0));
+            return list.sort((a, b) => getPrice(b) - getPrice(a));
 
         case "rating-desc":
             return list.sort((a, b) => {

@@ -143,8 +143,8 @@ function renderHeaderToolbar(container, user) {
                 <button type="button" class="bio-btn bio-btn--ghost bio-btn--xs" id="btn-switch-role" title="Alternar rol entre Cliente y Admin para pruebas de defensa técnica">
                     ⇄ Rol: ${isAdmin ? "Ver como Cliente" : "Ver como Admin"}
                 </button>
-                <a href="productos.html${isAdmin ? "#panel-admin" : "#mi-rutina-section"}" class="bio-btn bio-btn--cyan bio-btn--xs">
-                    ${isAdmin ? "⚙ Gestión Catálogo" : "🧴 Mi Rutina"}
+                <a href="productos.html${isAdmin ? "#panel-admin" : "#catalog-filters-mount"}" class="bio-btn bio-btn--cyan bio-btn--xs">
+                    ${isAdmin ? "⚙ Gestión Catálogo" : "🧴 Catálogo"}
                 </a>
                 <button type="button" class="bio-btn bio-btn--outline-light bio-btn--xs" id="btn-header-logout">
                     Salir

@@ -8,7 +8,7 @@
 
 // Expresiones regulares de apoyo
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const IMAGE_URL_OR_PATH_REGEX = /^(https?:\/\/[^\s]+|img\/[^\s]+\.(png|jpg|jpeg|webp|svg|gif))$/i;
+const IMAGE_URL_OR_PATH_REGEX = /^(https?:\/\/[^\s]+|img\/.+\.(png|jpg|jpeg|webp|svg|gif))$/i;
 
 // Catálogos permitidos para garantizar integridad de datos
 export const PAISES_VALIDOS = ["El Salvador", "Guatemala"];

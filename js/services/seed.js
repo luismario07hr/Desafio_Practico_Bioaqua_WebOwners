@@ -109,7 +109,7 @@ export const INITIAL_PRODUCTS_SEED = [
         stockEstado: "Stock Bajo",
         descripcion: "Fortalece la barrera hidrolipídica, suaviza asperezas y devuelve una sensación de piel tersa, firme y confortable frente al calor centroamericano.",
         ingredientesClave: "Fibroína de Seda Hidrolizada, Ceramidas NP, Escualano Vegetal",
-        imagenUrl: "img/proteina-de-seda-clean.png", // ✅ corregido: eliminado espacio en nombre de archivo
+        imagenUrl: "img/proteina-de-seda-clean (1).png",
         destacado: false
     },
     {
@@ -338,7 +338,7 @@ export const AVAILABLE_LOCAL_IMAGES = [
     { label: "Desmaquillante Bifásico",     path: "img/desmaquillante-bifasico-clean.png" },
     { label: "Gel Exfoliante de Arroz",     path: "img/gel-exfoliante-arroz-clean.png" },
     { label: "Espuma Limpiadora Pure Skin", path: "img/crema-limpiadora-pure-skin.png" },
-    { label: "Crema Proteína de Seda",      path: "img/proteina-de-seda-clean.png" }, // ✅ corregido
+    { label: "Crema Proteína de Seda",      path: "img/proteina-de-seda-clean (1).png" },
     { label: "Crema Focalizada Anti-Acné",  path: "img/crema-focalizada-anti-acne-clean.png" },
     { label: "Sérum Vitamina C + AH",       path: "img/serum-vitamina-c-ah-clean.png" },
     { label: "Suero Pure Skin Anti-Acné",   path: "img/suero-aclarante-anti-acne-clean.png" },

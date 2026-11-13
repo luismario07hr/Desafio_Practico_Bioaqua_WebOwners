@@ -3,12 +3,13 @@
  * ARCHIVO: js/ui/catalogUI.js
  * RESPONSABILIDAD: Renderizado 100% dinámico del Catálogo de Productos Bioaqua
  * desde Firestore (Cero catálogo estático), barra de búsqueda y filtrado
- * multicriterio en tiempo real, ordenamiento y bloque de indicadores (KPIs).
+ * multicriterio en tiempo real, ordenamiento y vistas basadas en roles
+ * (Cliente: solo lectura | Admin: controles CRUD en tarjetas y panel superior).
  * ============================================================================
  */
 
 import { getAllProducts } from "../services/productService.js";
-import { getAllReviews, getUserRoutine } from "../services/routineService.js";
+import { getAllReviews } from "../services/routineService.js";
 import { subscribeToAuthChanges, getCurrentUser } from "../services/authService.js";
 import {
     filterProducts,
@@ -23,18 +24,12 @@ import {
 } from "../utils/validators.js";
 import { renderLoadingState, renderEmptyState, showToast } from "./notificationsUI.js";
 import { renderAdminPanel, openProductModal, handleDeleteProduct } from "./adminUI.js";
-import {
-    renderClientRoutineSection,
-    openAddRoutineModal,
-    openProductReviewsModal
-} from "./clientRoutineUI.js";
 import { getActiveRegion, escapeHTML } from "./navbarUI.js";
 
 // Estado reactivo del catálogo en memoria para filtrado y ordenamiento instantáneo
 let rawProducts = [];
 let allReviews = [];
 let enrichedProducts = [];
-let userRoutineProductIds = new Set();
 
 const currentFilters = {
     search: "",
@@ -45,6 +40,33 @@ const currentFilters = {
     stockEstado: "Todos",
     sortBy: "destacados"
 };
+
+/**
+ * Normaliza rutas de imágenes locales por si en Firestore quedó guardada la variante sin "(1)".
+ */
+function normalizeImageUrl(url) {
+    if (!url) return "img/suero-acido-hialuronico-clean.png";
+    if (url === "img/proteina-de-seda-clean.png") {
+        return "img/proteina-de-seda-clean (1).png";
+    }
+    return url;
+}
+
+/**
+ * Formatea el precio del producto según la región activa (USD para SV, GTQ para GT).
+ */
+function formatProductPrice(prod, activeRegion = "SV") {
+    const usd = Number(prod.precioReferenciaUSD ?? prod.precio ?? 0);
+    const gtq = Number(prod.precioReferenciaGTQ ?? (usd * 7.8));
+
+    if (activeRegion === "GT" && gtq > 0) {
+        return `Q${gtq.toFixed(2)}`;
+    }
+    if (usd > 0) {
+        return `$${usd.toFixed(2)}`;
+    }
+    return "Consultar precio";
+}
 
 /**
  * Inicializa la página interactiva de Productos (`productos.html`).
@@ -60,35 +82,23 @@ export async function initCatalogPage() {
         currentFilters.tipoPiel = skinParam;
     }
 
-    // 2. Preparar contenedores estructurales en `productos.html` (reemplazando cualquier contenido estático)
+    // 2. Preparar contenedores estructurales en `productos.html`
+    // (Se eliminó el banner azul de crear cuenta y se reemplazó con la barra de filtros avanzados)
     mainContainer.innerHTML = `
         <!-- 1. PANEL EXCLUSIVO ROL ADMIN (Proceso 1) -->
         <section id="admin-panel-mount" class="hidden" aria-label="Panel de Administración"></section>
 
-        <!-- 2. BLOQUE DE INDICADORES CALCULADOS CON JS NATIVO (KPIs) -->
-        <section id="catalog-kpis-mount" class="bio-kpis-section" aria-label="Indicadores del Catálogo Regional"></section>
-
-        <!-- 3. SECCIÓN MI RUTINA BIOAQUA (Proceso 2 - Rol Cliente) -->
-        <section id="client-routine-mount" aria-label="Mi Rutina Personalizada Bioaqua"></section>
-
-        <!-- 4. BARRA DE BÚSQUEDA MULTICRITERIO, FILTROS Y ORDENAMIENTO -->
+        <!-- 2. BARRA DE FILTROS AVANZADOS EN TIEMPO REAL -->
         <section id="catalog-filters-mount" class="bio-filters-section" aria-label="Filtros y búsqueda del catálogo"></section>
 
-        <!-- 5. SECCIÓN DINÁMICA: BEST SELLERS / DESTACADOS -->
+        <!-- 3. SECCIÓN DINÁMICA: BEST SELLERS -->
         <section id="best-sellers-section">
-            <div class="bio-section-heading">
-                <h2>Best sellers Bioaqua</h2>
-                <span class="bio-section-badge" id="best-sellers-count-badge">Destacados</span>
-            </div>
+            <h2>Best sellers</h2>
             <div id="best-sellers-dynamic-grid" class="best-sellers-grid"></div>
         </section>
 
-        <!-- 6. SECCIÓN DINÁMICA: CATÁLOGO GENERAL REGIONAL -->
+        <!-- 4. SECCIÓN DINÁMICA: CATÁLOGO DE PRODUCTOS POR CATEGORÍA / FILTROS -->
         <section id="all-products-section">
-            <div class="bio-section-heading">
-                <h2 id="catalog-main-heading">Catálogo Regional Bioaqua (SV & GT)</h2>
-                <span class="bio-section-badge" id="catalog-results-count">Cargando...</span>
-            </div>
             <div id="catalog-dynamic-container"></div>
         </section>
     `;
@@ -100,8 +110,7 @@ export async function initCatalogPage() {
     await reloadCatalogAndReviews();
 
     // Suscribirse a cambios de sesión (Login/Logout/Cambio de Rol) para actualizar vistas sin recargar
-    subscribeToAuthChanges(async (userProfile) => {
-        await syncUserRoutineSet(userProfile);
+    subscribeToAuthChanges((userProfile) => {
         refreshAllCatalogViews(userProfile);
     });
 
@@ -119,7 +128,7 @@ export async function reloadCatalogAndReviews() {
     const bestSellersMount = document.getElementById("best-sellers-dynamic-grid");
 
     try {
-        renderLoadingState(catalogMount, "Sincronizando catálogo Bioaqua SV & GT desde Firestore...", 6);
+        renderLoadingState(catalogMount, "Sincronizando catálogo Bioaqua desde Firestore...", 6);
         if (bestSellersMount) bestSellersMount.innerHTML = "";
 
         const [productsData, reviewsData] = await Promise.all([
@@ -131,9 +140,7 @@ export async function reloadCatalogAndReviews() {
         allReviews = reviewsData;
         enrichedProducts = enrichProductsWithRatings(rawProducts, allReviews);
 
-        const user = getCurrentUser();
-        await syncUserRoutineSet(user);
-        refreshAllCatalogViews(user);
+        refreshAllCatalogViews(getCurrentUser());
     } catch (error) {
         console.error("Error cargando catálogo:", error);
         showToast(error.message || "Error al conectar con el catálogo.", "error");
@@ -147,27 +154,14 @@ export async function reloadCatalogAndReviews() {
     }
 }
 
-async function syncUserRoutineSet(user) {
-    if (!user) {
-        userRoutineProductIds = new Set();
-        return;
-    }
-    try {
-        const routine = await getUserRoutine(user.uid);
-        userRoutineProductIds = new Set((routine.pasos || []).map((p) => p.productoId));
-    } catch {
-        userRoutineProductIds = new Set();
-    }
-}
-
 /**
- * Refresca el Panel Admin, Indicadores KPI, Mi Rutina y las tarjetas del Catálogo.
+ * Refresca el Panel Admin y las tarjetas del Catálogo según el rol del usuario.
  * @param {Object|null} user
  */
 function refreshAllCatalogViews(user) {
     const metrics = calculateCatalogMetrics(enrichedProducts, allReviews);
 
-    // 1. Panel Admin (solo si rol === 'admin')
+    // 1. Panel Admin (solo visible si rol === 'admin')
     renderAdminPanel(
         document.getElementById("admin-panel-mount"),
         user,
@@ -175,72 +169,8 @@ function refreshAllCatalogViews(user) {
         reloadCatalogAndReviews
     );
 
-    // 2. Bloque de Indicadores (KPIs calculados con JS)
-    renderCatalogKPIs(document.getElementById("catalog-kpis-mount"), metrics);
-
-    // 3. Sección Mi Rutina Bioaqua (Proceso 2 Cliente)
-    renderClientRoutineSection(
-        document.getElementById("client-routine-mount"),
-        user,
-        enrichedProducts,
-        async () => {
-            await syncUserRoutineSet(user);
-            renderFilteredProducts(user);
-        }
-    );
-
-    // 4. Productos Filtrados y Ordenados
+    // 2. Productos Filtrados y Ordenados (Rol Cliente: solo lectura | Rol Admin: botones CRUD)
     renderFilteredProducts(user);
-}
-
-/**
- * Renderiza el bloque de Indicadores Calculados con JS Nativo.
- */
-function renderCatalogKPIs(container, metrics) {
-    if (!container) return;
-    const region = getActiveRegion();
-
-    container.innerHTML = `
-        <div class="bio-kpis-grid">
-            <article class="bio-kpi-card">
-                <span class="bio-kpi-card__label">Catálogo Activo Regional</span>
-                <strong class="bio-kpi-card__value">${metrics.totalProductos} Productos</strong>
-                <span class="bio-kpi-card__sub">
-                    🇸🇻 ${metrics.disponiblesSV} en El Salvador · 🇬🇹 ${metrics.disponiblesGT} en Guatemala
-                </span>
-            </article>
-
-            <article class="bio-kpi-card">
-                <span class="bio-kpi-card__label">Valoración Promedio Clientes</span>
-                <strong class="bio-kpi-card__value">★ ${metrics.calificacionGlobal.toFixed(1)} / 5.0</strong>
-                <span class="bio-kpi-card__sub">
-                    Basado en ${metrics.totalResenas} reseñas verificadas SV & GT
-                </span>
-            </article>
-
-            <article class="bio-kpi-card">
-                <span class="bio-kpi-card__label">Precio Promedio de Referencia</span>
-                <strong class="bio-kpi-card__value">
-                    ${
-                        region === "GT"
-                            ? `Q${metrics.precioPromedioGTQ.toFixed(2)} GTQ`
-                            : `$${metrics.precioPromedioUSD.toFixed(2)} USD`
-                    }
-                </strong>
-                <span class="bio-kpi-card__sub">
-                    🇸🇻 Prom. $${metrics.precioPromedioUSD.toFixed(2)} · 🇬🇹 Prom. Q${metrics.precioPromedioGTQ.toFixed(2)}
-                </span>
-            </article>
-
-            <article class="bio-kpi-card">
-                <span class="bio-kpi-card__label">Disponibilidad de Inventario</span>
-                <strong class="bio-kpi-card__value">${metrics.enStock} En Stock</strong>
-                <span class="bio-kpi-card__sub">
-                    ${metrics.stockBajo} stock bajo · ${metrics.agotados} agotados
-                </span>
-            </article>
-        </div>
-    `;
 }
 
 /**
@@ -344,7 +274,7 @@ function renderFilterControls(container) {
         </div>
     `;
 
-    // Listeners en tiempo real para cada filtro
+    // Listeners en tiempo real (input / change) para cada filtro
     const bindFilter = (id, key, eventName = "change") => {
         const el = container.querySelector(id);
         if (!el) return;
@@ -355,12 +285,12 @@ function renderFilterControls(container) {
     };
 
     bindFilter("#filter-search", "search", "input");
-    bindFilter("#filter-pais", "pais");
-    bindFilter("#filter-sort", "sortBy");
-    bindFilter("#filter-categoria", "categoria");
-    bindFilter("#filter-piel", "tipoPiel");
-    bindFilter("#filter-linea", "linea");
-    bindFilter("#filter-stock", "stockEstado");
+    bindFilter("#filter-pais", "pais", "change");
+    bindFilter("#filter-sort", "sortBy", "change");
+    bindFilter("#filter-categoria", "categoria", "change");
+    bindFilter("#filter-piel", "tipoPiel", "change");
+    bindFilter("#filter-linea", "linea", "change");
+    bindFilter("#filter-stock", "stockEstado", "change");
 
     container.querySelector("#btn-clear-filters")?.addEventListener("click", () => {
         currentFilters.search = "";
@@ -390,9 +320,7 @@ function renderFilterControls(container) {
 function renderFilteredProducts(user) {
     const bestSellersSection = document.getElementById("best-sellers-section");
     const bestSellersGrid = document.getElementById("best-sellers-dynamic-grid");
-    const bestSellersBadge = document.getElementById("best-sellers-count-badge");
     const catalogContainer = document.getElementById("catalog-dynamic-container");
-    const resultsCountBadge = document.getElementById("catalog-results-count");
 
     if (!catalogContainer) return;
 
@@ -400,28 +328,27 @@ function renderFilteredProducts(user) {
     const filtered = filterProducts(enrichedProducts, currentFilters);
     const sorted = sortProducts(filtered, currentFilters.sortBy, activeRegion);
 
-    if (resultsCountBadge) {
-        resultsCountBadge.textContent = `${sorted.length} de ${enrichedProducts.length} productos`;
-    }
-
-    // Mostrar Best Sellers arriba cuando no hay filtros restrictivos de texto/categoría o si hay destacados en el resultado
-    const featuredList = sorted.filter((p) => p.destacado);
-    const hasActiveSearch =
+    // Determinar si hay algún filtro o criterio de ordenamiento activo
+    const hasActiveFilterOrSort =
         Boolean(currentFilters.search.trim()) ||
+        currentFilters.pais !== "Todos" ||
         currentFilters.categoria !== "Todas" ||
-        currentFilters.linea !== "Todas";
+        currentFilters.tipoPiel !== "Todas" ||
+        currentFilters.linea !== "Todas" ||
+        currentFilters.stockEstado !== "Todos" ||
+        currentFilters.sortBy !== "destacados";
+
+    // Mostrar Best Sellers arriba cuando se explora el catálogo general sin filtros restrictivos
+    const featuredList = sorted.filter((p) => p.destacado);
 
     if (bestSellersSection && bestSellersGrid) {
-        if (featuredList.length > 0 && !hasActiveSearch) {
+        if (featuredList.length > 0 && !hasActiveFilterOrSort) {
             bestSellersSection.classList.remove("hidden");
-            if (bestSellersBadge) {
-                bestSellersBadge.textContent = `${featuredList.length} favoritos en Centroamérica`;
-            }
             bestSellersGrid.innerHTML = featuredList
-                .slice(0, 4)
+                .slice(0, 3)
                 .map((prod) => createBestSellerCardHTML(prod, user, activeRegion))
                 .join("");
-            bindProductCardEvents(bestSellersGrid, user);
+            bindProductCardEvents(bestSellersGrid);
         } else {
             bestSellersSection.classList.add("hidden");
             bestSellersGrid.innerHTML = "";
@@ -443,17 +370,18 @@ function renderFilteredProducts(user) {
         return;
     }
 
-    // Agrupar por categoría cuando se visualiza por defecto, o mostrar en grilla directa al ordenar por precio/rating
-    const isCustomSort = currentFilters.sortBy !== "destacados" || hasActiveSearch;
-
-    if (isCustomSort) {
+    // Si hay búsqueda/filtros/ordenamiento activo, mostrar los resultados directamente en la grilla
+    if (hasActiveFilterOrSort) {
         catalogContainer.innerHTML = `
-            <div class="products-cards-grid">
-                ${sorted.map((prod) => createStandardProductCardHTML(prod, user, activeRegion)).join("")}
+            <div class="bio-category-block">
+                <h3>Resultados encontrados (${sorted.length})</h3>
+                <div class="products-cards-grid">
+                    ${sorted.map((prod) => createStandardProductCardHTML(prod, user, activeRegion)).join("")}
+                </div>
             </div>
         `;
     } else {
-        // Agrupar dinámicamente por categoría manteniendo la elegancia original de productos.html
+        // Agrupar dinámicamente por categoría respetando el diseño de secciones de productos.html
         const grouped = new Map();
         for (const prod of sorted) {
             const cat = prod.categoria || "Otros";
@@ -465,7 +393,7 @@ function renderFilteredProducts(user) {
             .map(
                 ([categoria, items]) => `
                 <div class="bio-category-block">
-                    <h3 class="bio-category-subtitle">${escapeHTML(categoria)} <span>(${items.length})</span></h3>
+                    <h3>${escapeHTML(categoria)}</h3>
                     <div class="products-cards-grid">
                         ${items.map((prod) => createStandardProductCardHTML(prod, user, activeRegion)).join("")}
                     </div>
@@ -475,125 +403,98 @@ function renderFilteredProducts(user) {
             .join("");
     }
 
-    bindProductCardEvents(catalogContainer, user);
+    bindProductCardEvents(catalogContainer);
 }
 
 /**
- * Genera el HTML de una tarjeta de la sección Best Sellers respetando `.best-sellers-grid > article` de `productosStyle.css`.
+ * Genera los botones CRUD (Editar, Eliminar) únicamente cuando el usuario logueado tiene rol 'admin'.
+ * Para el rol 'cliente' (o visitante), devuelve cadena vacía (solo lectura).
+ */
+function renderAdminCardControlsHTML(prod, isAdmin) {
+    if (!isAdmin) return "";
+    return `
+        <footer class="bio-card-admin-actions">
+            <button type="button" class="bio-btn bio-btn--xs bio-btn--cyan" data-action="edit-product" data-id="${escapeHTML(prod.id)}" title="Editar producto">
+                ✎ Editar
+            </button>
+            <button type="button" class="bio-btn bio-btn--xs bio-btn--danger" data-action="delete-product" data-id="${escapeHTML(prod.id)}" title="Eliminar producto">
+                🗑 Eliminar
+            </button>
+        </footer>
+    `;
+}
+
+/**
+ * Genera el HTML de una tarjeta de la sección Best Sellers basado en el nuevo diseño:
+ * <article>
+ *     <div><img ...></div>
+ *     <h3>...</h3>
+ *     <p>...</p>
+ *     <ul><li>...</li></ul>
+ * </article>
  */
 function createBestSellerCardHTML(prod, user, activeRegion) {
-    const isAdmin = user && user.rol === "admin";
-    const inRoutine = userRoutineProductIds.has(prod.id);
-    const countryBadge = getCountryBadgeText(prod.disponibilidadPais);
-    const stockClass = getStockClass(prod.stockEstado);
-    const ratingText = prod.totalResenas > 0 ? `★ ${prod.ratingPromedio.toFixed(1)} (${prod.totalResenas})` : "★ Nuevo";
+    const isAdmin = Boolean(user && user.rol === "admin");
+    const imgSrc = normalizeImageUrl(prod.imagenUrl);
+    const priceLabel = formatProductPrice(prod, activeRegion);
+    const featureTag = prod.linea || prod.categoria || "Hidratación";
 
     return `
-        <article class="bio-dynamic-bestseller" data-product-id="${escapeHTML(prod.id)}">
-            <div class="bio-card-img-wrap">
-                <span class="bio-card-country-chip">${countryBadge}</span>
-                <span class="bio-card-stock-chip ${stockClass}">${escapeHTML(prod.stockEstado)}</span>
-                <img loading="lazy" src="${escapeHTML(prod.imagenUrl)}" alt="${escapeHTML(prod.nombre)}">
+        <article data-product-id="${escapeHTML(prod.id)}">
+            <div>
+                <img loading="lazy" src="${escapeHTML(imgSrc)}" alt="${escapeHTML(prod.nombre)}">
             </div>
             <h3>${escapeHTML(prod.nombre)}</h3>
-            <div class="bio-card-price-row">
-                <span class="bio-price-tag ${activeRegion === "SV" ? "active-currency" : ""}">
-                    🇸🇻 $${Number(prod.precioReferenciaUSD).toFixed(2)}
-                </span>
-                <span class="bio-price-tag ${activeRegion === "GT" ? "active-currency" : ""}">
-                    🇬🇹 Q${Number(prod.precioReferenciaGTQ).toFixed(2)}
-                </span>
-                <span class="bio-rating-pill">${ratingText}</span>
-            </div>
             <p>${escapeHTML(prod.descripcion)}</p>
-            <p class="bio-card-ingredients"><strong>Activos:</strong> ${escapeHTML(prod.ingredientesClave)}</p>
             <ul>
                 <li>Best seller</li>
-                <li>${escapeHTML(prod.linea)}</li>
-                <li>Piel ${escapeHTML(prod.tipoPielRecomendada)}</li>
+                <li>${escapeHTML(featureTag)}</li>
+                <li>${escapeHTML(priceLabel)}</li>
             </ul>
-            <div class="bio-card-actions">
-                <button type="button" class="bio-btn bio-btn--xs ${
-                    inRoutine ? "bio-btn--success" : "bio-btn--primary"
-                }" data-action="add-routine" data-id="${escapeHTML(prod.id)}" ${
-                    prod.stockEstado === "Agotado" ? "disabled" : ""
-                }>
-                    ${inRoutine ? "✓ En Mi Rutina" : "+ Mi Rutina"}
-                </button>
-                <button type="button" class="bio-btn bio-btn--xs bio-btn--outline" data-action="open-reviews" data-id="${escapeHTML(prod.id)}">
-                    ★ Reseñas (${prod.totalResenas || 0})
-                </button>
-                ${
-                    isAdmin
-                        ? `
-                        <button type="button" class="bio-btn bio-btn--xs bio-btn--cyan" data-action="edit-product" data-id="${escapeHTML(prod.id)}" title="Editar producto">✎</button>
-                        <button type="button" class="bio-btn bio-btn--xs bio-btn--danger" data-action="delete-product" data-id="${escapeHTML(prod.id)}" title="Eliminar producto">🗑</button>
-                    `
-                        : ""
-                }
-            </div>
+            ${renderAdminCardControlsHTML(prod, isAdmin)}
         </article>
     `;
 }
 
 /**
- * Genera el HTML de una tarjeta estándar respetando `.product-card` de `productosStyle.css`.
+ * Genera el HTML de una tarjeta estándar de producto basado en el nuevo diseño (.product-card):
+ * <article class="product-card">
+ *     <div>
+ *         <div>
+ *             <div><img ...></div>
+ *             <h4>...</h4>
+ *         </div>
+ *         <div>
+ *             <p>...</p>
+ *             <ul><li>...</li></ul>
+ *         </div>
+ *     </div>
+ * </article>
  */
 function createStandardProductCardHTML(prod, user, activeRegion) {
-    const isAdmin = user && user.rol === "admin";
-    const inRoutine = userRoutineProductIds.has(prod.id);
-    const countryBadge = getCountryBadgeText(prod.disponibilidadPais);
-    const stockClass = getStockClass(prod.stockEstado);
-    const ratingText = prod.totalResenas > 0 ? `★ ${prod.ratingPromedio.toFixed(1)} (${prod.totalResenas})` : "★ Nuevo";
+    const isAdmin = Boolean(user && user.rol === "admin");
+    const imgSrc = normalizeImageUrl(prod.imagenUrl);
+    const priceLabel = formatProductPrice(prod, activeRegion);
+    const primaryTag = prod.categoria || "Skincare";
+    const secondaryTag = prod.linea || (prod.tipoPielRecomendada ? `Piel ${prod.tipoPielRecomendada}` : "Bioaqua");
 
     return `
         <article class="product-card" data-product-id="${escapeHTML(prod.id)}">
             <div>
                 <div>
-                    <div class="bio-card-img-wrap">
-                        <span class="bio-card-country-chip">${countryBadge}</span>
-                        <span class="bio-card-stock-chip ${stockClass}">${escapeHTML(prod.stockEstado)}</span>
-                        <img loading="lazy" src="${escapeHTML(prod.imagenUrl)}" alt="${escapeHTML(prod.nombre)}">
+                    <div>
+                        <img loading="lazy" src="${escapeHTML(imgSrc)}" alt="${escapeHTML(prod.nombre)}">
                     </div>
                     <h4>${escapeHTML(prod.nombre)}</h4>
                 </div>
                 <div>
-                    <div class="bio-card-price-row">
-                        <span class="bio-price-tag ${activeRegion === "SV" ? "active-currency" : ""}">
-                            🇸🇻 $${Number(prod.precioReferenciaUSD).toFixed(2)}
-                        </span>
-                        <span class="bio-price-tag ${activeRegion === "GT" ? "active-currency" : ""}">
-                            🇬🇹 Q${Number(prod.precioReferenciaGTQ).toFixed(2)}
-                        </span>
-                        <span class="bio-rating-pill">${ratingText}</span>
-                    </div>
                     <p>${escapeHTML(prod.descripcion)}</p>
-                    <p class="bio-card-ingredients"><strong>Ingredientes clave:</strong> ${escapeHTML(prod.ingredientesClave)}</p>
                     <ul>
-                        <li>${escapeHTML(prod.categoria)}</li>
-                        <li>${escapeHTML(prod.linea)}</li>
-                        <li>Piel ${escapeHTML(prod.tipoPielRecomendada)}</li>
+                        <li>${escapeHTML(primaryTag)}</li>
+                        <li>${escapeHTML(secondaryTag)}</li>
+                        <li>${escapeHTML(priceLabel)}</li>
                     </ul>
-                    <div class="bio-card-actions">
-                        <button type="button" class="bio-btn bio-btn--xs ${
-                            inRoutine ? "bio-btn--success" : "bio-btn--primary"
-                        }" data-action="add-routine" data-id="${escapeHTML(prod.id)}" ${
-                            prod.stockEstado === "Agotado" ? "disabled" : ""
-                        }>
-                            ${inRoutine ? "✓ En Mi Rutina" : "+ Mi Rutina"}
-                        </button>
-                        <button type="button" class="bio-btn bio-btn--xs bio-btn--outline" data-action="open-reviews" data-id="${escapeHTML(prod.id)}">
-                            ★ Reseñas (${prod.totalResenas || 0})
-                        </button>
-                        ${
-                            isAdmin
-                                ? `
-                                <button type="button" class="bio-btn bio-btn--xs bio-btn--cyan" data-action="edit-product" data-id="${escapeHTML(prod.id)}" title="Editar producto">✎</button>
-                                <button type="button" class="bio-btn bio-btn--xs bio-btn--danger" data-action="delete-product" data-id="${escapeHTML(prod.id)}" title="Eliminar producto">🗑</button>
-                            `
-                                : ""
-                        }
-                    </div>
+                    ${renderAdminCardControlsHTML(prod, isAdmin)}
                 </div>
             </div>
         </article>
@@ -601,37 +502,14 @@ function createStandardProductCardHTML(prod, user, activeRegion) {
 }
 
 /**
- * Conecta los eventos de botones ("+ Mi Rutina", "★ Reseñas", "✎ Editar", "🗑 Eliminar") en las tarjetas renderizadas.
+ * Conecta los eventos de los botones CRUD ("✎ Editar", "🗑 Eliminar") para el rol Administrador.
  */
-function bindProductCardEvents(container, user) {
+function bindProductCardEvents(container) {
     if (!container) return;
 
     const findProd = (id) => enrichedProducts.find((p) => p.id === id);
 
-    // 1. Agregar a Mi Rutina (Proceso 2)
-    container.querySelectorAll('[data-action="add-routine"]').forEach((btn) => {
-        btn.addEventListener("click", () => {
-            const prod = findProd(btn.dataset.id);
-            if (!prod) return;
-            openAddRoutineModal(prod, user, null, async () => {
-                await syncUserRoutineSet(getCurrentUser());
-                refreshAllCatalogViews(getCurrentUser());
-            });
-        });
-    });
-
-    // 2. Ver / Publicar Reseñas (Proceso 2)
-    container.querySelectorAll('[data-action="open-reviews"]').forEach((btn) => {
-        btn.addEventListener("click", () => {
-            const prod = findProd(btn.dataset.id);
-            if (!prod) return;
-            openProductReviewsModal(prod, allReviews, getCurrentUser(), async () => {
-                await reloadCatalogAndReviews();
-            });
-        });
-    });
-
-    // 3. Editar Producto (Proceso 1 - Admin)
+    // 1. Editar Producto (Exclusivo Admin)
     container.querySelectorAll('[data-action="edit-product"]').forEach((btn) => {
         btn.addEventListener("click", () => {
             const prod = findProd(btn.dataset.id);
@@ -640,7 +518,7 @@ function bindProductCardEvents(container, user) {
         });
     });
 
-    // 4. Eliminar Producto (Proceso 1 - Admin)
+    // 2. Eliminar Producto (Exclusivo Admin)
     container.querySelectorAll('[data-action="delete-product"]').forEach((btn) => {
         btn.addEventListener("click", () => {
             const prod = findProd(btn.dataset.id);
@@ -649,16 +527,3 @@ function bindProductCardEvents(container, user) {
         });
     });
 }
-
-function getCountryBadgeText(disp) {
-    if (disp === "SV") return "🇸🇻 Solo SV";
-    if (disp === "GT") return "🇬🇹 Solo GT";
-    return "🇸🇻 🇬🇹 SV & GT";
-}
-
-function getStockClass(stock) {
-    if (stock === "Agotado") return "stock-out";
-    if (stock === "Stock Bajo") return "stock-low";
-    return "stock-ok";
-}
-
