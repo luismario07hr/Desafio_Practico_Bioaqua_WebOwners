@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,17 +10,19 @@
     <link rel="stylesheet" href="css/contactoStyle.css">
     <link rel="stylesheet" href="css/appBioaqua.css">
 </head>
+
 <body>
 
-<!-- ENCABEZADO OSCURO -->
+    <!-- ENCABEZADO OSCURO -->
     <header class="header bg-dark">
         <div class="logo">
             <img src="img/logo.png" alt="Logo Bioaqua">
         </div>
-        
+
         <!-- Checkbox Hack para menú sin JS -->
-        <input type="checkbox" id="menu-toggle" class="menu-checkbox" aria-label="Mostrar u ocultar el menú de navegación">
-        
+        <input type="checkbox" id="menu-toggle" class="menu-checkbox"
+            aria-label="Mostrar u ocultar el menú de navegación">
+
         <!-- El Label funciona como el botón hamburguesa -->
         <label for="menu-toggle" class="menu-label" aria-hidden="true">
             <span class="bar"></span>
@@ -44,7 +47,7 @@
         <!-- SECCIÓN 1: HERO CONTACTO -->
         <section class="bg-dark">
             <img src="img/contacto/Retail Website.png" alt="Mujer relajada tocando su rostro">
-            
+
             <div>
                 <h2>CONTÁCTANOS</h2>
                 <p>Elige tu país y escríbenos por WhatsApp. Un asesor te acompaña de lunes a sábado.</p>
@@ -59,11 +62,11 @@
             </div>
 
             <div class="split-section">
-                
+
                 <!-- Lado Izquierdo: Formulario de Contacto -->
                 <div class="form-container">
                     <form id="form-contacto" action="#" method="POST" novalidate>
-                        
+
                         <!-- Fila 1: Nombre y Email -->
                         <div>
                             <div>
@@ -82,22 +85,25 @@
                                 <label for="celular">Celular:</label>
                                 <div>
                                     <select name="codigo_pais" id="codigo_pais" required>
-                                        <option value="+503">🇸🇻 +503</option>
-                                        <option value="+502">🇬🇹 +502</option>
+                                        <option value="+503">+503</option>
+                                        <option value="+502">+502</option>
                                     </select>
-                                    <input type="tel" id="celular" name="celular" placeholder="0000 0000" pattern="[0-9]{8}" required>
+                                    <input type="tel" id="celular" name="celular" placeholder="00000000"
+                                        pattern="[0-9]{8}" required>
                                 </div>
                             </div>
                             <div>
                                 <label for="asunto">Asunto:</label>
-                                <input type="text" id="asunto" name="asunto" placeholder="¿En qué te ayudamos?" required>
+                                <input type="text" id="asunto" name="asunto" placeholder="¿En qué te ayudamos?"
+                                    required>
                             </div>
                         </div>
 
                         <!-- Fila 3: Mensaje -->
                         <div>
                             <label for="mensaje">Mensaje:</label>
-                            <textarea id="mensaje" name="mensaje" rows="4" placeholder="Escribe tu mensaje aquí..." required></textarea>
+                            <textarea id="mensaje" name="mensaje" rows="4" placeholder="Escribe tu mensaje aquí..."
+                                required></textarea>
                         </div>
 
                         <button type="submit" id="btn-enviar-contacto">Enviar Mensaje</button>
@@ -114,7 +120,8 @@
                         <div>
                             <img loading="lazy" src="img/contacto/mapaGuatemala.png" alt="Mapa de Guatemala">
                             <h4>Guatemala</h4>
-                            <a href="https://wa.me/50230205597?text=Hola%20BIOAQUA%20FRANCE%20Guatemala%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener noreferrer">
+                            <a href="https://wa.me/50230205597?text=Hola%20BIOAQUA%20FRANCE%20Guatemala%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n."
+                                target="_blank" rel="noopener noreferrer">
                                 <img loading="lazy" src="img/contacto/Whatsapp.png" alt="WhatsApp"> WhatsApp
                             </a>
                             <a href="https://www.instagram.com/bioaqua.gt/" target="_blank" rel="noopener noreferrer">
@@ -126,7 +133,8 @@
                         <div>
                             <img loading="lazy" src="img/contacto/mapaElSalvador.png" alt="Mapa de El Salvador">
                             <h4>El Salvador</h4>
-                            <a href="https://wa.me/50379658920?text=Hola%20BIOAQUA%20FRANCE%20El%20Salvador%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener noreferrer">
+                            <a href="https://wa.me/50379658920?text=Hola%20BIOAQUA%20FRANCE%20El%20Salvador%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n."
+                                target="_blank" rel="noopener noreferrer">
                                 <img loading="lazy" src="img/contacto/Whatsapp.png" alt="WhatsApp"> WhatsApp
                             </a>
                             <a href="https://instagram.com/bioaqua.sv" target="_blank" rel="noopener noreferrer">
@@ -144,11 +152,13 @@
     <footer class="footer bg-dark">
         <div>
             <p>&copy; 2026 BIOAQUA FRANCE</p>
-            <p>BIOAQUA FRANCE - Skincare para piel latina. Recomendado por dermatólogos. Distribución oficial en El Salvador y Guatemala.</p>
+            <p>BIOAQUA FRANCE - Skincare para piel latina. Recomendado por dermatólogos. Distribución oficial en El
+                Salvador y Guatemala.</p>
         </div>
     </footer>
 
     <script type="module" src="js/main.js"></script>
     <script type="module" src="js/consultas.js"></script>
 </body>
+
 </html>

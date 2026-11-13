@@ -223,7 +223,7 @@ function renderProductsTable(products) {
                 <td><span style="font-size: 0.8em; color: #888;">${escapeHTML(prod.id ? prod.id.substring(0, 8) : "—")}</span></td>
                 <td>
                     <strong>${escapeHTML(prod.nombre || "Sin nombre")}</strong>
-                    ${prod.destacado ? ' <span style="font-size:0.75rem; color:#f59e0b;">⭐ Top</span>' : ""}
+                    ${prod.destacado ? ' <span style="font-size:0.75rem; color:#f59e0b;">Top</span>' : ""}
                 </td>
                 <td>$${Number(prod.precioReferenciaUSD || 0).toFixed(2)} USD</td>
                 <td>
@@ -234,8 +234,8 @@ function renderProductsTable(products) {
                 <td>${escapeHTML(prod.disponibilidadPais || "Ambos")}</td>
                 <td>
                     <div style="display: flex; gap: 6px;">
-                        <button type="button" class="bio-btn bio-btn--xs bio-btn--cyan" onclick="window.editarProducto('${prod.id}')">✎ Editar</button>
-                        <button type="button" class="bio-btn bio-btn--xs bio-btn--danger" onclick="window.eliminarProducto('${prod.id}')">🗑 Eliminar</button>
+                        <button type="button" class="bio-btn bio-btn--xs bio-btn--cyan" onclick="window.editarProducto('${prod.id}')">Editar</button>
+                        <button type="button" class="bio-btn bio-btn--xs bio-btn--danger" onclick="window.eliminarProducto('${prod.id}')">Eliminar</button>
                     </div>
                 </td>
             </tr>

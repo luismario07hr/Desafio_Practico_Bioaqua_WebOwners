@@ -123,12 +123,12 @@ export function renderLoadingState(container, message = "Consultando catálogo B
  * @param {string} [options.actionText] Texto del botón de acción opcional.
  * @param {Function} [options.onAction] Callback al hacer clic en el botón.
  */
-export function renderEmptyState(container, { icon = "✨", title, message, actionText = "", onAction = null }) {
+export function renderEmptyState(container, { icon = "", title, message, actionText = "", onAction = null }) {
     if (!container) return;
 
     container.innerHTML = `
         <div class="bio-empty-state">
-            <div class="bio-empty-state__icon" aria-hidden="true">${icon}</div>
+            ${icon ? `<div class="bio-empty-state__icon" aria-hidden="true">${icon}</div>` : ""}
             <h4 class="bio-empty-state__title">${title}</h4>
             <p class="bio-empty-state__message">${message}</p>
             ${

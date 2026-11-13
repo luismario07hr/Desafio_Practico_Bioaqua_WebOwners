@@ -50,13 +50,13 @@ export function renderAdminPanel(container, user, metrics, onCatalogChanged) {
         <div class="bio-admin-banner" id="panel-admin">
             <div class="bio-admin-banner__actions">
                 <a href="dashboard-admin.html" class="bio-btn bio-btn--cyan">
-                    ⚙ Ir al Panel Admin Dedicado
+                    Ir al Panel Admin Dedicado
                 </a>
                 <button type="button" class="bio-btn bio-btn--primary" id="btn-admin-new-product">
                     + Nuevo Producto Rápido
                 </button>
                 <button type="button" class="bio-btn bio-btn--outline-light" id="btn-admin-seed">
-                    ⚡ Restaurar Catálogo Inicial (Seed)
+                    Restaurar Catálogo Inicial (Seed)
                 </button>
             </div>
         </div>
@@ -93,7 +93,7 @@ export function renderAdminPanel(container, user, metrics, onCatalogChanged) {
         } finally {
             if (seedBtn) {
                 seedBtn.disabled = false;
-                seedBtn.textContent = "⚡ Restaurar Catálogo Inicial (Seed)";
+                seedBtn.textContent = "Restaurar Catálogo Inicial (Seed)";
             }
         }
     });
@@ -242,9 +242,9 @@ function ensureProductCrudModalInDOM(onCatalogChanged) {
                         <div class="bio-form-group">
                             <label for="crud-pais">Disponibilidad por País *</label>
                             <select id="crud-pais" name="disponibilidadPais" required>
-                                <option value="Ambos">🇸🇻 🇬🇹 Ambos Países (SV y GT)</option>
-                                <option value="SV">🇸🇻 Exclusivo El Salvador (SV)</option>
-                                <option value="GT">🇬🇹 Exclusivo Guatemala (GT)</option>
+                                <option value="Ambos">Ambos Países (SV y GT)</option>
+                                <option value="SV">Exclusivo El Salvador (SV)</option>
+                                <option value="GT">Exclusivo Guatemala (GT)</option>
                             </select>
                         </div>
                     </div>
@@ -293,7 +293,7 @@ function ensureProductCrudModalInDOM(onCatalogChanged) {
 
                     <div class="bio-form-check">
                         <input type="checkbox" id="crud-destacado" name="destacado">
-                        <label for="crud-destacado">⭐ Marcar como producto <strong>Best Seller / Destacado</strong> en la parte superior del catálogo</label>
+                        <label for="crud-destacado">Marcar como producto <strong>Best Seller / Destacado</strong> en la parte superior del catálogo</label>
                     </div>
 
                     <div class="bio-modal__footer">

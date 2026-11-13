@@ -77,8 +77,8 @@ function renderHeaderToolbar(container, user) {
         <div class="bio-region-pill" title="Selecciona tu país para ver disponibilidad y moneda local">
             <label for="bio-region-selector" class="sr-only">País:</label>
             <select id="bio-region-selector" class="bio-region-select" aria-label="Seleccionar país El Salvador o Guatemala">
-                <option value="SV" ${currentRegion === "SV" ? "selected" : ""}>🇸🇻 SV ($ USD)</option>
-                <option value="GT" ${currentRegion === "GT" ? "selected" : ""}>🇬🇹 GT (Q GTQ)</option>
+                <option value="SV" ${currentRegion === "SV" ? "selected" : ""}>SV ($ USD)</option>
+                <option value="GT" ${currentRegion === "GT" ? "selected" : ""}>GT (Q GTQ)</option>
             </select>
         </div>
     `;
@@ -134,8 +134,8 @@ function renderHeaderToolbar(container, user) {
         setActiveRegion(selected);
         showToast(
             selected === "SV"
-                ? "🇸🇻 Catálogo ajustado a El Salvador (Precios en USD $)"
-                : "🇬🇹 Catálogo ajustado a Guatemala (Precios en Quetzales Q)",
+                ? "Catálogo ajustado a El Salvador (Precios en USD $)"
+                : "Catálogo ajustado a Guatemala (Precios en Quetzales Q)",
             "info",
             2800
         );

@@ -69,7 +69,7 @@ function getRedirectUrlByRole(rol) {
     if (rol === "admin") {
         return "dashboard-admin.html";
     }
-    return "productos.html#mi-rutina-section";
+    return "productos.html";
 }
 
 // ============================================================================
@@ -283,7 +283,7 @@ function setupRegisterForm(form) {
 
             showAuthAlert(
                 "success",
-                `¡Cuenta creada con éxito, <strong>${escapeHTML(profile.nombre)}</strong>! Se te ha asignado el rol <strong>CLIENTE</strong>. Redirigiendo a tu armador de rutina...`
+                `¡Cuenta creada con éxito, <strong>${escapeHTML(profile.nombre)}</strong>! Se te ha asignado el rol <strong>CLIENTE</strong>. Redirigiendo al catálogo...`
             );
             showToast(
                 `¡Bienvenido(a) a Bioaqua, ${profile.nombre}! Cuenta registrada con rol Cliente.`,
@@ -404,10 +404,8 @@ function showAuthAlert(type, htmlMessage) {
     const container = document.getElementById("auth-alert-container");
     if (!container) return;
 
-    const icon = type === "error" ? "⚠️" : type === "success" ? "✅" : "ℹ️";
     container.innerHTML = `
         <div class="auth-alert auth-alert--${type}" role="alert">
-            <span aria-hidden="true">${icon}</span>
             <div>${htmlMessage}</div>
         </div>
     `;

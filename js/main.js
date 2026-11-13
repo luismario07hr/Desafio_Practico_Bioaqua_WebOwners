@@ -56,7 +56,7 @@ function enhanceSkinTypePage() {
         catalogLink.className = "bio-skin-catalog-cta";
         catalogLink.style.marginLeft = "0.5rem";
         catalogLink.style.backgroundColor = "var(--color-celeste)";
-        catalogLink.textContent = `🧴 ${label}`;
+        catalogLink.textContent = label;
         infoBox.appendChild(catalogLink);
     });
 }

@@ -146,7 +146,7 @@ export async function reloadCatalogAndReviews() {
         console.error("Error cargando catálogo:", error);
         showToast(error.message || "Error al conectar con el catálogo.", "error");
         renderEmptyState(catalogMount, {
-            icon: "⚠️",
+            icon: "",
             title: "No se pudo cargar el catálogo en este momento",
             message: error.message || "Verifica tu conexión e intenta nuevamente.",
             actionText: "Reintentar carga",
@@ -199,7 +199,7 @@ function renderFilterControls(container) {
         <div class="bio-filter-card">
             <div class="bio-filter-card__top">
                 <div class="bio-search-box">
-                    <label for="filter-search">🔍 Buscar por producto, activo o beneficio</label>
+                    <label for="filter-search">Buscar por producto, activo o beneficio</label>
                     <input
                         type="search"
                         id="filter-search"
@@ -211,22 +211,22 @@ function renderFilterControls(container) {
                 <div class="bio-filter-group">
                     <label for="filter-pais">País de disponibilidad</label>
                     <select id="filter-pais">
-                        <option value="Todos">🌎 Todos (SV y GT)</option>
-                        <option value="SV">🇸🇻 Disponible en El Salvador</option>
-                        <option value="GT">🇬🇹 Disponible en Guatemala</option>
-                        <option value="Exclusivo-SV">🇸🇻 Exclusivo El Salvador</option>
-                        <option value="Exclusivo-GT">🇬🇹 Exclusivo Guatemala</option>
+                        <option value="Todos">Todos (SV y GT)</option>
+                        <option value="SV">Disponible en El Salvador</option>
+                        <option value="GT">Disponible en Guatemala</option>
+                        <option value="Exclusivo-SV">Exclusivo El Salvador</option>
+                        <option value="Exclusivo-GT">Exclusivo Guatemala</option>
                     </select>
                 </div>
 
                 <div class="bio-filter-group">
                     <label for="filter-sort">Ordenar catálogo por</label>
                     <select id="filter-sort">
-                        <option value="destacados">⭐ Destacados y Mejor Calificados</option>
-                        <option value="precio-asc">💲 Precio: Menor a Mayor</option>
-                        <option value="precio-desc">💲 Precio: Mayor a Menor</option>
-                        <option value="rating-desc">★ Calificación Promedio (Mayor a Menor)</option>
-                        <option value="nombre-asc">🔤 Nombre (A - Z)</option>
+                        <option value="destacados">Destacados y Mejor Calificados</option>
+                        <option value="precio-asc">Precio: Menor a Mayor</option>
+                        <option value="precio-desc">Precio: Mayor a Menor</option>
+                        <option value="rating-desc">Calificación Promedio (Mayor a Menor)</option>
+                        <option value="nombre-asc">Nombre (A - Z)</option>
                     </select>
                 </div>
             </div>
@@ -359,7 +359,7 @@ function renderFilteredProducts(user) {
     // Estado Vacío ("Empty State") si ningún producto coincide con los filtros
     if (sorted.length === 0) {
         renderEmptyState(catalogContainer, {
-            icon: "🔍",
+            icon: "",
             title: "No encontramos productos Bioaqua con esos filtros",
             message:
                 "Prueba buscando otro ingrediente activo (ej. Ácido Hialurónico, Arroz, Vitamina C) o restablece los filtros activos.",
@@ -426,16 +426,16 @@ function renderCardRoleControlsHTML(prod, user) {
                 data-action="open-reviews"
                 data-id="${escapeHTML(prod.id)}"
             >
-                ★ Reseñas (${prod.totalResenas || 0})
+                Reseñas (${prod.totalResenas || 0})
             </button>
             ${
                 isAdmin
                     ? `
                     <button type="button" class="bio-btn bio-btn--xs bio-btn--cyan bio-card-btn-crud" data-action="edit-product" data-id="${escapeHTML(prod.id)}" title="Editar producto">
-                        ✎ Editar
+                        Editar
                     </button>
                     <button type="button" class="bio-btn bio-btn--xs bio-btn--danger bio-card-btn-crud" data-action="delete-product" data-id="${escapeHTML(prod.id)}" title="Eliminar producto">
-                        🗑 Eliminar
+                        Eliminar
                     </button>
                 `
                     : ""

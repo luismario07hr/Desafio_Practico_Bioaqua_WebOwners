@@ -186,7 +186,7 @@ function initAdminFormControls() {
             showToast(error.message || "Error al restaurar el catálogo.", "error");
         } finally {
             seedBtn.disabled = false;
-            seedBtn.textContent = "⚡ Restaurar Catálogo Inicial (Seed)";
+            seedBtn.textContent = "Restaurar Catálogo Inicial (Seed)";
         }
     });
 }
@@ -207,7 +207,7 @@ export async function loadProducts() {
         console.error("Error en loadProducts:", error);
         showToast(error.message || "Error al cargar los productos desde Firestore.", "error");
         renderEmptyState(listContainer, {
-            icon: "⚠️",
+            icon: "",
             title: "Error al cargar el inventario",
             message: error.message || "Verifica tu conexión con Firebase Cloud Firestore.",
             actionText: "Reintentar",
@@ -247,7 +247,7 @@ function renderInventoryList() {
 
     if (filtered.length === 0) {
         renderEmptyState(listContainer, {
-            icon: "📦",
+            icon: "",
             title: "No se encontraron productos en el inventario",
             message: searchQuery
                 ? "Ningún producto coincide con tu búsqueda. Prueba con otro término."
@@ -287,7 +287,7 @@ function renderInventoryList() {
                                     data-action="edit"
                                     data-id="${escapeHTML(prod.id)}"
                                 >
-                                    ✎ Editar
+                                    Editar
                                 </button>
                                 <button
                                     type="button"
@@ -295,7 +295,7 @@ function renderInventoryList() {
                                     data-action="delete"
                                     data-id="${escapeHTML(prod.id)}"
                                 >
-                                    🗑 Eliminar
+                                    Eliminar
                                 </button>
                             </footer>
                         </div>

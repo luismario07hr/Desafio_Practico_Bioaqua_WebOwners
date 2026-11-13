@@ -60,7 +60,7 @@ function renderReviewsModalContent(modal, product, productReviews, user) {
     // Renderizar lista de reseñas
     if (productReviews.length === 0) {
         renderEmptyState(listContainer, {
-            icon: "💬",
+            icon: "",
             title: "Sé la primera persona en opinar sobre este producto",
             message: "Comparte tu experiencia con la comunidad Bioaqua de El Salvador y Guatemala."
         });
@@ -68,7 +68,7 @@ function renderReviewsModalContent(modal, product, productReviews, user) {
         listContainer.innerHTML = productReviews
             .map((rev) => {
                 const stars = "★".repeat(Number(rev.calificacion) || 5) + "☆".repeat(5 - (Number(rev.calificacion) || 5));
-                const flag = rev.pais === "Guatemala" ? "🇬🇹 Guatemala" : "🇸🇻 El Salvador";
+                const flag = rev.pais === "Guatemala" ? "Guatemala" : "El Salvador";
                 const canDelete = user && (user.uid === rev.uid || user.rol === "admin");
                 const formattedDate = rev.fecha
                     ? new Date(rev.fecha).toLocaleDateString("es-SV", {
