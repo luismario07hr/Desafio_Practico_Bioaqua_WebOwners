@@ -5,7 +5,7 @@
  * - Protección de ruta: Solo usuarios autenticados con rol === 'admin'.
  * - Carga de métricas globales (productos, usuarios, rutinas, reseñas).
  * - Renderizado y gestión CRUD de productos con modales y confirmaciones.
- * - Navegación lateral entre secciones (Resumen, Productos, Usuarios).
+ * - Navegación lateral entre secciones (Resumen, Productos, Usuarios, Rutinas).
  * ============================================================================
  */
 
@@ -20,6 +20,7 @@ import {
     seedProductsToFirestore
 } from "../services/productService.js";
 import {
+    getAllRoutines,
     getAllReviews,
     seedReviewsAndRoutines
 } from "../services/routineService.js";
@@ -138,9 +139,10 @@ document.addEventListener("DOMContentLoaded", () => {
  */
 export async function cargarDatosDashboard() {
     try {
-        const [products, users, reviews] = await Promise.all([
+        const [products, users, routines, reviews] = await Promise.all([
             getAllProducts(),
             getAllUsers(),
+            getAllRoutines(),
             getAllReviews()
         ]);
 
@@ -149,10 +151,12 @@ export async function cargarDatosDashboard() {
         // Actualizar Tarjetas de Métricas
         const elMetricProducts = document.getElementById("metric-products");
         const elMetricUsers    = document.getElementById("metric-users");
+        const elMetricRoutines = document.getElementById("metric-routines");
         const elMetricReviews  = document.getElementById("metric-reviews");
 
         if (elMetricProducts) elMetricProducts.textContent = products.length;
         if (elMetricUsers)    elMetricUsers.textContent = users.length;
+        if (elMetricRoutines) elMetricRoutines.textContent = routines.length;
         if (elMetricReviews)  elMetricReviews.textContent = reviews.length;
 
         // Llenar la Tabla de Productos
@@ -160,6 +164,9 @@ export async function cargarDatosDashboard() {
 
         // Llenar la Tabla de Usuarios (si existe)
         renderUsersTable(users);
+
+        // Llenar la Tabla de Rutinas (si existe)
+        renderRoutinesTable(routines);
 
     } catch (error) {
         console.error("Error al cargar datos del dashboard:", error);
@@ -268,5 +275,80 @@ function renderUsersTable(users) {
             </td>
         </tr>
     `).join("");
+}
+
+/**
+ * Renderiza la tabla de rutinas de clientes con sus pasos detallados.
+ * Estructura de documento por uid: { uid, nombreRutina, actualizadoEn, pasos: [{ pasoId, productoId, horario, notas }] }
+ * @param {Array<Object>} routines
+ */
+function renderRoutinesTable(routines) {
+    const tbody = document.getElementById("table-routines-body");
+    if (!tbody) return;
+
+    if (!routines || routines.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 2rem; color: #888;">
+                    No hay rutinas creadas por usuarios aún.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = routines.map((r) => {
+        const steps = Array.isArray(r.pasos) ? r.pasos : [];
+        let dateLabel = "—";
+        if (r.actualizadoEn) {
+            try {
+                dateLabel = new Date(r.actualizadoEn).toLocaleDateString();
+            } catch {
+                dateLabel = r.actualizadoEn;
+            }
+        }
+
+        const stepsHtml = steps.length === 0
+            ? '<span style="color:#888; font-size:0.85em;">Sin pasos configurados</span>'
+            : `<div style="display:flex; flex-direction:column; gap:6px;">
+                ${steps.map((p, idx) => {
+                    const prod = cachedProducts.find((cp) => cp.id === p.productoId);
+                    const prodName = prod ? prod.nombre : (p.productoId || `Paso #${idx + 1}`);
+                    const horario = p.horario || "Día y Noche";
+                    const horarioBadgeColor =
+                        horario === "Día"
+                            ? "background: #fff3e0; color: #ef6c00;"
+                            : horario === "Noche"
+                            ? "background: #ede7f6; color: #512da8;"
+                            : "background: #e8f5e9; color: #2e7d32;";
+
+                    return `
+                        <div style="font-size:0.82rem; background:#f8fafc; padding:6px 10px; border-radius:6px; border:1px solid #e2e8f0;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                                <span><strong>${idx + 1}.</strong> ${escapeHTML(prodName)}</span>
+                                <span style="padding:2px 6px; border-radius:4px; font-size:0.75rem; font-weight:600; ${horarioBadgeColor}">
+                                    ${escapeHTML(horario)}
+                                </span>
+                            </div>
+                            ${p.notas ? `<p style="margin-top:3px; font-size:0.75rem; color:#64748b; font-style:italic;">📝 ${escapeHTML(p.notas)}</p>` : ""}
+                        </div>
+                    `;
+                }).join("")}
+               </div>`;
+
+        return `
+            <tr>
+                <td><span style="font-size: 0.8em; color: #888;">${escapeHTML((r.uid || r.id || "—").substring(0, 12))}</span></td>
+                <td><strong>${escapeHTML(r.nombreRutina || "Mi Ritual Bioaqua")}</strong></td>
+                <td>
+                    <span class="bio-badge" style="font-size:0.82rem; padding:4px 8px; border-radius:4px; background:#e0f2fe; color:#0369a1; font-weight:600;">
+                        ${steps.length} paso${steps.length === 1 ? "" : "s"}
+                    </span>
+                </td>
+                <td>${stepsHtml}</td>
+                <td><span style="font-size:0.82rem; color:#64748b;">${escapeHTML(dateLabel)}</span></td>
+            </tr>
+        `;
+    }).join("");
 }
 

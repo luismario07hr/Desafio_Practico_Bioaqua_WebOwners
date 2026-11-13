@@ -30,6 +30,7 @@
                 <a href="#" class="active" data-section="resumen">Dashboard</a>
                 <a href="#" data-section="productos">Productos</a>
                 <a href="#" data-section="usuarios">👥 Usuarios</a>
+                <a href="#" data-section="rutinas">🧴 Rutinas</a>
                 <a href="productos.html"> Ver Catálogo</a>
                 <a href="index.html"> Inicio</a>
                 <a href="#" id="btn-logout-admin" class="logout">Cerrar Sesión</a>
@@ -55,6 +56,10 @@
                     <div class="metric-card">
                         <h3>Usuarios Registrados</h3>
                         <p class="metric-value" id="metric-users">0</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Rutinas Creadas</h3>
+                        <p class="metric-value" id="metric-routines">0</p>
                     </div>
                     <div class="metric-card">
                         <h3>Reseñas Registradas</h3>
@@ -102,6 +107,26 @@
                             </tr>
                         </thead>
                         <tbody id="table-users-body">
+                            <!-- Filas inyectadas por JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Sección: Rutinas -->
+            <section id="section-rutinas" class="content-section" style="display: none;">
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 140px;">Usuario / UID</th>
+                                <th style="width: 220px;">Nombre de Rutina</th>
+                                <th style="width: 110px;">Total Pasos</th>
+                                <th>Pasos Configurados (Horario y Notas)</th>
+                                <th style="width: 130px;">Última Actualización</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-routines-body">
                             <!-- Filas inyectadas por JavaScript -->
                         </tbody>
                     </table>
