@@ -353,3 +353,21 @@ export async function seedReviewsAndRoutines() {
         throw new Error("Error al cargar los datos iniciales.");
     }
 }
+
+/**
+ * Obtiene todas las rutinas registradas en Firestore (Exclusivo Administrador).
+ * En modo local, retorna las rutinas guardadas en localStorage.
+ * @returns {Promise<Array<Object>>}
+ */
+export async function getAllRoutines() {
+    try {
+        if (!db) {
+            return getLocalRoutines();
+        }
+        const snap = await getDocs(collection(db, ROUTINES_COLLECTION));
+        return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    } catch (error) {
+        console.error("Error al obtener rutinas:", error);
+        return [];
+    }
+}

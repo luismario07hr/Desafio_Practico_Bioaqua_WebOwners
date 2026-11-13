@@ -67,7 +67,7 @@ export function initAuthPages() {
  */
 function getRedirectUrlByRole(rol) {
     if (rol === "admin") {
-        return "productos.html#panel-admin";
+        return "dashboard-admin.html";
     }
     return "productos.html#mi-rutina-section";
 }

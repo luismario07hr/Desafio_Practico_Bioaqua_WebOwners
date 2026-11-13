@@ -14,6 +14,8 @@ import {
     updateProfile
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
+    collection,
+    getDocs,
     doc,
     setDoc,
     getDoc,
@@ -368,4 +370,26 @@ function translateAuthError(error) {
     const translated = new Error(map[error.code] || error.message || "Ocurrió un error de autenticación.");
     translated.code = error.code || "auth/unknown";
     return translated;
+}
+
+/**
+ * Obtiene la lista de todos los usuarios registrados (Exclusivo Administrador).
+ * En caso de no tener Firestore configurado, devuelve el respaldo local.
+ * @returns {Promise<Array<Object>>}
+ */
+export async function getAllUsers() {
+    try {
+        if (!db) {
+            return getLocalUsers().map((u) => {
+                const safe = { ...u, id: u.uid || u.id };
+                delete safe.password;
+                return safe;
+            });
+        }
+        const snap = await getDocs(collection(db, "users"));
+        return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    } catch (error) {
+        console.error("Error al obtener usuarios:", error);
+        return [];
+    }
 }

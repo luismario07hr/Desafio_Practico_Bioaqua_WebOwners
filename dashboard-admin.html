@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración | Bioaqua</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/adminStyle.css">
+    <link rel="stylesheet" href="css/appBioaqua.css">
+</head>
+<body>
+
+    <!-- Spinner de autenticación y carga -->
+    <div id="loader" class="loader-container">
+        <div class="spinner"></div>
+        <p>Verificando permisos de administrador...</p>
+    </div>
+
+    <!-- Contenedor principal del Dashboard (Oculto por defecto hasta verificar admin) -->
+    <div id="admin-dashboard" class="dashboard-container" style="display: none;">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Bioaqua Admin</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="active" data-section="resumen">📊 Dashboard</a>
+                <a href="#" data-section="productos">📦 Productos</a>
+                <a href="#" data-section="usuarios">👥 Usuarios</a>
+                <a href="#" data-section="rutinas">🧴 Rutinas</a>
+                <a href="productos.html">🛍 Ver Catálogo</a>
+                <a href="index.html">🏠 Inicio</a>
+                <a href="#" id="btn-logout-admin" class="logout">🚪 Cerrar Sesión</a>
+            </nav>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <header class="topbar">
+                <h1 id="page-title">Resumen General</h1>
+                <div class="user-info">
+                    <span id="admin-email">admin@bioaqua.com</span>
+                </div>
+            </header>
+
+            <!-- Sección: Resumen -->
+            <section id="section-resumen" class="content-section">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <h3>Productos Totales</h3>
+                        <p class="metric-value" id="metric-products">0</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Usuarios Registrados</h3>
+                        <p class="metric-value" id="metric-users">0</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Rutinas Creadas</h3>
+                        <p class="metric-value" id="metric-routines">0</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Reseñas Registradas</h3>
+                        <p class="metric-value" id="metric-reviews">0</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección: Productos -->
+            <section id="section-productos" class="content-section" style="display: none;">
+                <div class="action-bar" style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                    <button class="btn-primary" id="btn-add-product" style="margin-bottom: 0;">+ Nuevo Producto</button>
+                    <button class="bio-btn bio-btn--outline" id="btn-seed-catalog">⚡ Restaurar Catálogo (Seed)</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th>País</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-products-body">
+                            <!-- Filas inyectadas por JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Sección: Usuarios -->
+            <section id="section-usuarios" class="content-section" style="display: none;">
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                                <th>País</th>
+                                <th>Tipo de Piel</th>
+                                <th>Rol</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-users-body">
+                            <!-- Filas inyectadas por JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Sección: Rutinas -->
+            <section id="section-rutinas" class="content-section" style="display: none;">
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Usuario / UID</th>
+                                <th>Nombre de Rutina</th>
+                                <th>Pasos</th>
+                                <th>Última Actualización</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-routines-body">
+                            <!-- Filas inyectadas por JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+        </main>
+    </div>
+
+    <!-- Script de protección y lógica modular del Dashboard -->
+    <script type="module" src="js/ui/dashboardUI.js"></script>
+</body>
+</html>

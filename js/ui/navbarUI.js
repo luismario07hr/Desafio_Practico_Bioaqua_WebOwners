@@ -93,15 +93,12 @@ function renderNavAuthItem(navAuthItem, user) {
 
         navAuthItem.innerHTML = `
             <div class="nav-user-session">
-                <a href="productos.html${isAdmin ? "#panel-admin" : "#mi-rutina-section"}" class="nav-user-link" title="Ir a ${isAdmin ? "Panel Admin" : "Mi Rutina"}">
+                <a href="${isAdmin ? "dashboard-admin.html" : "productos.html#mi-rutina-section"}" class="nav-user-link" title="Ir a ${isAdmin ? "Dashboard Admin" : "Mi Rutina"}">
                     <span class="bio-user-name">${escapeHTML(displayIdentity)}</span>
                     ${roleBadge}
-                </div>
-                <button type="button" class="bio-btn bio-btn--ghost bio-btn--xs" id="btn-switch-role" title="Alternar rol entre Cliente y Admin para pruebas de defensa técnica">
-                    ⇄ Rol: ${isAdmin ? "Ver como Cliente" : "Ver como Admin"}
-                </button>
-                <a href="productos.html${isAdmin ? "#panel-admin" : "#mi-rutina-section"}" class="bio-btn bio-btn--cyan bio-btn--xs">
-                    ${isAdmin ? "⚙ Gestión Catálogo" : "🧴 Mi Rutina"}
+                </a>
+                <a href="${isAdmin ? "dashboard-admin.html" : "productos.html#mi-rutina-section"}" class="bio-btn bio-btn--cyan bio-btn--xs">
+                    ${isAdmin ? "📊 Dashboard Admin" : "🧴 Mi Rutina"}
                 </a>
                 <button type="button" class="bio-btn bio-btn--outline-light bio-btn--xs" id="btn-header-logout">
                     Salir
