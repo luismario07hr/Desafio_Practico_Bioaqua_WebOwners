@@ -2,7 +2,7 @@
  * ============================================================================
  * ARCHIVO: js/services/productService.js
  * RESPONSABILIDAD: Operaciones CRUD completas sobre la entidad principal
- * `productos` en Cloud Firestore.
+ * `productos` exclusivamente en Cloud Firestore.
  * ============================================================================
  */
 
@@ -22,36 +22,14 @@ import { db } from "../config/firebaseConfig.js";
 import { INITIAL_PRODUCTS_SEED } from "./seed.js";
 
 const COLLECTION_NAME = "productos";
-const LOCAL_PRODUCTS_KEY = "bioaqua_local_productos";
-
-function getLocalProducts() {
-    try {
-        const raw = localStorage.getItem(LOCAL_PRODUCTS_KEY);
-        if (!raw) {
-            localStorage.setItem(LOCAL_PRODUCTS_KEY, JSON.stringify(INITIAL_PRODUCTS_SEED));
-            return JSON.parse(JSON.stringify(INITIAL_PRODUCTS_SEED));
-        }
-        return JSON.parse(raw);
-    } catch {
-        return JSON.parse(JSON.stringify(INITIAL_PRODUCTS_SEED));
-    }
-}
-
-function saveLocalProducts(products) {
-    localStorage.setItem(LOCAL_PRODUCTS_KEY, JSON.stringify(products));
-}
 
 /**
- * READ (Todos): Obtiene todos los documentos de la colección `productos`.
+ * READ (Todos): Obtiene todos los documentos de la colección `productos` en Firestore.
  * Si la colección está vacía en el primer arranque, ejecuta el seed inicial.
  * @returns {Promise<Array<Object>>}
  */
 export async function getAllProducts() {
     try {
-        if (!db) {
-            return getLocalProducts();
-        }
-
         const snap = await getDocs(collection(db, COLLECTION_NAME));
 
         if (snap.empty) {
@@ -63,25 +41,22 @@ export async function getAllProducts() {
         return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
     } catch (error) {
         console.error("Error en getAllProducts:", error);
-        throw new Error("No se pudo cargar el catálogo de productos.");
+        throw new Error("No se pudo cargar el catálogo de productos desde Firestore.");
     }
 }
 
 /**
- * READ (Uno): Obtiene un producto específico por su ID.
+ * READ (Uno): Obtiene un producto específico por su ID desde Firestore.
  * @param {string} productId
  * @returns {Promise<Object|null>}
  */
 export async function getProductById(productId) {
     try {
-        if (!db) {
-            return getLocalProducts().find((p) => p.id === productId) || null;
-        }
         const snap = await getDoc(doc(db, COLLECTION_NAME, productId));
         return snap.exists() ? { id: snap.id, ...snap.data() } : null;
     } catch (error) {
         console.error("Error en getProductById:", error);
-        throw new Error("Error al consultar el detalle del producto.");
+        throw new Error("Error al consultar el detalle del producto en Firestore.");
     }
 }
 
@@ -92,14 +67,6 @@ export async function getProductById(productId) {
  */
 export async function createProduct(productData) {
     try {
-        if (!db) {
-            const list = getLocalProducts();
-            const created = { id: `bio-${Date.now()}`, ...productData };
-            list.unshift(created);
-            saveLocalProducts(list);
-            return created;
-        }
-
         const payload = {
             ...productData,
             createdAt: serverTimestamp(),
@@ -109,29 +76,18 @@ export async function createProduct(productData) {
         return { id: docRef.id, ...productData };
     } catch (error) {
         console.error("Error en createProduct:", error);
-        throw new Error("No se pudo registrar el producto. Verifica tus permisos de administrador.");
+        throw new Error("No se pudo registrar el producto. Verifica tus permisos de administrador en Firestore.");
     }
 }
 
 /**
- * UPDATE: Actualiza un producto existente. Exclusivo para rol 'admin'.
+ * UPDATE: Actualiza un producto existente en Firestore. Exclusivo para rol 'admin'.
  * @param {string} productId
  * @param {Object} updatedData
  * @returns {Promise<Object>}
  */
 export async function updateProduct(productId, updatedData) {
     try {
-        if (!db) {
-            const list = getLocalProducts();
-            const idx = list.findIndex((p) => p.id === productId);
-            if (idx !== -1) {
-                list[idx] = { ...list[idx], ...updatedData, id: productId };
-                saveLocalProducts(list);
-                return list[idx];
-            }
-            return { id: productId, ...updatedData };
-        }
-
         const docRef = doc(db, COLLECTION_NAME, productId);
         await updateDoc(docRef, {
             ...updatedData,
@@ -140,26 +96,21 @@ export async function updateProduct(productId, updatedData) {
         return { id: productId, ...updatedData };
     } catch (error) {
         console.error("Error en updateProduct:", error);
-        throw new Error("No se pudo actualizar el producto.");
+        throw new Error("No se pudo actualizar el producto en Firestore.");
     }
 }
 
 /**
- * DELETE: Elimina un producto del catálogo. Exclusivo para rol 'admin'.
+ * DELETE: Elimina un producto del catálogo en Firestore. Exclusivo para rol 'admin'.
  * @param {string} productId
  * @returns {Promise<void>}
  */
 export async function deleteProduct(productId) {
     try {
-        if (!db) {
-            const list = getLocalProducts().filter((p) => p.id !== productId);
-            saveLocalProducts(list);
-            return;
-        }
         await deleteDoc(doc(db, COLLECTION_NAME, productId));
     } catch (error) {
         console.error("Error en deleteProduct:", error);
-        throw new Error("No se pudo eliminar el producto.");
+        throw new Error("No se pudo eliminar el producto en Firestore.");
     }
 }
 
@@ -170,11 +121,6 @@ export async function deleteProduct(productId) {
  */
 export async function seedProductsToFirestore() {
     try {
-        if (!db) {
-            saveLocalProducts(INITIAL_PRODUCTS_SEED);
-            return JSON.parse(JSON.stringify(INITIAL_PRODUCTS_SEED));
-        }
-
         for (const item of INITIAL_PRODUCTS_SEED) {
             const { id, ...data } = item;
             await setDoc(doc(db, COLLECTION_NAME, id), {
@@ -185,6 +131,6 @@ export async function seedProductsToFirestore() {
         return JSON.parse(JSON.stringify(INITIAL_PRODUCTS_SEED));
     } catch (error) {
         console.error("Error en seedProductsToFirestore:", error);
-        throw new Error("Error al cargar los datos iniciales del catálogo.");
+        throw new Error("Error al cargar los datos iniciales del catálogo en Firestore.");
     }
 }

@@ -1,8 +1,8 @@
 /**
  * ============================================================================
  * ARCHIVO: js/services/authService.js
- * RESPONSABILIDAD: Lógica de autenticación con Firebase Auth y gestión de
- * perfiles y roles ('admin' y 'cliente') en la colección 'users' de Firestore.
+ * RESPONSABILIDAD: Lógica de autenticación exclusiva con Firebase Auth y
+ * gestión de perfiles y roles ('admin' y 'cliente') en Cloud Firestore.
  * ============================================================================
  */
 
@@ -25,28 +25,11 @@ import {
 
 import { auth, db } from "../config/firebaseConfig.js";
 
-// Claves de respaldo local cuando Firebase aún no tiene credenciales configuradas
-const LOCAL_USERS_KEY = "bioaqua_local_users";
-const LOCAL_SESSION_KEY = "bioaqua_local_session_uid";
-
 // Perfil del usuario actualmente en sesión (en memoria)
 let currentUserProfile = null;
 
 // Lista de suscriptores al estado de sesión
 const authListeners = new Set();
-
-function getLocalUsers() {
-    try {
-        const raw = localStorage.getItem(LOCAL_USERS_KEY);
-        return raw ? JSON.parse(raw) : [];
-    } catch {
-        return [];
-    }
-}
-
-function saveLocalUsers(users) {
-    localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(users));
-}
 
 /**
  * Notifica a todos los suscriptores sobre un cambio de sesión.
@@ -64,9 +47,9 @@ function notifyAuthListeners(userProfile) {
 }
 
 /**
- * Registra un nuevo usuario en Firebase Auth y crea su documento en 'users'.
+ * Registra un nuevo usuario en Firebase Auth y crea su documento en 'users' de Firestore.
  * REGLA DE NEGOCIO: El registro público SIEMPRE asigna rol: "cliente".
- * El rol "admin" solo puede asignarse manualmente desde la consola de Firebase.
+ * El rol "admin" solo puede asignarse directamente desde la consola de Firebase.
  *
  * @param {Object} userData - { nombre, email, password, pais, tipoPiel }
  * @returns {Promise<Object>} Perfil completo del usuario registrado.
@@ -76,57 +59,26 @@ export async function registerUser({ nombre, email, password, pais, tipoPiel }) 
         const cleanEmail = email.trim().toLowerCase();
         const cleanNombre = nombre.trim();
 
-        if (auth && db) {
-            const credential = await createUserWithEmailAndPassword(auth, cleanEmail, password);
-            const firebaseUser = credential.user;
+        const credential = await createUserWithEmailAndPassword(auth, cleanEmail, password);
+        const firebaseUser = credential.user;
 
-            await updateProfile(firebaseUser, { displayName: cleanNombre });
+        await updateProfile(firebaseUser, { displayName: cleanNombre });
 
-            const userDocData = {
-                uid: firebaseUser.uid,
-                nombre: cleanNombre,
-                email: cleanEmail,
-                pais,
-                tipoPiel,
-                rol: "cliente", // SIEMPRE "cliente" en registro público
-                createdAt: serverTimestamp()
-            };
-
-            await setDoc(doc(db, "users", firebaseUser.uid), userDocData);
-
-            const profile = { ...userDocData, createdAt: new Date().toISOString() };
-            notifyAuthListeners(profile);
-            return profile;
-        }
-
-        // Respaldo local si aún no se han configurado credenciales en firebase.env.js
-        await new Promise((r) => setTimeout(r, 350));
-        const users = getLocalUsers();
-        if (users.some((u) => u.email === cleanEmail)) {
-            const dupError = new Error("Este correo ya está registrado.");
-            dupError.code = "auth/email-already-in-use";
-            throw dupError;
-        }
-
-        const localProfile = {
-            uid: `user-${Date.now()}`,
+        const userDocData = {
+            uid: firebaseUser.uid,
             nombre: cleanNombre,
             email: cleanEmail,
-            password,
             pais,
             tipoPiel,
-            rol: "cliente",
-            createdAt: new Date().toISOString()
+            rol: "cliente", // SIEMPRE "cliente" en registro público
+            createdAt: serverTimestamp()
         };
-        users.push(localProfile);
-        saveLocalUsers(users);
-        localStorage.setItem(LOCAL_SESSION_KEY, localProfile.uid);
 
-        const safeProfile = { ...localProfile };
-        delete safeProfile.password;
-        notifyAuthListeners(safeProfile);
-        return safeProfile;
+        await setDoc(doc(db, "users", firebaseUser.uid), userDocData);
 
+        const profile = { ...userDocData, createdAt: new Date().toISOString() };
+        notifyAuthListeners(profile);
+        return profile;
     } catch (error) {
         console.error("Error en registerUser:", error);
         throw translateAuthError(error);
@@ -134,7 +86,7 @@ export async function registerUser({ nombre, email, password, pais, tipoPiel }) 
 }
 
 /**
- * Inicia sesión con correo y contraseña, y recupera el perfil con rol desde Firestore.
+ * Inicia sesión con correo y contraseña en Firebase Auth, y recupera el perfil con rol desde Firestore.
  *
  * @param {Object} credentials - { email, password }
  * @returns {Promise<Object>} Perfil del usuario autenticado incluyendo su rol.
@@ -143,48 +95,29 @@ export async function loginUser({ email, password }) {
     try {
         const cleanEmail = email.trim().toLowerCase();
 
-        if (auth && db) {
-            const credential = await signInWithEmailAndPassword(auth, cleanEmail, password);
-            const firebaseUser = credential.user;
+        const credential = await signInWithEmailAndPassword(auth, cleanEmail, password);
+        const firebaseUser = credential.user;
 
-            const userSnap = await getDoc(doc(db, "users", firebaseUser.uid));
+        const userSnap = await getDoc(doc(db, "users", firebaseUser.uid));
 
-            if (!userSnap.exists()) {
-                // Usuario creado en Firebase Console sin documento en 'users'
-                // Se crea su documento con rol "cliente" por seguridad
-                const fallbackProfile = {
-                    uid: firebaseUser.uid,
-                    nombre: firebaseUser.displayName || cleanEmail.split("@")[0],
-                    email: cleanEmail,
-                    pais: "El Salvador",
-                    tipoPiel: "Mixta",
-                    rol: "cliente"
-                };
-                await setDoc(doc(db, "users", firebaseUser.uid), fallbackProfile);
-                notifyAuthListeners(fallbackProfile);
-                return fallbackProfile;
-            }
-
-            const profile = { uid: firebaseUser.uid, ...userSnap.data() };
-            notifyAuthListeners(profile);
-            return profile;
+        if (!userSnap.exists()) {
+            // Usuario creado en Firebase Console sin documento en 'users'
+            const fallbackProfile = {
+                uid: firebaseUser.uid,
+                nombre: firebaseUser.displayName || cleanEmail.split("@")[0],
+                email: cleanEmail,
+                pais: "El Salvador",
+                tipoPiel: "Mixta",
+                rol: "cliente"
+            };
+            await setDoc(doc(db, "users", firebaseUser.uid), fallbackProfile);
+            notifyAuthListeners(fallbackProfile);
+            return fallbackProfile;
         }
 
-        // Respaldo local si aún no se han configurado credenciales en firebase.env.js
-        await new Promise((r) => setTimeout(r, 300));
-        const users = getLocalUsers();
-        const found = users.find((u) => u.email === cleanEmail && u.password === password);
-        if (!found) {
-            const credErr = new Error("Credenciales inválidas.");
-            credErr.code = "auth/invalid-credential";
-            throw credErr;
-        }
-        localStorage.setItem(LOCAL_SESSION_KEY, found.uid);
-        const safeProfile = { ...found };
-        delete safeProfile.password;
-        notifyAuthListeners(safeProfile);
-        return safeProfile;
-
+        const profile = { uid: firebaseUser.uid, ...userSnap.data() };
+        notifyAuthListeners(profile);
+        return profile;
     } catch (error) {
         console.error("Error en loginUser:", error);
         throw translateAuthError(error);
@@ -197,11 +130,7 @@ export async function loginUser({ email, password }) {
  */
 export async function logoutUser() {
     try {
-        if (auth) {
-            await signOut(auth);
-        } else {
-            localStorage.removeItem(LOCAL_SESSION_KEY);
-        }
+        await signOut(auth);
         notifyAuthListeners(null);
     } catch (error) {
         console.error("Error al cerrar sesión:", error);
@@ -211,10 +140,7 @@ export async function logoutUser() {
 
 /**
  * Actualiza campos del perfil de un usuario en Firestore.
- * IMPORTANTE: Esta función solo debe llamarse desde contextos de admin
- * o desde el propio usuario para campos permitidos (pais, tipoPiel).
- * El cambio de rol debe hacerse exclusivamente desde las Firestore Rules
- * o la consola de Firebase, nunca desde el cliente libremente.
+ * El cambio de rol está protegido y solo puede gestionarse desde Firebase Rules / Consola.
  *
  * @param {string} uid - UID del usuario a actualizar.
  * @param {Object} updates - Campos a actualizar ({ pais, tipoPiel, nombre }).
@@ -222,32 +148,16 @@ export async function logoutUser() {
  */
 export async function updateUserProfileData(uid, updates) {
     try {
-        // Prevenir que se cambie el rol desde el cliente
         const safeUpdates = { ...updates };
         delete safeUpdates.rol;
 
-        if (db) {
-            const userRef = doc(db, "users", uid);
-            await updateDoc(userRef, safeUpdates);
+        const userRef = doc(db, "users", uid);
+        await updateDoc(userRef, safeUpdates);
 
-            const snap = await getDoc(userRef);
-            const updated = { uid, ...snap.data() };
-            notifyAuthListeners(updated);
-            return updated;
-        }
-
-        const users = getLocalUsers();
-        const idx = users.findIndex((u) => u.uid === uid);
-        if (idx !== -1) {
-            users[idx] = { ...users[idx], ...safeUpdates };
-            saveLocalUsers(users);
-            const safeProfile = { ...users[idx] };
-            delete safeProfile.password;
-            notifyAuthListeners(safeProfile);
-            return safeProfile;
-        }
-        return null;
-
+        const snap = await getDoc(userRef);
+        const updated = { uid, ...snap.data() };
+        notifyAuthListeners(updated);
+        return updated;
     } catch (error) {
         console.error("Error al actualizar perfil:", error);
         throw new Error("No se pudo actualizar el perfil del usuario.");
@@ -260,7 +170,6 @@ export async function updateUserProfileData(uid, updates) {
  */
 export async function getCurrentUserProfile() {
     try {
-        if (!auth) return currentUserProfile;
         const firebaseUser = auth.currentUser;
         if (!firebaseUser) return null;
 
@@ -275,7 +184,7 @@ export async function getCurrentUserProfile() {
 }
 
 /**
- * Suscribe un callback a los cambios de estado de autenticación (Firebase onAuthStateChanged).
+ * Suscribe un callback a los cambios de estado de autenticación de Firebase Auth.
  * Se dispara automáticamente al cargar la página si hay sesión activa.
  *
  * @param {Function} callback - Recibe userProfile (Object) o null si no hay sesión.
@@ -283,23 +192,6 @@ export async function getCurrentUserProfile() {
  */
 export function subscribeToAuthChanges(callback) {
     authListeners.add(callback);
-
-    // Si Firebase aún no tiene credenciales configuradas (auth === null), evitar error de SDK
-    if (!auth || !db) {
-        const savedUid = localStorage.getItem(LOCAL_SESSION_KEY);
-        const users = getLocalUsers();
-        const found = savedUid ? users.find((u) => u.uid === savedUid) : null;
-        if (found) {
-            const safeProfile = { ...found };
-            delete safeProfile.password;
-            currentUserProfile = safeProfile;
-            callback(safeProfile);
-        } else {
-            currentUserProfile = null;
-            callback(null);
-        }
-        return () => authListeners.delete(callback);
-    }
 
     const unsubscribeFirebase = onAuthStateChanged(auth, async (firebaseUser) => {
         if (!firebaseUser) {
@@ -312,7 +204,6 @@ export function subscribeToAuthChanges(callback) {
             if (userSnap.exists()) {
                 notifyAuthListeners({ uid: firebaseUser.uid, ...userSnap.data() });
             } else {
-                // Documento no existe: crear con rol "cliente" por seguridad
                 const fallbackProfile = {
                     uid: firebaseUser.uid,
                     nombre: firebaseUser.displayName || firebaseUser.email.split("@")[0],
@@ -326,12 +217,11 @@ export function subscribeToAuthChanges(callback) {
             }
         } catch (err) {
             console.error("Error obteniendo perfil desde Firestore:", err);
-            // En caso de error de red, usar datos básicos de Firebase Auth
             notifyAuthListeners({
                 uid: firebaseUser.uid,
                 nombre: firebaseUser.displayName || firebaseUser.email,
                 email: firebaseUser.email,
-                rol: "cliente" // rol mínimo por seguridad ante cualquier fallo
+                rol: "cliente"
             });
         }
     });
@@ -344,11 +234,24 @@ export function subscribeToAuthChanges(callback) {
 
 /**
  * Devuelve sincrónicamente el perfil del usuario actualmente en memoria.
- * Útil para verificaciones rápidas sin necesidad de await.
  * @returns {Object|null}
  */
 export function getCurrentUser() {
     return currentUserProfile;
+}
+
+/**
+ * Obtiene la lista de todos los usuarios registrados directamente en Firestore (Exclusivo Admin).
+ * @returns {Promise<Array<Object>>}
+ */
+export async function getAllUsers() {
+    try {
+        const snap = await getDocs(collection(db, "users"));
+        return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    } catch (error) {
+        console.error("Error al obtener usuarios desde Firestore:", error);
+        return [];
+    }
 }
 
 /**
@@ -370,26 +273,4 @@ function translateAuthError(error) {
     const translated = new Error(map[error.code] || error.message || "Ocurrió un error de autenticación.");
     translated.code = error.code || "auth/unknown";
     return translated;
-}
-
-/**
- * Obtiene la lista de todos los usuarios registrados (Exclusivo Administrador).
- * En caso de no tener Firestore configurado, devuelve el respaldo local.
- * @returns {Promise<Array<Object>>}
- */
-export async function getAllUsers() {
-    try {
-        if (!db) {
-            return getLocalUsers().map((u) => {
-                const safe = { ...u, id: u.uid || u.id };
-                delete safe.password;
-                return safe;
-            });
-        }
-        const snap = await getDocs(collection(db, "users"));
-        return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    } catch (error) {
-        console.error("Error al obtener usuarios:", error);
-        return [];
-    }
 }
