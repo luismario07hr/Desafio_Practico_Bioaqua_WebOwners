@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bioaqua France | Panel de Administración de Productos</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/productosStyle.css">
+    <link rel="stylesheet" href="css/appBioaqua.css">
+</head>
+
+<body>
+
+    <!-- ENCABEZADO OSCURO -->
+    <header class="header bg-dark">
+        <div class="logo">
+            <img src="img/logo.png" alt="Logo Bioaqua">
+        </div>
+
+        <!-- Checkbox Hack para menú móvil -->
+        <input type="checkbox" id="menu-toggle" class="menu-checkbox" aria-label="Mostrar u ocultar el menú de navegación">
+
+        <!-- El Label funciona como el botón hamburguesa -->
+        <label for="menu-toggle" class="menu-label" aria-hidden="true">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </label>
+
+        <!-- Navegación -->
+        <nav class="main-nav" aria-label="Navegación principal">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="productos.html">Productos</a></li>
+                <li><a href="productos-admin.html" class="active" aria-current="page">Admin Productos</a></li>
+                <li><a href="tipo-de-piel.html">Tu tipo de piel</a></li>
+                <li><a href="sobre-nosotros.html">Sobre nosotros</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- CONTENEDOR PRINCIPAL DEL PANEL DE CONTROL (PROTEGIDO PARA ROL: ADMIN) -->
+    <main class="products-main-container" id="admin-root">
+
+        <!-- BANNER SUPERIOR DE BIENVENIDA Y ACCIONES RÁPIDAS -->
+        <section aria-label="Encabezado del Panel de Administración">
+            <div class="bio-admin-banner">
+                <div class="bio-admin-banner__info">
+                    <span class="bio-admin-eyebrow">⚙ PANEL DE CONTROL EXCLUSIVO · ROL: ADMIN</span>
+                    <h3>Gestión de Inventario y Catálogo Bioaqua (Cloud Firestore)</h3>
+                    <p>
+                        Crea, actualiza y elimina productos en tiempo real. Todos los cambios se reflejan automáticamente en la vista pública de clientes.
+                    </p>
+                </div>
+                <div class="bio-admin-banner__actions">
+                    <a href="productos.html" class="bio-btn bio-btn--outline-light">
+                        ← Ver Catálogo Público
+                    </a>
+                    <button type="button" class="bio-btn bio-btn--cyan" id="btn-admin-seed-catalog">
+                        ⚡ Restaurar Catálogo Inicial (Seed)
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ÁREA DIVIDIDA: 1. FORMULARIO DE PRODUCTO | 2. LISTA DE PRODUCTOS (INVENTARIO) -->
+        <section class="bio-admin-workspace" aria-label="Gestión CRUD de Productos">
+
+            <!-- ÁREA 1: FORMULARIO PARA CREAR / EDITAR PRODUCTO -->
+            <aside class="bio-admin-form-card" id="admin-form-panel">
+                <div class="bio-admin-form-card__header">
+                    <span class="bio-modal__eyebrow" id="admin-form-mode-badge">MODO: CREACIÓN</span>
+                    <h2 id="admin-form-title">Nuevo Producto Bioaqua</h2>
+                </div>
+
+                <div class="bio-admin-form-card__body">
+                    <!-- Contenedor de errores de validación JS -->
+                    <div id="admin-form-errors" class="bio-form-errors" aria-live="assertive"></div>
+
+                    <form id="admin-product-form" class="bio-form" novalidate>
+                        <input type="hidden" id="product-id" name="productId" value="">
+
+                        <div class="bio-form-group">
+                            <label for="prod-nombre">Nombre del Producto *</label>
+                            <input
+                                type="text"
+                                id="prod-nombre"
+                                name="nombre"
+                                placeholder="Ej. Suero de Ácido Hialurónico"
+                                required
+                            >
+                        </div>
+
+                        <div class="bio-form-row">
+                            <div class="bio-form-group">
+                                <label for="prod-categoria">Categoría *</label>
+                                <select id="prod-categoria" name="categoria" required></select>
+                            </div>
+
+                            <div class="bio-form-group">
+                                <label for="prod-tipo-piel">Tipo de Piel *</label>
+                                <select id="prod-tipo-piel" name="tipoPielRecomendada" required></select>
+                            </div>
+                        </div>
+
+                        <div class="bio-form-row">
+                            <div class="bio-form-group">
+                                <label for="prod-linea">Línea / Activo *</label>
+                                <select id="prod-linea" name="linea" required></select>
+                            </div>
+
+                            <div class="bio-form-group">
+                                <label for="prod-stock">Estado de Stock *</label>
+                                <select id="prod-stock" name="stockEstado" required>
+                                    <option value="En Stock">En Stock</option>
+                                    <option value="Stock Bajo">Stock Bajo</option>
+                                    <option value="Agotado">Agotado</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="bio-form-row">
+                            <div class="bio-form-group">
+                                <label for="prod-precio-usd">Precio ($ USD) *</label>
+                                <input
+                                    type="number"
+                                    id="prod-precio-usd"
+                                    name="precioReferenciaUSD"
+                                    step="0.01"
+                                    min="0.01"
+                                    placeholder="8.50"
+                                    required
+                                >
+                            </div>
+
+                            <div class="bio-form-group">
+                                <label for="prod-precio-gtq">Precio (Q GTQ)</label>
+                                <input
+                                    type="number"
+                                    id="prod-precio-gtq"
+                                    name="precioReferenciaGTQ"
+                                    step="0.50"
+                                    min="0.50"
+                                    placeholder="65.00"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="bio-form-group">
+                            <label for="prod-preset-img">Imagen del repositorio (o ingresa URL abajo)</label>
+                            <select id="prod-preset-img">
+                                <option value="">-- Seleccionar imagen local de Bioaqua --</option>
+                            </select>
+                        </div>
+
+                        <div class="bio-form-row" style="align-items: center;">
+                            <div class="bio-form-group" style="flex: 1;">
+                                <label for="prod-imagen-url">URL o Ruta de la Imagen *</label>
+                                <input
+                                    type="text"
+                                    id="prod-imagen-url"
+                                    name="imagenUrl"
+                                    placeholder="img/suero-acido-hialuronico-clean.png"
+                                    required
+                                >
+                            </div>
+                            <div class="bio-crud-preview-box" title="Vista previa de la imagen">
+                                <img
+                                    id="prod-img-preview"
+                                    src="img/suero-acido-hialuronico-clean.png"
+                                    alt="Vista previa del producto"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="bio-form-group">
+                            <label for="prod-ingredientes">Ingredientes Clave</label>
+                            <input
+                                type="text"
+                                id="prod-ingredientes"
+                                name="ingredientesClave"
+                                placeholder="Ej. Ácido Hialurónico, Niacinamida, Vitamina E"
+                            >
+                        </div>
+
+                        <div class="bio-form-group">
+                            <label for="prod-descripcion">Descripción del Producto *</label>
+                            <textarea
+                                id="prod-descripcion"
+                                name="descripcion"
+                                rows="3"
+                                placeholder="Describe los beneficios y características principales del producto..."
+                                required
+                            ></textarea>
+                        </div>
+
+                        <div class="bio-form-check">
+                            <input type="checkbox" id="prod-destacado" name="destacado">
+                            <label for="prod-destacado">⭐ Mostrar en la sección <strong>Best sellers</strong></label>
+                        </div>
+
+                        <div class="bio-admin-form-actions">
+                            <button type="submit" class="bio-btn bio-btn--primary" id="btn-submit-product" style="flex: 1;">
+                                Guardar Producto
+                            </button>
+                            <button type="button" class="bio-btn bio-btn--outline hidden" id="btn-cancel-edit">
+                                Cancelar Edición
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </aside>
+
+            <!-- ÁREA 2: LISTA DE PRODUCTOS (INVENTARIO DINÁMICO) -->
+            <div class="bio-admin-inventory-card">
+                <div class="bio-admin-inventory-toolbar">
+                    <div>
+                        <h2>Inventario de Productos</h2>
+                        <span class="bio-section-badge" id="admin-inventory-count">Cargando...</span>
+                    </div>
+
+                    <div>
+                        <label for="admin-inventory-search" class="sr-only">Filtrar inventario</label>
+                        <input
+                            type="search"
+                            id="admin-inventory-search"
+                            class="bio-admin-search-input"
+                            placeholder="🔍 Filtrar inventario por nombre o categoría..."
+                        >
+                    </div>
+                </div>
+
+                <!-- Contenedor donde loadProducts() inyecta las tarjetas dinámicamente -->
+                <div id="admin-products-list" class="products-cards-grid"></div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="footer bg-dark">
+        <div>
+            <p>&copy; 2026 BIOAQUA FRANCE</p>
+            <p>BIOAQUA FRANCE - Skincare para piel latina. Recomendado por dermatólogos. Distribución oficial en El Salvador y Guatemala.</p>
+        </div>
+    </footer>
+
+    <!-- Módulo de lógica de negocio exclusiva para Administración CRUD -->
+    <script type="module" src="js/admin-productos.js"></script>
+</body>
+
+</html>
+

@@ -58,15 +58,18 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%;
+    flex: 1 1 280px;
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
+    overflow: hidden;
     text-align: center;
-    max-width: 280px;
     padding: 1.25rem;
     background-color: #ffffff;
     border-radius: 14px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    width: 100%;
 }
 
 .best-sellers-grid > article:hover {
@@ -76,7 +79,10 @@ body {
 
 /* Contenedor de la Imagen */
 .best-sellers-grid > article > div {
-    height: 230px;
+    width: 100%;
+    height: 220px;
+    flex: 0 0 220px;
+    box-sizing: border-box;
     background-color: #faf7f5;
     border-radius: 14px;
     display: flex;
@@ -87,28 +93,38 @@ body {
 }
 
 .best-sellers-grid > article > div > img {
-    width: 100%;
-    height: 100%;
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
+    object-position: center;
 }
 
 /* Título del producto */
 .best-sellers-grid > article > h3 {
+    width: 100%;
     margin-top: 0.7rem;
     font-size: 1.15rem;
     color: var(--color-negro);
     letter-spacing: 0.2px;
     text-align: left;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 /* Descripción del producto */
 .best-sellers-grid > article > p {
+    width: 100%;
     color: var(--color-negro);
     font-size: 0.88rem;
     line-height: 1.55;
     margin-top: 0.35rem;
     opacity: 0.85;
     text-align: left;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 /* Tags (Lista de características) */
@@ -172,9 +188,11 @@ body {
 
 /* Zona superior: imagen + título (.product-card-front) */
 .product-card > div > div:first-child {
+    width: 100%;
+    box-sizing: border-box;
     height: auto;
     flex: 0 0 auto;
-    padding: 0 1rem 0.7rem;
+    padding: 0.75rem 1rem 0.7rem;
     background-color: #ffffff;
     color: var(--color-negro);
     justify-content: flex-start;
@@ -185,13 +203,16 @@ body {
 
 .product-card > div > div:first-child > h4 {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 0.5rem;
     width: 100%;
+    min-width: 0;
     margin: 0;
     text-align: left;
     font-size: 1rem;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .product-card > div > div:first-child > h4::after {
@@ -209,9 +230,11 @@ body {
     width: 100%;
     height: 205px;
     flex: 0 0 205px;
+    box-sizing: border-box;
+    padding: 0.5rem;
     margin-bottom: 0.45rem;
     border-radius: 10px;
-    background-color: #fff;
+    background-color: #faf7f5;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -230,6 +253,8 @@ body {
 
 /* Zona inferior: descripción + tags (.product-card-back) */
 .product-card > div > div:last-child {
+    width: 100%;
+    box-sizing: border-box;
     height: auto;
     flex: 1 1 auto;
     display: flex;
@@ -243,12 +268,15 @@ body {
 }
 
 .product-card > div > div:last-child > p {
+    width: 100%;
     color: #555555;
     font-size: 0.82rem;
     line-height: 1.45;
     letter-spacing: 0;
     text-align: left;
     margin: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 /* Controles de acción y CRUD dentro de las tarjetas (Responsive sin desbordamiento) */
