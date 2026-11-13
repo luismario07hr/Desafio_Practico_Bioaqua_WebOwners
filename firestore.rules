@@ -100,6 +100,25 @@ service cloud.firestore {
       // Solo el autor de la reseña o un administrador puede editarla o eliminarla
       allow update, delete: if (isAuthenticated() && resource.data.uid == request.auth.uid) || isAdmin();
     }
+
+    // ------------------------------------------------------------------------
+    // 5. COLECCIÓN: consultas (Formulario de Contacto SV & GT)
+    // ------------------------------------------------------------------------
+    match /consultas/{consultaId} {
+      // Cualquier visitante o cliente autenticado puede enviar una consulta válida
+      allow create: if request.resource.data.nombre is string &&
+                    request.resource.data.nombre.size() >= 3 &&
+                    request.resource.data.email is string &&
+                    request.resource.data.celular is string &&
+                    request.resource.data.celular.size() == 8 &&
+                    request.resource.data.asunto is string &&
+                    request.resource.data.mensaje is string &&
+                    (request.resource.data.uid == null || (isAuthenticated() && request.resource.data.uid == request.auth.uid));
+
+      // Solo el administrador o el cliente propietario pueden leer sus consultas
+      allow read: if isAdmin() || (isAuthenticated() && resource.data.uid == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
   }
 }
 

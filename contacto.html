@@ -61,8 +61,8 @@
             <div class="split-section">
                 
                 <!-- Lado Izquierdo: Formulario de Contacto -->
-                <div class  = "form-container">
-                    <form action="#" method="POST">
+                <div class="form-container">
+                    <form id="form-contacto" action="#" method="POST" novalidate>
                         
                         <!-- Fila 1: Nombre y Email -->
                         <div>
@@ -100,7 +100,7 @@
                             <textarea id="mensaje" name="mensaje" rows="4" placeholder="Escribe tu mensaje aquí..." required></textarea>
                         </div>
 
-                        <button type="submit">Enviar Mensaje</button>
+                        <button type="submit" id="btn-enviar-contacto">Enviar Mensaje</button>
                     </form>
                 </div>
 
@@ -149,5 +149,6 @@
     </footer>
 
     <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/consultas.js"></script>
 </body>
 </html>

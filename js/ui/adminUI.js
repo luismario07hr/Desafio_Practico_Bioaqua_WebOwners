@@ -58,8 +58,11 @@ export function renderAdminPanel(container, user, metrics, onCatalogChanged) {
                 </p>
             </div>
             <div class="bio-admin-banner__actions">
-                <button type="button" class="bio-btn bio-btn--cyan" id="btn-admin-new-product">
-                    + Nuevo Producto Bioaqua
+                <a href="productos-admin.html" class="bio-btn bio-btn--cyan">
+                    ⚙ Ir al Panel Admin Dedicado
+                </a>
+                <button type="button" class="bio-btn bio-btn--primary" id="btn-admin-new-product">
+                    + Nuevo Producto Rápido
                 </button>
                 <button type="button" class="bio-btn bio-btn--outline-light" id="btn-admin-seed">
                     ⚡ Restaurar Catálogo Inicial (Seed)

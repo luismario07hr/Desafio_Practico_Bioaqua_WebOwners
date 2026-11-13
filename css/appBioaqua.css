@@ -150,82 +150,6 @@
     border: 1px solid rgba(0, 191, 255, 0.5);
 }
 
-/* Botón de "Iniciar Sesión / Registrarse" integrado directamente en el <nav class="main-nav"> */
-.main-nav ul {
-    align-items: center;
-}
-
-#nav-auth-item {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0.5rem 0;
-}
-
-@media (min-width: 768px) {
-    #nav-auth-item {
-        padding: 0;
-    }
-}
-
-.main-nav ul li a.nav-auth-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-celeste);
-    color: var(--color-negro) !important;
-    font-weight: 700;
-    font-size: 0.9rem;
-    padding: 0.48rem 1.1rem;
-    border-radius: 999px;
-    border-bottom: none;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-}
-
-.main-nav ul li a.nav-auth-btn:hover,
-.main-nav ul li a.nav-auth-btn.active {
-    background-color: var(--color-azul);
-    color: var(--color-blanco) !important;
-    transform: translateY(-1px);
-}
-
-.nav-user-session {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 0.6rem;
-}
-
-.main-nav ul li a.nav-user-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    padding: 0.32rem 0.75rem;
-    border-radius: 999px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-bottom: none;
-    font-size: 0.88rem;
-}
-
-.nav-logout-btn {
-    background-color: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.45);
-    color: var(--color-blanco);
-    font-family: var(--font-principal);
-    font-size: 0.78rem;
-    font-weight: 600;
-    padding: 0.35rem 0.8rem;
-    border-radius: 999px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.nav-logout-btn:hover {
-    border-color: var(--color-celeste);
-    color: var(--color-celeste);
-}
-
 /* ============================================================================
    2. SISTEMA DE BOTONES (.bio-btn)
    ============================================================================ */
@@ -705,6 +629,7 @@
     .bio-filter-card__top {
         grid-template-columns: 2fr 1fr 1fr;
     }
+
     .bio-filter-card__bottom {
         grid-template-columns: repeat(4, 1fr) auto;
     }
@@ -1133,7 +1058,7 @@
     font-size: 0.82rem;
 }
 
-.bio-error-list li + li {
+.bio-error-list li+li {
     margin-top: 0.3rem;
 }
 
@@ -1329,6 +1254,7 @@
     0% {
         background-position: 200% 0;
     }
+
     100% {
         background-position: -200% 0;
     }
@@ -1395,3 +1321,102 @@
     margin-bottom: 1.1rem;
 }
 
+/* ============================================================================
+   11. VISTA DEDICADA DE ADMINISTRACIÓN (productos-admin.html)
+   ============================================================================ */
+.bio-admin-workspace {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.25rem;
+    align-items: start;
+}
+
+@media (min-width: 992px) {
+    .bio-admin-workspace {
+        grid-template-columns: 400px 1fr;
+    }
+}
+
+.bio-admin-form-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
+    overflow: hidden;
+    position: sticky;
+    top: 1.25rem;
+}
+
+.bio-admin-form-card__header {
+    background: linear-gradient(135deg, var(--color-negro) 0%, #1a2a44 100%);
+    color: var(--color-blanco);
+    padding: 1.2rem 1.4rem;
+    border-bottom: 2px solid var(--color-celeste);
+}
+
+.bio-admin-form-card__header h2 {
+    font-size: 1.25rem;
+    color: var(--color-blanco) !important;
+    margin: 0.2rem 0 0 !important;
+    text-align: left !important;
+}
+
+.bio-admin-form-card__body {
+    padding: 1.35rem 1.4rem;
+}
+
+.bio-admin-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 0.5rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.bio-admin-inventory-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.bio-admin-inventory-toolbar {
+    background-color: #ffffff;
+    border-radius: 14px;
+    padding: 1.1rem 1.35rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.bio-admin-inventory-toolbar h2 {
+    font-size: 1.4rem !important;
+    margin: 0 !important;
+    color: var(--color-negro);
+}
+
+.bio-admin-search-input {
+    min-width: 240px;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    font-family: var(--font-principal);
+    font-size: 0.85rem;
+    background-color: #f8fafc;
+}
+
+.bio-admin-search-input:focus {
+    outline: none;
+    border-color: var(--color-azul);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(42, 125, 225, 0.14);
+}
+
+.product-card--editing {
+    outline: 3px solid var(--color-celeste);
+    box-shadow: 0 12px 32px rgba(0, 191, 255, 0.25) !important;
+}
