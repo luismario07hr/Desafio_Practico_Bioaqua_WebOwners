@@ -99,24 +99,10 @@ function renderHeaderToolbar(container, user) {
         </div>
     `;
 
-    const firebaseBadgeHTML = `
-        <button type="button" id="btn-open-fb-config" class="bio-status-chip ${
-            firebaseReady ? "bio-status-chip--live" : "bio-status-chip--demo"
-        }" title="${
-            firebaseReady
-                ? "Conectado a Firebase Cloud Firestore"
-                : "Modo Respaldo Local activo. Clic para pegar tus llaves de Firebase"
-        }">
-            <span class="bio-status-dot"></span>
-            ${firebaseReady ? "Firebase Live" : "Modo Demo / Llaves"}
-        </button>
-    `;
-
     if (!user) {
         // Visitante no autenticado
         container.innerHTML = `
             ${regionSelectHTML}
-            ${firebaseBadgeHTML}
             <div class="bio-auth-actions">
                 <button type="button" class="bio-btn bio-btn--cyan bio-btn--sm" id="btn-header-login">
                     Iniciar Sesión / Registro
@@ -134,7 +120,6 @@ function renderHeaderToolbar(container, user) {
 
         container.innerHTML = `
             ${regionSelectHTML}
-            ${firebaseBadgeHTML}
             <div class="bio-user-session">
                 <div class="bio-user-info">
                     <span class="bio-user-name">${escapeHTML(user.nombre)}</span>
