@@ -1,0 +1,8 @@
+{
+  "name": "bioaqua-sv-gt",
+  "version": "1.0.0",
+  "description": "Proyecto Bioaqua SV-GT",
+  "scripts": {
+    "build": "node scripts/generate-env.js"
+  }
+}

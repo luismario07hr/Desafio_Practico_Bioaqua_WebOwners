@@ -1,0 +1,4 @@
+.env
+js/config/firebase.env.js
+dist/
+.vscode/
