@@ -58,7 +58,7 @@ export function renderAdminPanel(container, user, metrics, onCatalogChanged) {
                 </p>
             </div>
             <div class="bio-admin-banner__actions">
-                <a href="productos-admin.html" class="bio-btn bio-btn--cyan">
+                <a href="dashboard-admin.html" class="bio-btn bio-btn--cyan">
                     ⚙ Ir al Panel Admin Dedicado
                 </a>
                 <button type="button" class="bio-btn bio-btn--primary" id="btn-admin-new-product">

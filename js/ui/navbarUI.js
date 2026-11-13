@@ -60,8 +60,7 @@ export function initNavbarUI() {
         header.appendChild(userToolbar);
     }
 
-    // 2. Asegurar que existan los modales de Auth y Configuración Firebase en el DOM
-    ensureAuthModalInDOM();
+    // 2. Asegurar que exista el modal de Configuración Firebase en el DOM
     ensureFirebaseConfigModalInDOM();
 
     // 3. Suscribirse a cambios de autenticación para renderizar según rol ('admin', 'cliente', o visitante)
@@ -87,7 +86,7 @@ export function initNavbarUI() {
  */
 function renderHeaderToolbar(container, user) {
     const currentRegion = getActiveRegion();
-    const firebaseReady = isFirebaseConfigured();
+    const navAuthItem = document.getElementById("nav-auth-item");
 
     const regionSelectHTML = `
         <div class="bio-region-pill" title="Selecciona tu país para ver disponibilidad y moneda local">
@@ -100,36 +99,32 @@ function renderHeaderToolbar(container, user) {
     `;
 
     if (!user) {
-        // Visitante no autenticado
+        // Visitante no autenticado: asegurar que el enlace en el menú principal lleve a login.html
+        if (navAuthItem) {
+            navAuthItem.style.display = "";
+            const authLink = navAuthItem.querySelector("a");
+            if (authLink) authLink.setAttribute("href", "login.html");
+        }
+
+        // En la barra derecha solo mostramos el selector regional (sin botón duplicado)
         container.innerHTML = `
             ${regionSelectHTML}
-            <div class="bio-auth-actions">
-                <button type="button" class="bio-btn bio-btn--cyan bio-btn--sm" id="btn-header-login">
-                    Iniciar Sesión / Registro
-                </button>
-            </div>
         `;
-
-        container.querySelector("#btn-header-login")?.addEventListener("click", () => openAuthModal("login"));
     } else {
-        // Usuario autenticado ('admin' o 'cliente')
+        // Usuario autenticado ('admin' o 'cliente'): ocultar enlace "Iniciar Sesión" del menú principal
+        if (navAuthItem) navAuthItem.style.display = "none";
+
         const isAdmin = user.rol === "admin";
         const roleBadge = isAdmin
             ? `<span class="bio-role-badge bio-role-badge--admin">ADMIN</span>`
-            : `<span class="bio-role-badge bio-role-badge--client">CLIENTE · Piel ${user.tipoPiel || "Mixta"}</span>`;
+            : `<span class="bio-role-badge bio-role-badge--client">CLIENTE</span>`;
 
         container.innerHTML = `
             ${regionSelectHTML}
             <div class="bio-user-session">
-                <div class="bio-user-info">
-                    <span class="bio-user-name">${escapeHTML(user.nombre)}</span>
+                <a href="${isAdmin ? "dashboard-admin.html" : "productos.html#mi-rutina-section"}" class="bio-user-info" title="${isAdmin ? "Ir a Panel de Administración" : "Ir a Mi Rutina"}" style="text-decoration:none; cursor:pointer;">
+                    <span class="bio-user-name">${escapeHTML(user.nombre || user.email)}</span>
                     ${roleBadge}
-                </div>
-                <button type="button" class="bio-btn bio-btn--ghost bio-btn--xs" id="btn-switch-role" title="Alternar rol entre Cliente y Admin para pruebas de defensa técnica">
-                    ⇄ Rol: ${isAdmin ? "Ver como Cliente" : "Ver como Admin"}
-                </button>
-                <a href="${isAdmin ? "productos-admin.html" : "productos.html#catalog-filters-mount"}" class="bio-btn bio-btn--cyan bio-btn--xs">
-                    ${isAdmin ? "⚙ Panel Admin CRUD" : "🧴 Catálogo"}
                 </a>
                 <button type="button" class="bio-btn bio-btn--outline-light bio-btn--xs" id="btn-header-logout">
                     Salir
@@ -142,20 +137,6 @@ function renderHeaderToolbar(container, user) {
             try {
                 await logoutUser();
                 showToast("Has cerrado sesión correctamente.", "info");
-            } catch (err) {
-                showToast(err.message, "error");
-            }
-        });
-
-        // Evento cambio rápido de Rol para facilitar pruebas de evaluación / defensa técnica
-        container.querySelector("#btn-switch-role")?.addEventListener("click", async () => {
-            try {
-                const nextRole = isAdmin ? "cliente" : "admin";
-                await updateUserProfileData(user.uid, { rol: nextRole });
-                showToast(
-                    `Rol cambiado a '${nextRole.toUpperCase()}'. La interfaz se ha actualizado dinámicamente.`,
-                    "success"
-                );
             } catch (err) {
                 showToast(err.message, "error");
             }
@@ -180,16 +161,15 @@ function renderHeaderToolbar(container, user) {
 }
 
 /**
- * Abre el modal de Autenticación en la pestaña 'login' o 'register'.
+ * Redirige a la página dedicada de Inicio de Sesión o Registro cuando un componente solicita autenticación.
  * @param {'login'|'register'} tab
  */
 export function openAuthModal(tab = "login") {
-    ensureAuthModalInDOM();
-    const modal = document.getElementById("bio-auth-modal");
-    if (!modal) return;
-
-    modal.classList.add("active");
-    switchAuthTab(tab);
+    if (tab === "register") {
+        window.location.href = "registro.html";
+    } else {
+        window.location.href = "login.html";
+    }
 }
 
 export function closeAuthModal() {
