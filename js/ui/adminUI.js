@@ -48,15 +48,6 @@ export function renderAdminPanel(container, user, metrics, onCatalogChanged) {
 
     container.innerHTML = `
         <div class="bio-admin-banner" id="panel-admin">
-            <div class="bio-admin-banner__info">
-                <span class="bio-admin-eyebrow">⚙ PROCESO 1 · PANEL DE ADMINISTRACIÓN REGIONAL (ROL: ADMIN)</span>
-                <h3>Gestión de Catálogo Bioaqua El Salvador & Guatemala</h3>
-                <p>
-                    Controla la disponibilidad regional (🇸🇻 SV / 🇬🇹 GT), precios en USD y Quetzales, estados de stock
-                    (<strong>${metrics.enStock} en stock</strong> · <strong>${metrics.stockBajo} stock bajo</strong> · <strong>${metrics.agotados} agotados</strong>)
-                    y productos Best Sellers.
-                </p>
-            </div>
             <div class="bio-admin-banner__actions">
                 <a href="dashboard-admin.html" class="bio-btn bio-btn--cyan">
                     ⚙ Ir al Panel Admin Dedicado
