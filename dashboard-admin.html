@@ -21,10 +21,14 @@
     <!-- Contenedor principal del Dashboard (Oculto por defecto hasta verificar admin) -->
     <div id="admin-dashboard" class="dashboard-container" style="display: none;">
 
+        <!-- Backdrop para oscurecer el fondo en móviles cuando el menú lateral está abierto -->
+        <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="admin-sidebar">
             <div class="sidebar-header">
                 <h2>Bioaqua Admin</h2>
+                <button type="button" id="btn-close-sidebar" class="sidebar-close-btn" aria-label="Cerrar menú">×</button>
             </div>
             <nav class="sidebar-nav">
                 <a href="#" class="active" data-section="resumen">Dashboard</a>
@@ -40,7 +44,14 @@
         <!-- Contenido Principal -->
         <main class="main-content">
             <header class="topbar">
-                <h1 id="page-title">Resumen General</h1>
+                <div class="topbar-left">
+                    <button type="button" id="btn-toggle-sidebar" class="sidebar-toggle-btn" aria-label="Abrir menú de navegación">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </button>
+                    <h1 id="page-title">Resumen General</h1>
+                </div>
                 <div class="user-info">
                     <span id="admin-email">admin@bioaqua.com</span>
                 </div>
@@ -74,7 +85,7 @@
                     <button class="btn-primary" id="btn-add-product" style="margin-bottom: 0;">+ Nuevo Producto</button>
                     <button class="bio-btn bio-btn--outline" id="btn-seed-catalog">⚡ Restaurar Catálogo (Seed)</button>
                 </div>
-                <div style="overflow-x: auto;">
+                <div class="table-responsive">
                     <table class="data-table">
                         <thead>
                             <tr>
@@ -95,7 +106,7 @@
 
             <!-- Sección: Usuarios -->
             <section id="section-usuarios" class="content-section" style="display: none;">
-                <div style="overflow-x: auto;">
+                <div class="table-responsive">
                     <table class="data-table">
                         <thead>
                             <tr>
@@ -115,7 +126,7 @@
 
             <!-- Sección: Rutinas -->
             <section id="section-rutinas" class="content-section" style="display: none;">
-                <div style="overflow-x: auto;">
+                <div class="table-responsive">
                     <table class="data-table">
                         <thead>
                             <tr>

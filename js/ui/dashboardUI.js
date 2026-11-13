@@ -66,7 +66,26 @@ document.addEventListener("DOMContentLoaded", () => {
         await cargarDatosDashboard();
     });
 
-    // 2. LÓGICA DE NAVEGACIÓN (SIDEBAR)
+    // 2. LÓGICA DE NAVEGACIÓN Y RESPONSIVIDAD (SIDEBAR)
+    const sidebar = document.getElementById("admin-sidebar");
+    const sidebarBackdrop = document.getElementById("sidebar-backdrop");
+    const toggleBtn = document.getElementById("btn-toggle-sidebar");
+    const closeBtn = document.getElementById("btn-close-sidebar");
+
+    const openMobileSidebar = () => {
+        sidebar?.classList.add("open");
+        sidebarBackdrop?.classList.add("active");
+    };
+
+    const closeMobileSidebar = () => {
+        sidebar?.classList.remove("open");
+        sidebarBackdrop?.classList.remove("active");
+    };
+
+    toggleBtn?.addEventListener("click", openMobileSidebar);
+    closeBtn?.addEventListener("click", closeMobileSidebar);
+    sidebarBackdrop?.addEventListener("click", closeMobileSidebar);
+
     const navLinks = document.querySelectorAll(".sidebar-nav a[data-section]");
     const sections = document.querySelectorAll(".content-section");
     const pageTitle = document.getElementById("page-title");
@@ -86,6 +105,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (pageTitle) {
                 pageTitle.textContent = link.textContent.replace(/[^\w\s]/gi, "").trim();
+            }
+
+            // En dispositivos móviles, cerrar el menú lateral al hacer clic en una sección
+            if (window.innerWidth <= 860) {
+                closeMobileSidebar();
             }
         });
     });
