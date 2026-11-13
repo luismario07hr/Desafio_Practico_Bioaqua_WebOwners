@@ -5,7 +5,7 @@
  * - Protección de ruta: Solo usuarios autenticados con rol === 'admin'.
  * - Carga de métricas globales (productos, usuarios, rutinas, reseñas).
  * - Renderizado y gestión CRUD de productos con modales y confirmaciones.
- * - Navegación lateral entre secciones (Resumen, Productos, Usuarios, Rutinas).
+ * - Navegación lateral entre secciones (Resumen, Productos, Usuarios).
  * ============================================================================
  */
 
@@ -20,7 +20,6 @@ import {
     seedProductsToFirestore
 } from "../services/productService.js";
 import {
-    getAllRoutines,
     getAllReviews,
     seedReviewsAndRoutines
 } from "../services/routineService.js";
@@ -139,10 +138,9 @@ document.addEventListener("DOMContentLoaded", () => {
  */
 export async function cargarDatosDashboard() {
     try {
-        const [products, users, routines, reviews] = await Promise.all([
+        const [products, users, reviews] = await Promise.all([
             getAllProducts(),
             getAllUsers(),
-            getAllRoutines(),
             getAllReviews()
         ]);
 
@@ -151,12 +149,10 @@ export async function cargarDatosDashboard() {
         // Actualizar Tarjetas de Métricas
         const elMetricProducts = document.getElementById("metric-products");
         const elMetricUsers    = document.getElementById("metric-users");
-        const elMetricRoutines = document.getElementById("metric-routines");
         const elMetricReviews  = document.getElementById("metric-reviews");
 
         if (elMetricProducts) elMetricProducts.textContent = products.length;
         if (elMetricUsers)    elMetricUsers.textContent = users.length;
-        if (elMetricRoutines) elMetricRoutines.textContent = routines.length;
         if (elMetricReviews)  elMetricReviews.textContent = reviews.length;
 
         // Llenar la Tabla de Productos
@@ -164,9 +160,6 @@ export async function cargarDatosDashboard() {
 
         // Llenar la Tabla de Usuarios (si existe)
         renderUsersTable(users);
-
-        // Llenar la Tabla de Rutinas (si existe)
-        renderRoutinesTable(routines);
 
     } catch (error) {
         console.error("Error al cargar datos del dashboard:", error);
@@ -275,46 +268,5 @@ function renderUsersTable(users) {
             </td>
         </tr>
     `).join("");
-}
-
-/**
- * Renderiza la tabla de rutinas de clientes.
- * @param {Array<Object>} routines
- */
-function renderRoutinesTable(routines) {
-    const tbody = document.getElementById("table-routines-body");
-    if (!tbody) return;
-
-    if (!routines || routines.length === 0) {
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="4" style="text-align: center; padding: 2rem; color: #888;">
-                    No hay rutinas creadas por usuarios aún.
-                </td>
-            </tr>
-        `;
-        return;
-    }
-
-    tbody.innerHTML = routines.map((r) => {
-        const stepsCount = Array.isArray(r.pasos) ? r.pasos.length : 0;
-        let dateLabel = "—";
-        if (r.actualizadoEn) {
-            try {
-                dateLabel = new Date(r.actualizadoEn).toLocaleDateString();
-            } catch {
-                dateLabel = r.actualizadoEn;
-            }
-        }
-
-        return `
-            <tr>
-                <td><span style="font-size: 0.8em; color: #888;">${escapeHTML((r.uid || r.id || "").substring(0, 10))}...</span></td>
-                <td><strong>${escapeHTML(r.nombreRutina || "Mi Ritual Bioaqua")}</strong></td>
-                <td><span class="bio-badge">${stepsCount} paso${stepsCount === 1 ? "" : "s"}</span></td>
-                <td>${escapeHTML(dateLabel)}</td>
-            </tr>
-        `;
-    }).join("");
 }
 
