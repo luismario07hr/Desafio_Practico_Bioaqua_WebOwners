@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bioaqua France | Crear Cuenta</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/appBioaqua.css">
+    <link rel="stylesheet" href="css/authStyle.css">
+</head>
+<body class="auth-page-body">
+
+    <!-- ENCABEZADO OSCURO -->
+    <header class="header bg-dark">
+        <div class="logo">
+            <a href="index.html" aria-label="Ir al inicio de Bioaqua">
+                <img src="img/logo.png" alt="Logo Bioaqua">
+            </a>
+        </div>
+
+        <!-- Checkbox Hack para menú móvil -->
+        <input type="checkbox" id="menu-toggle" class="menu-checkbox" aria-label="Mostrar u ocultar el menú de navegación">
+
+        <label for="menu-toggle" class="menu-label" aria-hidden="true">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </label>
+
+        <!-- Navegación Principal -->
+        <nav class="main-nav" aria-label="Navegación principal">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="productos.html">Productos</a></li>
+                <li><a href="tipo-de-piel.html">Tu tipo de piel</a></li>
+                <li><a href="sobre-nosotros.html">Sobre nosotros</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li id="nav-auth-item">
+                    <a href="login.html" class="nav-auth-btn active" aria-current="page">Iniciar Sesión / Registrarse</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL: FORMULARIO DE REGISTRO -->
+    <main class="auth-main">
+        <section class="auth-card-container auth-card-container--register" aria-labelledby="register-heading">
+            <div class="auth-form-panel">
+                <div class="auth-form-header">
+                    <h2 id="register-heading">Crear Cuenta Bioaqua</h2>
+                    <p>Completa tus datos para personalizar tu experiencia de cuidado facial.</p>
+                </div>
+
+                <!-- Contenedor de Alertas Dinámicas (Errores de Firebase o Confirmación) -->
+                <div id="auth-alert-container" aria-live="assertive"></div>
+
+                <form id="page-form-register" class="auth-page-form" novalidate>
+                    <!-- 1. Nombre completo -->
+                    <div class="auth-field">
+                        <label for="reg-page-nombre">Nombre completo *</label>
+                        <input
+                            type="text"
+                            id="reg-page-nombre"
+                            name="nombre"
+                            placeholder="Ej. Andrea Martínez"
+                            autocomplete="name"
+                            required
+                        >
+                        <small id="error-reg-nombre" class="field-error-msg" role="alert"></small>
+                    </div>
+
+                    <!-- 2. Correo electrónico -->
+                    <div class="auth-field">
+                        <label for="reg-page-email">Correo electrónico *</label>
+                        <input
+                            type="email"
+                            id="reg-page-email"
+                            name="email"
+                            placeholder="tu-correo@dominio.com"
+                            autocomplete="email"
+                            required
+                        >
+                        <small id="error-reg-email" class="field-error-msg" role="alert"></small>
+                    </div>
+
+                    <!-- 3 y 4. País de residencia y Tipo de piel -->
+                    <div class="auth-form-grid-2">
+                        <div class="auth-field">
+                            <label for="reg-page-pais">País de residencia *</label>
+                            <select id="reg-page-pais" name="pais" required>
+                                <option value="El Salvador">El Salvador</option>
+                                <option value="Guatemala">Guatemala</option>
+                            </select>
+                            <small id="error-reg-pais" class="field-error-msg" role="alert"></small>
+                        </div>
+
+                        <div class="auth-field">
+                            <label for="reg-page-piel">Tu tipo de piel *</label>
+                            <select id="reg-page-piel" name="tipoPiel" required>
+                                <option value="Grasa">Grasa</option>
+                                <option value="Seca">Seca</option>
+                                <option value="Mixta" selected>Mixta</option>
+                                <option value="Sensible">Sensible</option>
+                                <option value="Todas">Todo tipo</option>
+                            </select>
+                            <small id="error-reg-piel" class="field-error-msg" role="alert"></small>
+                        </div>
+                    </div>
+
+                    <!-- 5 y 6. Contraseña y Confirmar contraseña -->
+                    <div class="auth-form-grid-2">
+                        <div class="auth-field">
+                            <label for="reg-page-password">Contraseña *</label>
+                            <div class="password-input-wrap">
+                                <input
+                                    type="password"
+                                    id="reg-page-password"
+                                    name="password"
+                                    placeholder="Mín. 6 caracteres"
+                                    autocomplete="new-password"
+                                    required
+                                >
+                                <button
+                                    type="button"
+                                    class="password-toggle-btn"
+                                    data-target="reg-page-password"
+                                    aria-label="Mostrar contraseña"
+                                >
+                                    Mostrar
+                                </button>
+                            </div>
+                            <small id="error-reg-password" class="field-error-msg" role="alert"></small>
+                        </div>
+
+                        <div class="auth-field">
+                            <label for="reg-page-confirm">Confirmar contraseña *</label>
+                            <div class="password-input-wrap">
+                                <input
+                                    type="password"
+                                    id="reg-page-confirm"
+                                    name="confirmPassword"
+                                    placeholder="Repite tu contraseña"
+                                    autocomplete="new-password"
+                                    required
+                                >
+                                <button
+                                    type="button"
+                                    class="password-toggle-btn"
+                                    data-target="reg-page-confirm"
+                                    aria-label="Mostrar confirmación de contraseña"
+                                >
+                                    Mostrar
+                                </button>
+                            </div>
+                            <small id="error-reg-confirm" class="field-error-msg" role="alert"></small>
+                        </div>
+                    </div>
+
+                    <!-- Nota de seguridad sobre rol asignado automáticamente -->
+                    <div class="auth-role-notice">
+                        🔒 <strong>Seguridad de cuenta:</strong> Todo registro público se guarda automáticamente en Firestore con el perfil estándar de <strong>Cliente</strong>.
+                    </div>
+
+                    <button type="submit" id="btn-page-register" class="auth-submit-btn">
+                        Crear mi cuenta Bioaqua
+                    </button>
+                </form>
+
+                <div class="auth-switch-footer">
+                    <p>¿Ya tienes una cuenta? <a href="login.html">Inicia sesión aquí</a></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="footer bg-dark">
+        <div>
+            <p>&copy; 2026 BIOAQUA FRANCE</p>
+            <p>BIOAQUA FRANCE - Skincare para piel latina. Recomendado por dermatólogos. Distribución oficial en El Salvador y Guatemala.</p>
+        </div>
+    </footer>
+
+    <!-- Script inmediato para alternar visibilidad de contraseña -->
+    <script>
+        document.addEventListener("click", function (e) {
+            var btn = e.target.closest(".password-toggle-btn");
+            if (!btn) return;
+            e.preventDefault();
+            var targetId = btn.getAttribute("data-target");
+            var input = targetId ? document.getElementById(targetId) : btn.parentElement.querySelector("input");
+            if (!input) return;
+            var isPwd = input.type === "password";
+            input.type = isPwd ? "text" : "password";
+            btn.textContent = isPwd ? "Ocultar" : "Mostrar";
+            btn.setAttribute("aria-label", isPwd ? "Ocultar contraseña" : "Mostrar contraseña");
+        });
+    </script>
+    <!-- Punto de entrada modular ES Modules -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

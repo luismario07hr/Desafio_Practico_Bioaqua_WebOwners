@@ -1,0 +1,285 @@
+/* ============================================================================
+   ARCHIVO: css/authStyle.css
+   RESPONSABILIDAD: Estilos de las páginas dedicadas de Inicio de Sesión
+   (login.html) y Registro de Cuenta (registro.html) de Bioaqua SV & GT.
+   Reutiliza las variables de marca de css/styles.css.
+   ============================================================================ */
+
+.auth-page-body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(180deg, #f0f6fc 0%, #fdfcfb 100%);
+    color: var(--color-negro);
+}
+
+.auth-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1rem;
+}
+
+/* ============================================================================
+   TARJETA CENTRADA LIMPIA (LOGIN Y REGISTRO)
+   ============================================================================ */
+.auth-card-container {
+    width: 100%;
+    max-width: 480px;
+    background-color: var(--color-blanco);
+    border-radius: 20px;
+    box-shadow: 0 18px 45px rgba(35, 31, 32, 0.10);
+    border: 1px solid rgba(42, 125, 225, 0.12);
+    overflow: hidden;
+    animation: fade-in-up 0.45s ease-out forwards;
+}
+
+.auth-card-container--register {
+    max-width: 560px;
+}
+
+.auth-form-panel {
+    padding: 2.5rem 2.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--color-blanco);
+}
+
+@media (max-width: 480px) {
+    .auth-form-panel {
+        padding: 1.85rem 1.35rem;
+    }
+}
+
+.auth-form-header {
+    margin-bottom: 1.5rem;
+}
+
+.auth-form-header h2 {
+    font-size: 1.85rem;
+    color: var(--color-negro);
+    margin-bottom: 0.35rem;
+    font-weight: 800;
+}
+
+.auth-form-header p {
+    font-size: 0.92rem;
+    color: #55697d;
+}
+
+/* ============================================================================
+   CONTENEDOR DE ALERTA GENERAL (Errores de Firebase Auth o Éxito)
+   ============================================================================ */
+.auth-alert {
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    font-size: 0.86rem;
+    line-height: 1.45;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+}
+
+.auth-alert--error {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    border-left: 4px solid #ef4444;
+    color: #991b1b;
+}
+
+.auth-alert--success {
+    background-color: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-left: 4px solid #16a34a;
+    color: #166534;
+}
+
+.auth-alert--info {
+    background-color: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-left: 4px solid var(--color-azul);
+    color: #0369a1;
+}
+
+/* ============================================================================
+   CAMPOS DEL FORMULARIO Y VALIDACIONES POR INPUT
+   ============================================================================ */
+.auth-page-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.05rem;
+}
+
+.auth-form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 520px) {
+    .auth-form-grid-2 {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.auth-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.32rem;
+}
+
+.auth-field label {
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--color-negro);
+}
+
+.auth-field input,
+.auth-field select {
+    width: 100%;
+    padding: 0.72rem 0.9rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    font-family: var(--font-principal);
+    font-size: 0.92rem;
+    color: var(--color-negro);
+    background-color: #f8fafc;
+    transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+}
+
+.auth-field input:focus,
+.auth-field select:focus {
+    outline: none;
+    border-color: var(--color-azul);
+    background-color: var(--color-blanco);
+    box-shadow: 0 0 0 3px rgba(42, 125, 225, 0.15);
+}
+
+/* Estados visuales de validación por campo */
+.auth-field input.input-invalid,
+.auth-field select.input-invalid {
+    border-color: #dc2626;
+    background-color: #fff5f5;
+}
+
+.auth-field input.input-valid,
+.auth-field select.input-valid {
+    border-color: #16a34a;
+}
+
+/* Mensaje de error específico debajo de cada input */
+.field-error-msg {
+    font-size: 0.77rem;
+    color: #dc2626;
+    font-weight: 600;
+    min-height: 1.05rem;
+    line-height: 1.3;
+    display: none;
+}
+
+.field-error-msg.visible {
+    display: block;
+}
+
+/* Contenedor de Contraseña con botón Mostrar / Ocultar */
+.password-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-wrap input {
+    padding-right: 4.5rem;
+}
+
+.password-toggle-btn {
+    position: absolute;
+    right: 0.55rem;
+    background: transparent;
+    border: none;
+    color: var(--color-azul);
+    font-family: var(--font-principal);
+    font-size: 0.76rem;
+    font-weight: 700;
+    padding: 0.3rem 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.password-toggle-btn:hover {
+    background-color: rgba(42, 125, 225, 0.1);
+}
+
+/* Nota de seguridad sobre rol asignado automáticamente */
+.auth-role-notice {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 3px solid var(--color-celeste);
+    border-radius: 8px;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.79rem;
+    color: #475569;
+    line-height: 1.4;
+}
+
+/* Botón de envío con spinner en línea */
+.auth-submit-btn {
+    margin-top: 0.35rem;
+    padding: 0.82rem 1.25rem;
+    font-size: 0.96rem;
+    font-weight: 700;
+    border-radius: 999px;
+    background-color: var(--color-azul);
+    color: var(--color-blanco);
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.auth-submit-btn:hover:not(:disabled) {
+    background-color: #1b65c4;
+    transform: translateY(-1px);
+}
+
+.auth-submit-btn:disabled {
+    opacity: 0.68;
+    cursor: not-allowed;
+}
+
+.btn-inline-spinner {
+    width: 17px;
+    height: 17px;
+    border: 2.5px solid rgba(255, 255, 255, 0.35);
+    border-top-color: var(--color-blanco);
+    border-radius: 50%;
+    animation: bio-spin 0.7s linear infinite;
+    display: inline-block;
+}
+
+/* Pie del formulario con enlaces entre Login y Registro */
+.auth-switch-footer {
+    margin-top: 1.4rem;
+    padding-top: 1.15rem;
+    border-top: 1px solid #e2e8f0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #475569;
+}
+
+.auth-switch-footer a {
+    color: var(--color-azul);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.auth-switch-footer a:hover {
+    text-decoration: underline;
+}

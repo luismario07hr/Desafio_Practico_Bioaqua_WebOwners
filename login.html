@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bioaqua France | Iniciar Sesión</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/appBioaqua.css">
+    <link rel="stylesheet" href="css/authStyle.css">
+</head>
+<body class="auth-page-body">
+
+    <!-- ENCABEZADO OSCURO -->
+    <header class="header bg-dark">
+        <div class="logo">
+            <a href="index.html" aria-label="Ir al inicio de Bioaqua">
+                <img src="img/logo.png" alt="Logo Bioaqua">
+            </a>
+        </div>
+
+        <!-- Checkbox Hack para menú móvil -->
+        <input type="checkbox" id="menu-toggle" class="menu-checkbox" aria-label="Mostrar u ocultar el menú de navegación">
+
+        <label for="menu-toggle" class="menu-label" aria-hidden="true">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </label>
+
+        <!-- Navegación Principal -->
+        <nav class="main-nav" aria-label="Navegación principal">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="productos.html">Productos</a></li>
+                <li><a href="tipo-de-piel.html">Tu tipo de piel</a></li>
+                <li><a href="sobre-nosotros.html">Sobre nosotros</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li id="nav-auth-item">
+                    <a href="login.html" class="nav-auth-btn active" aria-current="page">Iniciar Sesión / Registrarse</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL: FORMULARIO DE INICIO DE SESIÓN -->
+    <main class="auth-main">
+        <section class="auth-card-container" aria-labelledby="login-heading">
+            <div class="auth-form-panel">
+                <div class="auth-form-header">
+                    <h2 id="login-heading">Iniciar Sesión</h2>
+                    <p>Ingresa tus credenciales para acceder a tu cuenta Bioaqua.</p>
+                </div>
+
+                <!-- Contenedor de Alertas Dinámicas (Errores de Firebase o Confirmación) -->
+                <div id="auth-alert-container" aria-live="assertive"></div>
+
+                <form id="page-form-login" class="auth-page-form" novalidate>
+                    <!-- 1. Correo electrónico -->
+                    <div class="auth-field">
+                        <label for="login-page-email">Correo electrónico *</label>
+                        <input
+                            type="email"
+                            id="login-page-email"
+                            name="email"
+                            placeholder="ejemplo@correo.com"
+                            autocomplete="email"
+                            required
+                        >
+                        <small id="error-login-email" class="field-error-msg" role="alert"></small>
+                    </div>
+
+                    <!-- 2. Contraseña con botón Mostrar/Ocultar -->
+                    <div class="auth-field">
+                        <label for="login-page-password">Contraseña *</label>
+                        <div class="password-input-wrap">
+                            <input
+                                type="password"
+                                id="login-page-password"
+                                name="password"
+                                placeholder="Ingresa tu contraseña"
+                                autocomplete="current-password"
+                                required
+                            >
+                            <button
+                                type="button"
+                                class="password-toggle-btn"
+                                data-target="login-page-password"
+                                aria-label="Mostrar contraseña"
+                            >
+                                Mostrar
+                            </button>
+                        </div>
+                        <small id="error-login-password" class="field-error-msg" role="alert"></small>
+                    </div>
+
+                    <button type="submit" id="btn-page-login" class="auth-submit-btn">
+                        Iniciar Sesión
+                    </button>
+                </form>
+
+                <div class="auth-switch-footer">
+                    <p>¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="footer bg-dark">
+        <div>
+            <p>&copy; 2026 BIOAQUA FRANCE</p>
+            <p>BIOAQUA FRANCE - Skincare para piel latina. Recomendado por dermatólogos. Distribución oficial en El Salvador y Guatemala.</p>
+        </div>
+    </footer>
+
+    <!-- Script inmediato para alternar visibilidad de contraseña -->
+    <script>
+        document.addEventListener("click", function (e) {
+            var btn = e.target.closest(".password-toggle-btn");
+            if (!btn) return;
+            e.preventDefault();
+            var targetId = btn.getAttribute("data-target");
+            var input = targetId ? document.getElementById(targetId) : btn.parentElement.querySelector("input");
+            if (!input) return;
+            var isPwd = input.type === "password";
+            input.type = isPwd ? "text" : "password";
+            btn.textContent = isPwd ? "Ocultar" : "Mostrar";
+            btn.setAttribute("aria-label", isPwd ? "Ocultar contraseña" : "Mostrar contraseña");
+        });
+    </script>
+    <!-- Punto de entrada modular ES Modules -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
