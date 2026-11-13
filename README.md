@@ -1,6 +1,6 @@
 # Plataforma de Catálogo Interactivo y Asesoría Skincare — Bioaqua El Salvador & Guatemala
 
-Aplicación web desarrollada para la asignatura **Desarrollo Web I (Desafío Práctico II)** en la **Escuela Superior de Economía y Negocios (ESEN)** utilizando **HTML5 semántico**, **CSS3**, **JavaScript Nativo (ES Modules)** y **Firebase (Authentication + Cloud Firestore)**.
+Aplicación web desarrollada para la asignatura **Desarrollo Web I (Desafío Práctico II)** utilizando **HTML5 semántico**, **CSS3**, **JavaScript Nativo (ES Modules)** y **Firebase (Authentication + Cloud Firestore)**.
 
 ---
 
