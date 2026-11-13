@@ -18,7 +18,7 @@ import {
     isFirebaseConfigured,
     getActiveFirebaseConfig,
     saveCustomFirebaseConfig,
-    clearCustomFirebaseConfig
+    //clearCustomFirebaseConfig
 } from "../config/firebaseConfig.js";
 import { validateLoginForm, validateRegisterForm } from "../utils/validators.js";
 import { showToast } from "./notificationsUI.js";
